@@ -1,7 +1,12 @@
+dev\nightbeam\fssentials\maintenance\MaintenanceListener.class
 dev\nightbeam\fssentials\FssentialsPlugin.class
 dev\nightbeam\fssentials\service\AdminToolsListener.class
+dev\nightbeam\fssentials\maintenance\MaintenanceCommand.class
+dev\nightbeam\fssentials\maintenance\MaintenanceConfig.class
 dev\nightbeam\fssentials\command\CommandRouter.class
+dev\nightbeam\fssentials\maintenance\MaintenanceTimer.class
 dev\nightbeam\fssentials\service\VanishService.class
+dev\nightbeam\fssentials\maintenance\MaintenanceManager.class
 dev\nightbeam\fssentials\model\InvseeInventoryHolder.class
 dev\nightbeam\fssentials\service\PunishmentManager.class
 dev\nightbeam\fssentials\util\FoliaScheduler.class

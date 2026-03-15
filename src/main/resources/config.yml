@@ -1,8 +1,25 @@
 storage:
   persistence-enabled: true
 
+maintenance:
+  enabled: false
+
 permissions:
   silent-notify: "fssentials.notify.silent"
+  bypass: "fssentials.maintenance.bypass"
+  notify: "fssentials.maintenance.notify"
+
+messages:
+  maintenance-enabled: "<green>Maintenance mode enabled."
+  maintenance-disabled: "<green>Maintenance mode disabled."
+  kick: "<red>The server is currently under maintenance.<newline><yellow>Please try again later."
+  notify-join-attempt: "<yellow>%player%</yellow> tried to join during maintenance."
+
+motd:
+  - "<red>Server Under Maintenance"
+  - "<yellow>We'll be back soon!"
+
+whitelist: []
 
 # Reason layouts used by @layout in punishment commands.
 layouts:

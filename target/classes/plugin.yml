@@ -83,6 +83,9 @@ commands:
   invsee:
     description: View a player's inventory safely.
     usage: /invsee <player>
+  maintenance:
+    description: Manage maintenance mode.
+    usage: /maintenance <on|off|reload|add|remove|whitelist|starttimer|endtimer|schedule|aborttimer|motd|setmotd>
 
 permissions:
   fssentials.*:
@@ -110,3 +113,18 @@ permissions:
       fssentials.notify.silent: true
       fssentials.vanish: true
       fssentials.invsee: true
+      fssentials.maintenance.admin: true
+      fssentials.maintenance.bypass: true
+      fssentials.maintenance.notify: true
+
+  fssentials.maintenance.admin:
+    default: op
+    description: Allows managing maintenance mode.
+
+  fssentials.maintenance.bypass:
+    default: op
+    description: Allows joining during maintenance mode.
+
+  fssentials.maintenance.notify:
+    default: op
+    description: Receives maintenance join-attempt notifications.

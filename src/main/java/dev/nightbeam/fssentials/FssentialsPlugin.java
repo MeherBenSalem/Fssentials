@@ -1,6 +1,11 @@
 package dev.nightbeam.fssentials;
 
 import dev.nightbeam.fssentials.command.CommandRouter;
+import dev.nightbeam.fssentials.maintenance.MaintenanceCommand;
+import dev.nightbeam.fssentials.maintenance.MaintenanceConfig;
+import dev.nightbeam.fssentials.maintenance.MaintenanceListener;
+import dev.nightbeam.fssentials.maintenance.MaintenanceManager;
+import dev.nightbeam.fssentials.maintenance.MaintenanceTimer;
 import dev.nightbeam.fssentials.service.AdminToolsListener;
 import dev.nightbeam.fssentials.service.MessageService;
 import dev.nightbeam.fssentials.service.PunishmentManager;
@@ -19,6 +24,9 @@ public class FssentialsPlugin extends JavaPlugin {
     private PunishmentManager punishmentManager;
     private FoliaScheduler foliaScheduler;
     private VanishService vanishService;
+    private MaintenanceConfig maintenanceConfig;
+    private MaintenanceManager maintenanceManager;
+    private MaintenanceTimer maintenanceTimer;
 
     @Override
     public void onEnable() {
@@ -35,16 +43,20 @@ public class FssentialsPlugin extends JavaPlugin {
             foliaScheduler,
                 new YamlPunishmentStorage(this)
         );
+        this.maintenanceConfig = new MaintenanceConfig(this);
+        this.maintenanceManager = new MaintenanceManager(this, maintenanceConfig);
+        this.maintenanceTimer = new MaintenanceTimer(this, maintenanceManager);
 
         // Load punishment storage asynchronously to avoid blocking a tick thread.
         punishmentManager.loadAsync();
 
         CommandRouter router = new CommandRouter(this, messageService, punishmentManager, vanishService);
-        registerCommands(router);
+        registerCommands(router, new MaintenanceCommand(this, maintenanceManager, maintenanceTimer));
         getServer().getPluginManager().registerEvents(router, this);
 
         getServer().getPluginManager().registerEvents(new PunishmentListener(this, messageService, punishmentManager), this);
         getServer().getPluginManager().registerEvents(new AdminToolsListener(vanishService), this);
+        getServer().getPluginManager().registerEvents(new MaintenanceListener(maintenanceManager, maintenanceTimer), this);
         // Temporary punishment expiration runs on Folia async scheduler; player messaging hops to entity/global schedulers.
         foliaScheduler.runAsyncTimer(punishmentManager::expirePunishments, 20L, 20L * 30L);
 
@@ -65,13 +77,16 @@ public class FssentialsPlugin extends JavaPlugin {
         punishmentManager.reloadConfigSettings();
         punishmentManager.saveAsync();
         punishmentManager.loadAsync();
+        if (maintenanceManager != null) {
+            maintenanceManager.reloadEverything();
+        }
     }
 
     public FoliaScheduler getFoliaScheduler() {
         return foliaScheduler;
     }
 
-    private void registerCommands(CommandRouter router) {
+    private void registerCommands(CommandRouter router, MaintenanceCommand maintenanceCommand) {
         List<String> commands = Arrays.asList(
                 "kick", "ban", "mute", "warn", "note", "banip",
                 "tempban", "tempmute", "tempwarn", "tempipban",
@@ -89,6 +104,14 @@ public class FssentialsPlugin extends JavaPlugin {
             pluginCommand.setExecutor(router);
             pluginCommand.setTabCompleter(router);
         }
+
+        PluginCommand maintenance = getCommand("maintenance");
+        if (maintenance == null) {
+            getLogger().warning("Command not found in plugin.yml: maintenance");
+            return;
+        }
+        maintenance.setExecutor(maintenanceCommand);
+        maintenance.setTabCompleter(maintenanceCommand);
     }
 
     private void saveResourceIfMissing(String path) {
