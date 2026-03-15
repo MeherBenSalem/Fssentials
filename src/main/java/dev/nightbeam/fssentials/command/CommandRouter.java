@@ -338,10 +338,19 @@ public class CommandRouter implements CommandExecutor, TabCompleter, Listener {
             return true;
         }
 
-        String id = args[0].toUpperCase(Locale.ROOT);
+        String token = args[0];
+        String id = token.toUpperCase(Locale.ROOT);
         boolean success = expected == null
                 ? punishmentManager.deactivatePunishment(id)
                 : punishmentManager.deactivateByType(id, expected);
+
+        if (!success && (expected == PunishmentType.BAN || expected == PunishmentType.MUTE)) {
+            Optional<String> removedId = punishmentManager.deactivateLatestByTypeAndPlayerName(token, expected);
+            if (removedId.isPresent()) {
+                sender.sendMessage(messageService.get("punishment.removed", Map.of("id", removedId.get())));
+                return true;
+            }
+        }
 
         if (!success) {
             sender.sendMessage(messageService.get("errors.invalid-id", Map.of("id", id)));

@@ -183,6 +183,30 @@ public class PunishmentManager {
         return true;
     }
 
+    public Optional<String> deactivateLatestByTypeAndPlayerName(String playerName, PunishmentType type) {
+        String normalized = playerName.toLowerCase(Locale.ROOT);
+        String removedId;
+
+        synchronized (punishmentLock) {
+            Punishment latest = punishmentsById.values().stream()
+                    .filter(Punishment::isActive)
+                    .filter(p -> p.getType() == type)
+                    .filter(p -> p.getTargetName() != null && p.getTargetName().toLowerCase(Locale.ROOT).equals(normalized))
+                    .max(Comparator.comparingLong(Punishment::getCreatedAt))
+                    .orElse(null);
+
+            if (latest == null) {
+                return Optional.empty();
+            }
+
+            latest.setActive(false);
+            removedId = latest.getId();
+        }
+
+        saveAsync();
+        return Optional.of(removedId);
+    }
+
     public boolean changeReason(String id, String newReason) {
         synchronized (punishmentLock) {
             Punishment p = punishmentsById.get(id);
