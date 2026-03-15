@@ -23,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -689,18 +690,67 @@ public class CommandRouter implements CommandExecutor, TabCompleter, Listener {
         return stack == null ? null : stack.clone();
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onInvseeClose(InventoryCloseEvent event) {
+        if (!(event.getView().getTopInventory().getHolder() instanceof InvseeInventoryHolder holder)) {
+            return;
+        }
+
+        Player target = Bukkit.getPlayer(holder.getTargetUuid());
+        if (target == null || !target.isOnline()) {
+            return;
+        }
+
+        Inventory inv = event.getView().getTopInventory();
+        ItemStack[] storage = new ItemStack[36];
+        for (int i = 0; i < 36; i++) {
+            storage[i] = cloneItem(inv.getItem(i));
+        }
+
+        ItemStack[] armor = new ItemStack[4];
+        armor[3] = cloneItem(inv.getItem(45)); // Helmet
+        armor[2] = cloneItem(inv.getItem(46)); // Chestplate
+        armor[1] = cloneItem(inv.getItem(47)); // Leggings
+        armor[0] = cloneItem(inv.getItem(48)); // Boots
+        ItemStack offHand = cloneItem(inv.getItem(49));
+
+        foliaScheduler.runAtEntity(target, () -> {
+            target.getInventory().setStorageContents(storage);
+            target.getInventory().setArmorContents(armor);
+            target.getInventory().setItemInOffHand(offHand);
+        });
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInvseeClick(InventoryClickEvent event) {
-        if (event.getView().getTopInventory().getHolder() instanceof InvseeInventoryHolder) {
-            event.setCancelled(true);
+        if (!(event.getView().getTopInventory().getHolder() instanceof InvseeInventoryHolder)) {
+            return;
+        }
+
+        if (event.getClickedInventory() == event.getView().getTopInventory()) {
+            int raw = event.getRawSlot();
+            if (!isInvseeEditableSlot(raw)) {
+                event.setCancelled(true);
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInvseeDrag(InventoryDragEvent event) {
-        if (event.getView().getTopInventory().getHolder() instanceof InvseeInventoryHolder) {
-            event.setCancelled(true);
+        if (!(event.getView().getTopInventory().getHolder() instanceof InvseeInventoryHolder)) {
+            return;
         }
+
+        for (int rawSlot : event.getRawSlots()) {
+            if (rawSlot < event.getView().getTopInventory().getSize() && !isInvseeEditableSlot(rawSlot)) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    private boolean isInvseeEditableSlot(int rawSlot) {
+        return (rawSlot >= 0 && rawSlot <= 35) || (rawSlot >= 45 && rawSlot <= 49);
     }
 
     @Override
