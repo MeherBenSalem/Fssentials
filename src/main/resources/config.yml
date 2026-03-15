@@ -1,0 +1,29 @@
+storage:
+  persistence-enabled: true
+
+permissions:
+  silent-notify: "fssentials.notify.silent"
+
+# Reason layouts used by @layout in punishment commands.
+layouts:
+  toxicity: "Being toxic in chat"
+  spam: "Spamming messages"
+  exploit: "Using unfair exploits"
+
+# Time layouts used by #layout in temporary punishment commands.
+time-layouts:
+  default: "1d"
+  short: "30m"
+  long: "7d"
+
+help-lines:
+  - "&8&m----------------------------------------"
+  - "&6/fssentials help &7- Open this guide, captain."
+  - "&6/fssentials reload &7- Reload configs and messages."
+  - "&6/kick <-s> <player> <reason|@layout> &7- Give a quick boot."
+  - "&6/ban <-s> <player> <reason|@layout> &7- Permanent timeout."
+  - "&6/mute <-s> <player> <reason|@layout> &7- Quiet mode ON."
+  - "&6/tempban <-s> <player> <time> <reason> &7- Limited timeout."
+  - "&6/banlist <page> &7- See who is currently restricted."
+  - "&6/history <player> <page> &7- Full moderation timeline."
+  - "&8&m----------------------------------------"

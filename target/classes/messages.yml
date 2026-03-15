@@ -1,0 +1,90 @@
+prefix: "&8[&6Fssentials&8] &r"
+
+errors:
+  no-permission: "&cNope! You do not have permission for that command."
+  player-only: "&cThis command is for in-game players only, captain."
+  player-not-found: "&cI looked everywhere, but I could not find &e%player%&c."
+  invsee-offline: "&cPlayer %player% is not online."
+  invalid-id: "&cThat punishment ID (&e%id%&c) does not exist or is already inactive."
+  invalid-time: "&cTime format is off. Try examples like &e30m&c, &e2h&c, &e3d&c, &e1mo&c."
+  ip-not-found: "&cNo known IP found for &e%player%&c yet."
+
+usage:
+  kick: "&eUsage: /kick <-s> <player> <reason|@layout>"
+  ban: "&eUsage: /ban <-s> <player> <reason|@layout>"
+  mute: "&eUsage: /mute <-s> <player> <reason|@layout>"
+  warn: "&eUsage: /warn <-s> <player> <reason|@layout>"
+  note: "&eUsage: /note <-s> <player> <reason|@layout>"
+  banip: "&eUsage: /banip <-s> <player|ip> <reason|@layout>"
+  tempban: "&eUsage: /tempban <-s> <player> <time|#layout> <reason|@layout>"
+  tempmute: "&eUsage: /tempmute <-s> <player> <time|#layout> <reason|@layout>"
+  tempwarn: "&eUsage: /tempwarn <-s> <player> <time|#layout> <reason|@layout>"
+  tempipban: "&eUsage: /tempipban <-s> <player|ip> <time|#layout> <reason|@layout>"
+  unpunish: "&eUsage: /unpunish <id>"
+  change-reason: "&eUsage: /change-reason <id> <new reason>"
+  warns: "&eUsage: /warns <player>"
+  notes: "&eUsage: /notes <player>"
+  check: "&eUsage: /check <player>"
+  history: "&eUsage: /history <player> <page>"
+  invsee: "&eUsage: /invsee <player>"
+  fssentials: "&eUsage: /fssentials <help|reload>"
+
+vanish:
+  enabled: "&aYou are now vanished."
+  disabled: "&cYou are now visible."
+
+invsee:
+  opened: "&aPeeking at &e%player%&a's inventory in read-only mode. Hands off the loot!"
+
+enforcement:
+  kick: "&cYou were kicked! Reason: &e%reason%"
+  ban-kick: "&cYou are banned!\n&7ID: &e%id%\n&7Reason: &e%reason%\n&7Until: &e%until%"
+  mute-chat: "&eShh... You are muted right now.\n&7ID: &e%id%\n&7Reason: &e%reason%\n&7Until: &e%until%"
+
+punishment:
+  applied: "&c%player% &7was hit with &c%type% &7by &e%staff%&7. Reason: &f%reason% &8(ID: &e%id%&8, until &e%until%&8)"
+  kick: "&e%player% &7was kicked by &e%staff%&7. Reason: &f%reason%"
+  saved: "&aAll set! Saved &e%type% &afor &e%player% &a(ID: &e%id%&a)."
+  removed: "&aPoof! Punishment &e%id% &ahas been removed."
+  reason-updated: "&aUpdated reason for &e%id%&a: &f%reason%"
+  expired: "&aAuto-expired: &e%type% &afor &e%player% &7(ID: &e%id%&7)."
+  silent-wrapper: "&8[&7Silent&8] &7%message%"
+
+target:
+  warn: "&eHey %player%, you have been warned for: &f%reason%&e. Stay on your toes!"
+
+help:
+  header: "&6Fssentials Help &8- &7Friendly moderation toolkit"
+
+check:
+  header: "&6Moderation Snapshot for &e%player%"
+  uuid: "&7UUID: &f%uuid%"
+  ip: "&7IP: &f%ip%"
+  country: "&7Country: &f%country%"
+  ban: "&7Ban: %status%"
+  mute: "&7Mute: %status%"
+  warn: "&7Warn count: &e%count%"
+  note: "&7Note count: &e%count%"
+
+banlist:
+  header: "&6Active Punishments &8(Page &e%page%&8/&e%max%&8, Total: &e%count%&8)"
+
+history:
+  header: "&6History for &e%player% &8(Page &e%page%&8/&e%max%&8, Total: &e%count%&8)"
+
+warns-header: "&6Warnings for &e%player% &8(Total: &e%count%&8)"
+notes-header: "&6Notes for &e%player% &8(Total: &e%count%&8)"
+
+list:
+  empty: "&7Nothing to show here right now."
+  line: "&8- &e%id% &7| &c%type% &7| &f%player% &7| &f%reason% &7| &aBy %actor% &7| &b%created% &7| &dUntil %until% &7| %active%"
+
+admin:
+  reloaded: "&aConfigs refreshed. Fssentials is back in action!"
+
+system:
+  header: "&6System Preferences"
+  version: "&7Plugin version: &f%version%"
+  java: "&7Java version: &f%version%"
+  players: "&7Online players: &f%online%"
+  storage: "&7Persistence: &f%state%"

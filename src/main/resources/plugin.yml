@@ -1,0 +1,112 @@
+# Folia supported v1.0+
+name: Fssentials
+main: dev.nightbeam.fssentials.FssentialsPlugin
+version: 1.0.0
+api-version: '1.20'
+folia-supported: true
+author: NightBeam
+description: Fun and professional moderation essentials for Paper servers.
+
+commands:
+  kick:
+    description: Kick a player.
+    usage: /kick <-s> <player> <reason|@layout>
+  ban:
+    description: Permanently ban a player.
+    usage: /ban <-s> <player> <reason|@layout>
+  mute:
+    description: Permanently mute a player.
+    usage: /mute <-s> <player> <reason|@layout>
+  warn:
+    description: Warn a player.
+    usage: /warn <-s> <player> <reason|@layout>
+  note:
+    description: Add note to a player.
+    usage: /note <-s> <player> <reason|@layout>
+  banip:
+    description: Permanently ban an IP.
+    usage: /banip <-s> <player|ip> <reason|@layout>
+  tempban:
+    description: Temporarily ban a player.
+    usage: /tempban <-s> <player> <duration|#timelayout> <reason|@layout>
+  tempmute:
+    description: Temporarily mute a player.
+    usage: /tempmute <-s> <player> <duration|#timelayout> <reason|@layout>
+  tempwarn:
+    description: Temporarily warn a player.
+    usage: /tempwarn <-s> <player> <duration|#timelayout> <reason|@layout>
+  tempipban:
+    description: Temporarily ban an IP.
+    usage: /tempipban <-s> <player|ip> <duration|#timelayout> <reason|@layout>
+  unban:
+    description: Remove a ban by ID.
+    usage: /unban <id>
+  unmute:
+    description: Remove a mute by ID.
+    usage: /unmute <id>
+  unwarn:
+    description: Remove a warn by ID.
+    usage: /unwarn <id>
+  unnote:
+    description: Remove a note by ID.
+    usage: /unnote <id>
+  unpunish:
+    description: Remove any punishment by ID.
+    usage: /unpunish <id>
+  change-reason:
+    description: Change punishment reason.
+    usage: /change-reason <id> <new reason>
+  warns:
+    description: Show warns for a player.
+    usage: /warns <player>
+  notes:
+    description: Show notes for a player.
+    usage: /notes <player>
+  check:
+    description: Check moderation profile.
+    usage: /check <player>
+  banlist:
+    description: Show active punishments.
+    usage: /banlist <page>
+  history:
+    description: Show punishment history.
+    usage: /history <player> <page>
+  fssentials:
+    description: Admin command hub.
+    usage: /fssentials <help|reload>
+  systemprefs:
+    description: Show system preferences.
+    usage: /systemprefs
+  vanish:
+    description: Toggle admin invisibility.
+    usage: /vanish
+  invsee:
+    description: View a player's inventory safely.
+    usage: /invsee <player>
+
+permissions:
+  fssentials.*:
+    default: op
+    children:
+      fssentials.punish.kick: true
+      fssentials.punish.ban: true
+      fssentials.punish.mute: true
+      fssentials.punish.warn: true
+      fssentials.punish.note: true
+      fssentials.punish.banip: true
+      fssentials.punish.tempban: true
+      fssentials.punish.tempmute: true
+      fssentials.punish.tempwarn: true
+      fssentials.punish.tempipban: true
+      fssentials.punish.unpunish: true
+      fssentials.punish.change-reason: true
+      fssentials.view.warn: true
+      fssentials.view.note: true
+      fssentials.view.check: true
+      fssentials.view.banlist: true
+      fssentials.view.history: true
+      fssentials.admin.reload: true
+      fssentials.admin.systemprefs: true
+      fssentials.notify.silent: true
+      fssentials.vanish: true
+      fssentials.invsee: true
