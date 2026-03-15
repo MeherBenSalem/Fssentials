@@ -1,0 +1,53 @@
+2026-03-15T13:51:24.742Z [INFO] ----------------------invoke list_jdks----------------------
+2026-03-15T13:51:24.743Z [INFO] [Tool.invoke]({name: list_jdks, input: {
+  "sessionId": "20260315-upgrade",
+  "projectPath": "d:\\Projects\\NightBeam\\Fssentials"
+}}).
+2026-03-15T13:51:24.743Z [INFO] [Tool.invoke] do invoke.
+2026-03-15T13:51:24.886Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following jdks in your system:\n\n1. Java 17.0.12\n   📁 Path: C:\\Program Files\\Java\\jdk-17\\bin\n   🏷️ Source: others\n\n2. Java 21.0.9\n   📁 Path: C:\\Program Files\\Java\\jdk-21\\bin\n   🏷️ Source: others\n\n3. Java 25.0.1\n   📁 Path: C:\\Program Files\\Java\\jdk-25\\bin\n   🏷️ Source: others\n\nTotal: 3 JDK installation(s) found"
+}}).
+2026-03-15T13:51:24.886Z [INFO] ----------------------invoked list_jdks----------------------
+2026-03-15T13:51:29.202Z [INFO] ---------------------prepare list_mavens----------------------
+2026-03-15T13:51:29.203Z [INFO] [Tool.prepareInvocation]({name: list_mavens, input: {
+  "sessionId": "20260315-upgrade"
+}}).
+2026-03-15T13:51:29.203Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-03-15T13:51:29.203Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "List mavens"
+}}).
+2026-03-15T13:51:29.204Z [INFO] ----------------------prepared list_mavens----------------------
+2026-03-15T13:51:29.246Z [INFO] ----------------------invoke list_mavens----------------------
+2026-03-15T13:51:29.246Z [INFO] [Tool.invoke]({name: list_mavens, input: {
+  "sessionId": "20260315-upgrade",
+  "projectPath": "d:\\Projects\\NightBeam\\Fssentials"
+}}).
+2026-03-15T13:51:29.247Z [INFO] [Tool.invoke] do invoke.
+2026-03-15T13:51:29.284Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following maven installations in your system:\n\n1. 📁 Path: D:\\Libraries\\Maven\\3.9.12\\bin\n   🏷️ Source: PATH\n\nTotal: 1 Maven installation(s) found"
+}}).
+2026-03-15T13:51:29.285Z [INFO] ----------------------invoked list_mavens----------------------
+2026-03-15T13:52:16.452Z [INFO] ---------------------prepare confirm_upgrade_plan----------------------
+2026-03-15T13:52:16.452Z [INFO] [Tool.prepareInvocation]({name: confirm_upgrade_plan, input: {
+  "sessionId": "20260315-upgrade"
+}}).
+2026-03-15T13:52:16.452Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-03-15T13:52:16.453Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Review [upgrade plan](file:///d:/Projects/NightBeam/Fssentials/.github/java-upgrade/20260315-upgrade/plan.md)",
+  "confirmationMessages": {
+    "title": "Plan generated",
+    "message": "Please review the generated plan and make any necessary adjustments before proceeding. You can modify the generated [`plan.md`](file:///d:/Projects/NightBeam/Fssentials/.github/java-upgrade/20260315-upgrade/plan.md) directly."
+  }
+}}).
+2026-03-15T13:52:16.453Z [INFO] ----------------------prepared confirm_upgrade_plan----------------------
+2026-03-15T13:53:10.692Z [INFO] ----------------------invoke confirm_upgrade_plan----------------------
+2026-03-15T13:53:10.692Z [INFO] [Tool.invoke]({name: confirm_upgrade_plan, input: {
+  "sessionId": "20260315-upgrade",
+  "projectPath": "d:\\Projects\\NightBeam\\Fssentials"
+}}).
+2026-03-15T13:53:10.692Z [INFO] [Tool.invoke] do invoke.
+2026-03-15T13:53:10.693Z [INFO] Upgrade plan confirmed successfully.
+2026-03-15T13:53:11.029Z [INFO] [Tool.invoke]({result: {
+  "message": "Generated plan is reviewed and confirmed by the user! the upgrade process will start now and be tracked in markdown file: d:\\Projects\\NightBeam\\Fssentials\\.github\\java-upgrade\\20260315-upgrade\\progress.md."
+}}).
+2026-03-15T13:53:11.029Z [INFO] ----------------------invoked confirm_upgrade_plan----------------------

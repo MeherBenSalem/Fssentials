@@ -1,0 +1,17 @@
+2026-03-15T13:50:39.135Z [INFO] ----------------------invoke redirect_to_upgrade_agent----------------------
+2026-03-15T13:50:39.136Z [INFO] [Tool.invoke]({name: redirect_to_upgrade_agent, input: {
+  "originalPrompt": "upgrade java runtime to the LTS version Java 21",
+  "projectPath": "d:\\Projects\\NightBeam\\Fssentials"
+}}).
+2026-03-15T13:50:39.136Z [INFO] [Tool.invoke] do invoke.
+2026-03-15T13:50:39.136Z [INFO] [RedirectToUpgradeAgentTool] Redirecting to custom agent "modernize-java" with prompt: upgrade java runtime to the LTS version Java 21
+2026-03-15T13:50:39.234Z [INFO] [RedirectToUpgradeAgentTool] Redirected to custom agent "modernize-java". User MUST switch to the new agent to continue.
+2026-03-15T13:50:39.234Z [INFO] [Tool.invoke]({result: {
+  "message": "The upgrade request has been redirected to the \"modernize-java\" agent in a new chat session. You MUST! stop processing in this session.",
+  "result": {
+    "redirected": true,
+    "agentName": "modernize-java",
+    "prompt": "upgrade java runtime to the LTS version Java 21"
+  }
+}}).
+2026-03-15T13:50:39.235Z [INFO] ----------------------invoked redirect_to_upgrade_agent----------------------
