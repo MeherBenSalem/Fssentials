@@ -13,6 +13,7 @@ import dev.nightbeam.fssentials.util.Text;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CommandRouter implements CommandExecutor, TabCompleter, Listener {
@@ -87,6 +89,9 @@ public class CommandRouter implements CommandExecutor, TabCompleter, Listener {
                 case "fssentials" -> handleFssentials(sender, args);
                 case "systemprefs" -> handleSystemPrefs(sender);
                 case "vanish" -> handleVanish(sender);
+                case "offlinetp" -> handleOfflineTp(sender, args);
+                case "playerlist" -> handlePlayerList(sender, args);
+                case "punishment" -> handlePunishment(sender, args);
                 case "invsee" -> handleInvsee(sender, args);
                 default -> false;
             };
@@ -607,6 +612,105 @@ public class CommandRouter implements CommandExecutor, TabCompleter, Listener {
         return true;
     }
 
+    private boolean handleOfflineTp(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(messageService.get("errors.player-only"));
+            return true;
+        }
+
+        if (!hasPerm(sender, "fssentials.teleport.offlinetp")) {
+            return true;
+        }
+
+        if (args.length < 1) {
+            sender.sendMessage(messageService.get("usage.offlinetp"));
+            return true;
+        }
+
+        OfflinePlayer target = resolveOfflinePlayerByToken(args[0]);
+        if (target == null || (target.getName() == null && !target.hasPlayedBefore() && !target.isOnline())) {
+            sender.sendMessage(messageService.get("errors.player-not-found", Map.of("player", args[0])));
+            return true;
+        }
+
+        Location targetLocation;
+        if (target.isOnline() && target.getPlayer() != null) {
+            targetLocation = target.getPlayer().getLocation().clone();
+        } else {
+            targetLocation = target.getLocation();
+            if (targetLocation == null) {
+                targetLocation = target.getRespawnLocation();
+            }
+        }
+
+        if (targetLocation == null || targetLocation.getWorld() == null) {
+            sender.sendMessage(messageService.get("errors.offlinetp-location-unavailable", Map.of("player", args[0])));
+            return true;
+        }
+
+        String targetName = target.getName() != null ? target.getName() : target.getUniqueId().toString();
+        Location finalTargetLocation = targetLocation.clone();
+        foliaScheduler.runAtEntity(player, () -> {
+            player.teleportAsync(finalTargetLocation);
+            player.sendMessage(messageService.get("teleport.offlinetp-success", Map.of("player", targetName)));
+        });
+        return true;
+    }
+
+    private boolean handlePlayerList(CommandSender sender, String[] args) {
+        if (!hasPerm(sender, "fssentials.view.playerlist")) {
+            return true;
+        }
+
+        List<String> names = Bukkit.getOnlinePlayers().stream()
+                .map(Player::getName)
+                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(Collectors.toList());
+
+        sender.sendMessage(messageService.get("playerlist.header", Map.of(
+                "online", String.valueOf(names.size()),
+                "max", String.valueOf(Bukkit.getMaxPlayers())
+        )));
+
+        boolean showNames = args.length >= 1 && (args[0].equalsIgnoreCase("names") || args[0].equalsIgnoreCase("list"));
+        if (!showNames) {
+            return true;
+        }
+
+        if (names.isEmpty()) {
+            sender.sendMessage(messageService.get("list.empty"));
+            return true;
+        }
+
+        sender.sendMessage(messageService.get("playerlist.names", Map.of("names", String.join(", ", names))));
+        return true;
+    }
+
+    private boolean handlePunishment(CommandSender sender, String[] args) {
+        if (!hasPerm(sender, "fssentials.punish.delete-record")) {
+            return true;
+        }
+
+        if (args.length < 3 || !args[0].equalsIgnoreCase("delete") || !args[1].equalsIgnoreCase("record")) {
+            sender.sendMessage(messageService.get("usage.punishment"));
+            return true;
+        }
+
+        String id = stripSurroundingQuotes(args[2]).toUpperCase(Locale.ROOT);
+        if (id.isBlank()) {
+            sender.sendMessage(messageService.get("usage.punishment"));
+            return true;
+        }
+
+        if (!punishmentManager.deletePunishmentRecord(id)) {
+            sender.sendMessage(messageService.get("errors.invalid-id", Map.of("id", id)));
+            return true;
+        }
+
+        sender.sendMessage(messageService.get("punishment.record-deleted", Map.of("id", id)));
+        return true;
+    }
+
     private ParseResult parseSilent(String[] args) {
         if (args.length == 0) {
             return new ParseResult(false, args);
@@ -687,6 +791,23 @@ public class CommandRouter implements CommandExecutor, TabCompleter, Listener {
         return Bukkit.getOfflinePlayerIfCached(name);
     }
 
+    private OfflinePlayer resolveOfflinePlayerByToken(String token) {
+        try {
+            UUID uuid = UUID.fromString(token);
+            return Bukkit.getOfflinePlayer(uuid);
+        } catch (IllegalArgumentException ignored) {
+            return resolveOfflinePlayer(token);
+        }
+    }
+
+    private String stripSurroundingQuotes(String input) {
+        String trimmed = input.trim();
+        if (trimmed.length() >= 2 && trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
+            return trimmed.substring(1, trimmed.length() - 1).trim();
+        }
+        return trimmed;
+    }
+
     private ItemStack[] cloneItems(ItemStack[] input) {
         ItemStack[] copy = new ItemStack[input.length];
         for (int i = 0; i < input.length; i++) {
@@ -764,12 +885,49 @@ public class CommandRouter implements CommandExecutor, TabCompleter, Listener {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (command.getName().equalsIgnoreCase("punishment")) {
+            if (args.length == 1) {
+                return List.of("delete").stream()
+                        .filter(s -> s.startsWith(args[0].toLowerCase(Locale.ROOT)))
+                        .collect(Collectors.toList());
+            }
+            if (args.length == 2 && "delete".equalsIgnoreCase(args[0])) {
+                return List.of("record").stream()
+                        .filter(s -> s.startsWith(args[1].toLowerCase(Locale.ROOT)))
+                        .collect(Collectors.toList());
+            }
+            if (args.length == 3 && "delete".equalsIgnoreCase(args[0]) && "record".equalsIgnoreCase(args[1])) {
+                return punishmentManager.getAllPunishmentIds().stream()
+                        .filter(id -> id.toLowerCase(Locale.ROOT).startsWith(args[2].toLowerCase(Locale.ROOT)))
+                        .sorted()
+                        .limit(50)
+                        .collect(Collectors.toList());
+            }
+            return List.of();
+        }
+
         if (args.length == 1) {
             List<String> values = new ArrayList<>();
             if (command.getName().equalsIgnoreCase("invsee")) {
                 return Bukkit.getOnlinePlayers().stream()
                         .map(Player::getName)
                         .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
+                        .collect(Collectors.toList());
+            }
+
+            if (command.getName().equalsIgnoreCase("offlinetp")) {
+                return Bukkit.getOfflinePlayers().length == 0
+                        ? List.of()
+                        : Arrays.stream(Bukkit.getOfflinePlayers())
+                            .map(OfflinePlayer::getName)
+                            .filter(name -> name != null && name.toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
+                            .limit(50)
+                            .collect(Collectors.toList());
+            }
+
+            if (command.getName().equalsIgnoreCase("playerlist")) {
+                return List.of("names", "list").stream()
+                        .filter(s -> s.startsWith(args[0].toLowerCase(Locale.ROOT)))
                         .collect(Collectors.toList());
             }
 

@@ -1,4 +1,4 @@
-prefix: "&8[&6Fssentials&8] &r"
+prefix: "&6&lCore &8» "
 
 errors:
   no-permission: "&cNope! You do not have permission for that command."
@@ -8,6 +8,7 @@ errors:
   invalid-id: "&cThat punishment ID (&e%id%&c) does not exist or is already inactive."
   invalid-time: "&cTime format is off. Try examples like &e30m&c, &e2h&c, &e3d&c, &e1mo&c."
   ip-not-found: "&cNo known IP found for &e%player%&c yet."
+  offlinetp-location-unavailable: "&cNo stored location is available for &e%player%&c."
 
 usage:
   kick: "&eUsage: /kick <-s> <player> <reason|@layout>"
@@ -26,6 +27,9 @@ usage:
   notes: "&eUsage: /notes <player>"
   check: "&eUsage: /check <player>"
   history: "&eUsage: /history <player> <page>"
+  offlinetp: "&eUsage: /offlinetp <player|uuid>"
+  playerlist: "&eUsage: /playerlist [names]"
+  punishment: "&eUsage: /punishment delete record <id>"
   invsee: "&eUsage: /invsee <player>"
   fssentials: "&eUsage: /fssentials <help|reload>"
 
@@ -46,9 +50,13 @@ punishment:
   kick: "&e%player% &7was kicked by &e%staff%&7. Reason: &f%reason%"
   saved: "&aAll set! Saved &e%type% &afor &e%player% &a(ID: &e%id%&a)."
   removed: "&aPoof! Punishment &e%id% &ahas been removed."
+  record-deleted: "&aDeleted punishment record &e%id%&a from storage."
   reason-updated: "&aUpdated reason for &e%id%&a: &f%reason%"
   expired: "&aAuto-expired: &e%type% &afor &e%player% &7(ID: &e%id%&7)."
   silent-wrapper: "&8[&7Silent&8] &7%message%"
+
+teleport:
+  offlinetp-success: "&aTeleported to &e%player%&a's saved location."
 
 target:
   warn: "&eHey %player%, you have been warned for: &f%reason%&e. Stay on your toes!"
@@ -71,6 +79,10 @@ banlist:
 
 history:
   header: "&6History for &e%player% &8(Page &e%page%&8/&e%max%&8, Total: &e%count%&8)"
+
+playerlist:
+  header: "&6Online Players: &e%online%&7/&e%max%"
+  names: "&7Players: &f%names%"
 
 warns-header: "&6Warnings for &e%player% &8(Total: &e%count%&8)"
 notes-header: "&6Notes for &e%player% &8(Total: &e%count%&8)"

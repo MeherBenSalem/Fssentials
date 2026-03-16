@@ -20,6 +20,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class MaintenanceManager {
+    private static final String ADMIN_PERMISSION = "fssentials.maintenance.admin";
+
     private final FssentialsPlugin plugin;
     private final MaintenanceConfig config;
     private final FoliaScheduler foliaScheduler;
@@ -49,7 +51,10 @@ public final class MaintenanceManager {
 
     public void enable() {
         enabled.set(true);
-        foliaScheduler.runGlobal(() -> config.saveMaintenanceEnabled(true));
+        foliaScheduler.runGlobal(() -> {
+            config.saveMaintenanceEnabled(true);
+            kickNonAdminPlayers("0m");
+        });
     }
 
     public void disable() {
@@ -62,11 +67,7 @@ public final class MaintenanceManager {
             return true;
         }
 
-        if (player.hasPermission(config.bypassPermission())) {
-            return true;
-        }
-
-        return whitelist.contains(player.getName().toLowerCase(Locale.ROOT));
+        return canRemainDuringMaintenance(player);
     }
 
     public boolean addWhitelist(String playerName) {
@@ -173,6 +174,26 @@ public final class MaintenanceManager {
     private void persistWhitelist() {
         Set<String> snapshot = Set.copyOf(whitelist);
         foliaScheduler.runGlobal(() -> config.saveWhitelist(snapshot));
+    }
+
+    private boolean canRemainDuringMaintenance(Player player) {
+        if (player.hasPermission(ADMIN_PERMISSION)) {
+            return true;
+        }
+        if (player.hasPermission(config.bypassPermission())) {
+            return true;
+        }
+        return whitelist.contains(player.getName().toLowerCase(Locale.ROOT));
+    }
+
+    private void kickNonAdminPlayers(String timerText) {
+        Component kickMessage = renderKickMessage(timerText);
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            if (canRemainDuringMaintenance(online)) {
+                continue;
+            }
+            foliaScheduler.runAtEntity(online, () -> online.kick(kickMessage));
+        }
     }
 
     private String applyPlaceholders(String template, Map<String, String> placeholders) {

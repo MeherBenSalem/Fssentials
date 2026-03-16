@@ -57,7 +57,9 @@ public class PunishmentManager {
             synchronized (punishmentLock) {
                 punishmentsById.clear();
                 for (Punishment punishment : loaded) {
-                    punishmentsById.put(punishment.getId(), punishment);
+                    String normalizedId = normalizeId(punishment.getId());
+                    punishment.setId(normalizedId);
+                    punishmentsById.put(normalizedId, punishment);
                 }
             }
         });
@@ -128,7 +130,7 @@ public class PunishmentManager {
 
     public Optional<Punishment> getById(String id) {
         synchronized (punishmentLock) {
-            return Optional.ofNullable(punishmentsById.get(id));
+            return Optional.ofNullable(findPunishmentByIdLocked(id));
         }
     }
 
@@ -161,25 +163,25 @@ public class PunishmentManager {
 
     public boolean deactivatePunishment(String id) {
         synchronized (punishmentLock) {
-            Punishment p = punishmentsById.get(id);
+            Punishment p = findPunishmentByIdLocked(id);
             if (p == null || !p.isActive()) {
                 return false;
             }
             p.setActive(false);
         }
-        saveAsync();
+        saveNow();
         return true;
     }
 
     public boolean deactivateByType(String id, PunishmentType type) {
         synchronized (punishmentLock) {
-            Punishment p = punishmentsById.get(id);
+            Punishment p = findPunishmentByIdLocked(id);
             if (p == null || !p.isActive() || p.getType() != type) {
                 return false;
             }
             p.setActive(false);
         }
-        saveAsync();
+        saveNow();
         return true;
     }
 
@@ -203,19 +205,43 @@ public class PunishmentManager {
             removedId = latest.getId();
         }
 
-        saveAsync();
+        saveNow();
         return Optional.of(removedId);
     }
 
     public boolean changeReason(String id, String newReason) {
         synchronized (punishmentLock) {
-            Punishment p = punishmentsById.get(id);
+            Punishment p = findPunishmentByIdLocked(id);
             if (p == null) {
                 return false;
             }
             p.setReason(newReason);
         }
-        saveAsync();
+        saveNow();
+        return true;
+    }
+
+    public boolean deletePunishmentRecord(String id) {
+        synchronized (punishmentLock) {
+            String normalizedId = normalizeId(id);
+            Punishment removed = punishmentsById.remove(normalizedId);
+            if (removed == null) {
+                String actualKey = punishmentsById.entrySet().stream()
+                        .filter(entry -> normalizeId(entry.getKey()).equals(normalizedId)
+                                || normalizeId(entry.getValue().getId()).equals(normalizedId))
+                        .map(Map.Entry::getKey)
+                        .findFirst()
+                        .orElse(null);
+                if (actualKey != null) {
+                    removed = punishmentsById.remove(actualKey);
+                }
+            }
+
+            if (removed == null) {
+                return false;
+            }
+        }
+        saveNow();
         return true;
     }
 
@@ -264,7 +290,18 @@ public class PunishmentManager {
         }
 
         if (!expired.isEmpty()) {
-            saveAsync();
+            saveNow();
+        }
+    }
+
+    public List<String> getAllPunishmentIds() {
+        synchronized (punishmentLock) {
+            return punishmentsById.values().stream()
+                    .map(Punishment::getId)
+                    .filter(id -> id != null && !id.isBlank())
+                    .map(this::normalizeId)
+                    .distinct()
+                    .collect(Collectors.toList());
         }
     }
 
@@ -311,6 +348,44 @@ public class PunishmentManager {
 
     private String generateId() {
         return UUID.randomUUID().toString().split("-")[0].toUpperCase(Locale.ROOT);
+    }
+
+    private void saveNow() {
+        if (!persistenceEnabled) {
+            return;
+        }
+        List<Punishment> snapshot;
+        synchronized (punishmentLock) {
+            snapshot = new ArrayList<>(punishmentsById.values());
+        }
+        storage.saveAll(snapshot);
+    }
+
+    private Punishment findPunishmentByIdLocked(String id) {
+        String normalizedId = normalizeId(id);
+        Punishment direct = punishmentsById.get(normalizedId);
+        if (direct != null) {
+            return direct;
+        }
+
+        for (Map.Entry<String, Punishment> entry : punishmentsById.entrySet()) {
+            Punishment candidate = entry.getValue();
+            if (normalizeId(entry.getKey()).equals(normalizedId)
+                    || normalizeId(candidate.getId()).equals(normalizedId)) {
+                candidate.setId(normalizedId);
+                punishmentsById.put(normalizedId, candidate);
+                if (!entry.getKey().equals(normalizedId)) {
+                    punishmentsById.remove(entry.getKey());
+                }
+                return candidate;
+            }
+        }
+
+        return null;
+    }
+
+    private String normalizeId(String id) {
+        return id == null ? "" : id.trim().toUpperCase(Locale.ROOT);
     }
 
     private List<Punishment> snapshotPunishments() {

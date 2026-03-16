@@ -21,6 +21,18 @@ motd:
 
 whitelist: []
 
+announcements:
+  format:
+    - "<gray>━━━━━━━━━━━━━━━━━━━━"
+    - "<gold><bold>📢 %title%</bold></gold>"
+    - "<white>%message%</white>"
+    - "<gray>━━━━━━━━━━━━━━━━━━━━"
+  sound:
+    enabled: true
+    type: "BLOCK_NOTE_BLOCK_PLING"
+    volume: 1.0
+    pitch: 1.0
+
 # Reason layouts used by @layout in punishment commands.
 layouts:
   toxicity: "Being toxic in chat"

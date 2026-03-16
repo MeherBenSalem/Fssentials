@@ -1,5 +1,7 @@
 package dev.nightbeam.fssentials;
 
+import dev.nightbeam.fssentials.announcement.BroadcastCommand;
+import dev.nightbeam.fssentials.announcement.BroadcastService;
 import dev.nightbeam.fssentials.command.CommandRouter;
 import dev.nightbeam.fssentials.maintenance.MaintenanceCommand;
 import dev.nightbeam.fssentials.maintenance.MaintenanceConfig;
@@ -27,6 +29,7 @@ public class FssentialsPlugin extends JavaPlugin {
     private MaintenanceConfig maintenanceConfig;
     private MaintenanceManager maintenanceManager;
     private MaintenanceTimer maintenanceTimer;
+    private BroadcastService broadcastService;
 
     @Override
     public void onEnable() {
@@ -46,12 +49,17 @@ public class FssentialsPlugin extends JavaPlugin {
         this.maintenanceConfig = new MaintenanceConfig(this);
         this.maintenanceManager = new MaintenanceManager(this, maintenanceConfig);
         this.maintenanceTimer = new MaintenanceTimer(this, maintenanceManager);
+        this.broadcastService = new BroadcastService(this);
 
         // Load punishment storage asynchronously to avoid blocking a tick thread.
         punishmentManager.loadAsync();
 
         CommandRouter router = new CommandRouter(this, messageService, punishmentManager, vanishService);
-        registerCommands(router, new MaintenanceCommand(this, maintenanceManager, maintenanceTimer));
+        registerCommands(
+            router,
+            new MaintenanceCommand(this, maintenanceManager, maintenanceTimer),
+            new BroadcastCommand(broadcastService)
+        );
         getServer().getPluginManager().registerEvents(router, this);
 
         getServer().getPluginManager().registerEvents(new PunishmentListener(this, messageService, punishmentManager), this);
@@ -86,13 +94,13 @@ public class FssentialsPlugin extends JavaPlugin {
         return foliaScheduler;
     }
 
-    private void registerCommands(CommandRouter router, MaintenanceCommand maintenanceCommand) {
+    private void registerCommands(CommandRouter router, MaintenanceCommand maintenanceCommand, BroadcastCommand broadcastCommand) {
         List<String> commands = Arrays.asList(
                 "kick", "ban", "mute", "warn", "note", "banip",
                 "tempban", "tempmute", "tempwarn", "tempipban",
                 "unban", "unmute", "unwarn", "unnote", "unpunish",
                 "change-reason", "warns", "notes", "check", "banlist", "history",
-                "fssentials", "systemprefs", "vanish", "invsee"
+                "fssentials", "systemprefs", "vanish", "offlinetp", "playerlist", "punishment", "invsee"
         );
 
         for (String cmd : commands) {
@@ -108,10 +116,18 @@ public class FssentialsPlugin extends JavaPlugin {
         PluginCommand maintenance = getCommand("maintenance");
         if (maintenance == null) {
             getLogger().warning("Command not found in plugin.yml: maintenance");
+        } else {
+            maintenance.setExecutor(maintenanceCommand);
+            maintenance.setTabCompleter(maintenanceCommand);
+        }
+
+        PluginCommand broadcast = getCommand("broadcast");
+        if (broadcast == null) {
+            getLogger().warning("Command not found in plugin.yml: broadcast");
             return;
         }
-        maintenance.setExecutor(maintenanceCommand);
-        maintenance.setTabCompleter(maintenanceCommand);
+        broadcast.setExecutor(broadcastCommand);
+        broadcast.setTabCompleter(broadcastCommand);
     }
 
     private void saveResourceIfMissing(String path) {

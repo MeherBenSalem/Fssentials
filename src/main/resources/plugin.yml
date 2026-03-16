@@ -1,7 +1,7 @@
 # Folia supported v1.0+
 name: Fssentials
 main: dev.nightbeam.fssentials.FssentialsPlugin
-version: 1.0.0
+version: 1.1.0
 api-version: '1.20'
 folia-supported: true
 author: NightBeam
@@ -80,12 +80,25 @@ commands:
   vanish:
     description: Toggle admin invisibility.
     usage: /vanish
+    aliases: [v]
+  offlinetp:
+    description: Teleport to an offline player's last known location.
+    usage: /offlinetp <player|uuid>
+  playerlist:
+    description: Show online player count and optionally names.
+    usage: /playerlist [names]
+  punishment:
+    description: Manage punishment records.
+    usage: /punishment delete record <id>
   invsee:
     description: View a player's inventory safely.
     usage: /invsee <player>
   maintenance:
     description: Manage maintenance mode.
     usage: /maintenance <on|off|reload|add|remove|whitelist|starttimer|endtimer|schedule|aborttimer|motd|setmotd>
+  broadcast:
+    description: Send a server-wide announcement.
+    usage: /broadcast <title> [subtitle]
 
 permissions:
   fssentials.*:
@@ -112,10 +125,26 @@ permissions:
       fssentials.admin.systemprefs: true
       fssentials.notify.silent: true
       fssentials.vanish: true
+      fssentials.teleport.offlinetp: true
+      fssentials.view.playerlist: true
+      fssentials.punish.delete-record: true
       fssentials.invsee: true
       fssentials.maintenance.admin: true
       fssentials.maintenance.bypass: true
       fssentials.maintenance.notify: true
+      server.broadcast: true
+
+  fssentials.teleport.offlinetp:
+    default: op
+    description: Allows teleporting to offline players.
+
+  fssentials.view.playerlist:
+    default: true
+    description: Allows viewing online player count and names.
+
+  fssentials.punish.delete-record:
+    default: op
+    description: Allows deleting punishment records from storage.
 
   fssentials.maintenance.admin:
     default: op
@@ -128,3 +157,7 @@ permissions:
   fssentials.maintenance.notify:
     default: op
     description: Receives maintenance join-attempt notifications.
+
+  server.broadcast:
+    default: op
+    description: Allows sending server-wide announcements.
