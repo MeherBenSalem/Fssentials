@@ -10,6 +10,9 @@ D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\maintena
 D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\model\InvseeInventoryHolder.java
 D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\model\Punishment.java
 D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\model\PunishmentType.java
+D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\security\IpLockCommand.java
+D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\security\IpLockListener.java
+D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\security\IpLockManager.java
 D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\service\AdminToolsListener.java
 D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\service\MessageService.java
 D:\Projects\NightBeam\Fssentials\src\main\java\dev\nightbeam\fssentials\service\PunishmentListener.java

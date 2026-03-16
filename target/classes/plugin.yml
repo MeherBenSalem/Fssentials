@@ -99,6 +99,9 @@ commands:
   broadcast:
     description: Send a server-wide announcement.
     usage: /broadcast <title> [subtitle]
+  iplock:
+    description: Manage account IP lock restrictions.
+    usage: /iplock <set|remove|change|check> <player> [ip]
 
 permissions:
   fssentials.*:
@@ -133,6 +136,8 @@ permissions:
       fssentials.maintenance.bypass: true
       fssentials.maintenance.notify: true
       server.broadcast: true
+      plugin.iplock.admin: true
+      plugin.iplock.bypass: true
 
   fssentials.teleport.offlinetp:
     default: op
@@ -161,3 +166,11 @@ permissions:
   server.broadcast:
     default: op
     description: Allows sending server-wide announcements.
+
+  plugin.iplock.admin:
+    default: op
+    description: Allows full access to IP lock administration commands.
+
+  plugin.iplock.bypass:
+    default: op
+    description: Allows bypassing IP lock checks.

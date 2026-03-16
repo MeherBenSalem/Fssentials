@@ -31,6 +31,7 @@ usage:
   playerlist: "&eUsage: /playerlist [names]"
   punishment: "&eUsage: /punishment delete record <id>"
   invsee: "&eUsage: /invsee <player>"
+  iplock: "&eUsage: /iplock <set|remove|change|check> <player> [ip]"
   fssentials: "&eUsage: /fssentials <help|reload>"
 
 vanish:
@@ -83,6 +84,14 @@ history:
 playerlist:
   header: "&6Online Players: &e%online%&7/&e%max%"
   names: "&7Players: &f%names%"
+
+iplock:
+  set: "&aIP lock set for &e%player%&a to &e%ip%&a."
+  removed: "&aRemoved IP lock for &e%player%&a."
+  changed: "&aUpdated IP lock for &e%player%&a to &e%ip%&a."
+  check: "&e%player% &7is locked to IP: &f%ip%"
+  not-locked: "&e%player% &7does not have an IP lock."
+  invalid-ip: "&cInvalid IP address: &e%ip%&c."
 
 warns-header: "&6Warnings for &e%player% &8(Total: &e%count%&8)"
 notes-header: "&6Notes for &e%player% &8(Total: &e%count%&8)"

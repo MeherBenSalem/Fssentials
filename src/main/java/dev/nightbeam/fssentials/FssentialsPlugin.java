@@ -8,6 +8,9 @@ import dev.nightbeam.fssentials.maintenance.MaintenanceConfig;
 import dev.nightbeam.fssentials.maintenance.MaintenanceListener;
 import dev.nightbeam.fssentials.maintenance.MaintenanceManager;
 import dev.nightbeam.fssentials.maintenance.MaintenanceTimer;
+import dev.nightbeam.fssentials.security.IpLockCommand;
+import dev.nightbeam.fssentials.security.IpLockListener;
+import dev.nightbeam.fssentials.security.IpLockManager;
 import dev.nightbeam.fssentials.service.AdminToolsListener;
 import dev.nightbeam.fssentials.service.MessageService;
 import dev.nightbeam.fssentials.service.PunishmentManager;
@@ -30,6 +33,7 @@ public class FssentialsPlugin extends JavaPlugin {
     private MaintenanceManager maintenanceManager;
     private MaintenanceTimer maintenanceTimer;
     private BroadcastService broadcastService;
+    private IpLockManager ipLockManager;
 
     @Override
     public void onEnable() {
@@ -50,6 +54,8 @@ public class FssentialsPlugin extends JavaPlugin {
         this.maintenanceManager = new MaintenanceManager(this, maintenanceConfig);
         this.maintenanceTimer = new MaintenanceTimer(this, maintenanceManager);
         this.broadcastService = new BroadcastService(this);
+        this.ipLockManager = new IpLockManager(this);
+        this.ipLockManager.load();
 
         // Load punishment storage asynchronously to avoid blocking a tick thread.
         punishmentManager.loadAsync();
@@ -58,13 +64,15 @@ public class FssentialsPlugin extends JavaPlugin {
         registerCommands(
             router,
             new MaintenanceCommand(this, maintenanceManager, maintenanceTimer),
-            new BroadcastCommand(broadcastService)
+            new BroadcastCommand(broadcastService),
+            new IpLockCommand(ipLockManager, messageService)
         );
         getServer().getPluginManager().registerEvents(router, this);
 
         getServer().getPluginManager().registerEvents(new PunishmentListener(this, messageService, punishmentManager), this);
         getServer().getPluginManager().registerEvents(new AdminToolsListener(vanishService), this);
         getServer().getPluginManager().registerEvents(new MaintenanceListener(maintenanceManager, maintenanceTimer), this);
+        getServer().getPluginManager().registerEvents(new IpLockListener(this, ipLockManager), this);
         // Temporary punishment expiration runs on Folia async scheduler; player messaging hops to entity/global schedulers.
         foliaScheduler.runAsyncTimer(punishmentManager::expirePunishments, 20L, 20L * 30L);
 
@@ -75,6 +83,9 @@ public class FssentialsPlugin extends JavaPlugin {
     public void onDisable() {
         if (punishmentManager != null) {
             punishmentManager.saveAsync();
+        }
+        if (ipLockManager != null) {
+            ipLockManager.save();
         }
     }
 
@@ -88,13 +99,16 @@ public class FssentialsPlugin extends JavaPlugin {
         if (maintenanceManager != null) {
             maintenanceManager.reloadEverything();
         }
+        if (ipLockManager != null) {
+            ipLockManager.reload();
+        }
     }
 
     public FoliaScheduler getFoliaScheduler() {
         return foliaScheduler;
     }
 
-    private void registerCommands(CommandRouter router, MaintenanceCommand maintenanceCommand, BroadcastCommand broadcastCommand) {
+    private void registerCommands(CommandRouter router, MaintenanceCommand maintenanceCommand, BroadcastCommand broadcastCommand, IpLockCommand ipLockCommand) {
         List<String> commands = Arrays.asList(
                 "kick", "ban", "mute", "warn", "note", "banip",
                 "tempban", "tempmute", "tempwarn", "tempipban",
@@ -128,6 +142,14 @@ public class FssentialsPlugin extends JavaPlugin {
         }
         broadcast.setExecutor(broadcastCommand);
         broadcast.setTabCompleter(broadcastCommand);
+
+        PluginCommand ipLock = getCommand("iplock");
+        if (ipLock == null) {
+            getLogger().warning("Command not found in plugin.yml: iplock");
+            return;
+        }
+        ipLock.setExecutor(ipLockCommand);
+        ipLock.setTabCompleter(ipLockCommand);
     }
 
     private void saveResourceIfMissing(String path) {

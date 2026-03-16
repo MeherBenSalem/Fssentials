@@ -5,6 +5,8 @@ dev\nightbeam\fssentials\maintenance\MaintenanceConfig.class
 dev\nightbeam\fssentials\command\CommandRouter.class
 dev\nightbeam\fssentials\model\InvseeInventoryHolder.class
 dev\nightbeam\fssentials\service\PunishmentManager.class
+dev\nightbeam\fssentials\security\IpLockManager$IpLockEntry.class
+dev\nightbeam\fssentials\security\IpLockListener$MismatchAttempt.class
 dev\nightbeam\fssentials\command\CommandRouter$ParseResult.class
 dev\nightbeam\fssentials\announcement\BroadcastCommand$ParsedBroadcast.class
 dev\nightbeam\fssentials\service\TimeParser.class
@@ -12,12 +14,15 @@ dev\nightbeam\fssentials\maintenance\MaintenanceListener.class
 dev\nightbeam\fssentials\service\AdminToolsListener.class
 dev\nightbeam\fssentials\maintenance\MaintenanceCommand.class
 dev\nightbeam\fssentials\maintenance\MaintenanceTimer.class
+dev\nightbeam\fssentials\security\IpLockListener.class
 dev\nightbeam\fssentials\service\VanishService.class
 dev\nightbeam\fssentials\maintenance\MaintenanceManager.class
 dev\nightbeam\fssentials\util\FoliaScheduler.class
+dev\nightbeam\fssentials\security\IpLockManager.class
 dev\nightbeam\fssentials\model\Punishment.class
 dev\nightbeam\fssentials\model\PunishmentType.class
 dev\nightbeam\fssentials\util\Text.class
+dev\nightbeam\fssentials\security\IpLockCommand.class
 dev\nightbeam\fssentials\storage\YamlPunishmentStorage.class
 dev\nightbeam\fssentials\service\PunishmentListener.class
 dev\nightbeam\fssentials\service\MessageService.class
