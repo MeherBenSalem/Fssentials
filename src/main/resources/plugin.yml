@@ -1,8 +1,8 @@
 # Folia supported v1.0+
 name: Fssentials
 main: dev.nightbeam.fssentials.FssentialsPlugin
-version: 1.1.0
-api-version: '1.20'
+version: 1.1.2
+api-version: '1.21'
 folia-supported: true
 author: NightBeam
 description: Fun and professional moderation essentials for Paper servers.
