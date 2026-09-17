@@ -1,3 +1,6 @@
+bstats: true
+update-check: true
+
 storage:
   persistence-enabled: true
 
@@ -5,9 +8,9 @@ maintenance:
   enabled: false
 
 permissions:
-  silent-notify: "fssentials.notify.silent"
-  bypass: "fssentials.maintenance.bypass"
-  notify: "fssentials.maintenance.notify"
+  silent-notify: "donutessentials.notify.silent"
+  bypass: "donutessentials.maintenance.bypass"
+  notify: "donutessentials.maintenance.notify"
 
 messages:
   maintenance-enabled: "<green>Maintenance mode enabled."
@@ -52,8 +55,8 @@ time-layouts:
 
 help-lines:
   - "&8&m----------------------------------------"
-  - "&6/fssentials help &7- Open this guide, captain."
-  - "&6/fssentials reload &7- Reload configs and messages."
+  - "&6/donutessentials help &7- Open this guide, captain."
+  - "&6/donutessentials reload &7- Reload configs and messages."
   - "&6/kick <-s> <player> <reason|@layout> &7- Give a quick boot."
   - "&6/ban <-s> <player> <reason|@layout> &7- Permanent timeout."
   - "&6/mute <-s> <player> <reason|@layout> &7- Quiet mode ON."

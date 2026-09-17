@@ -1,11 +1,11 @@
 # Folia supported v1.0+
-name: Fssentials
-main: dev.nightbeam.fssentials.FssentialsPlugin
-version: 1.1.2
-api-version: '1.21'
+name: DonutEssentials
+main: dev.nightbeam.donutessentials.DonutEssentialsPlugin
+version: 2.0.0
+api-version: '1.20'
 folia-supported: true
 author: NightBeam
-description: Fun and professional moderation essentials for Paper servers.
+description: Moderation and admin essentials for Paper, Folia, and Purpur servers.
 
 commands:
   kick:
@@ -71,9 +71,10 @@ commands:
   history:
     description: Show punishment history.
     usage: /history <player> <page>
-  fssentials:
+  donutessentials:
     description: Admin command hub.
-    usage: /fssentials <help|reload>
+    usage: /donutessentials <help|reload>
+    aliases: [fssentials]
   systemprefs:
     description: Show system preferences.
     usage: /systemprefs
@@ -104,6 +105,41 @@ commands:
     usage: /iplock <set|remove|change|check> <player> [ip]
 
 permissions:
+  donutessentials.*:
+    default: op
+    children:
+      donutessentials.punish.kick: true
+      donutessentials.punish.ban: true
+      donutessentials.punish.mute: true
+      donutessentials.punish.warn: true
+      donutessentials.punish.note: true
+      donutessentials.punish.banip: true
+      donutessentials.punish.tempban: true
+      donutessentials.punish.tempmute: true
+      donutessentials.punish.tempwarn: true
+      donutessentials.punish.tempipban: true
+      donutessentials.punish.unpunish: true
+      donutessentials.punish.change-reason: true
+      donutessentials.view.warn: true
+      donutessentials.view.note: true
+      donutessentials.view.check: true
+      donutessentials.view.banlist: true
+      donutessentials.view.history: true
+      donutessentials.admin.reload: true
+      donutessentials.admin.systemprefs: true
+      donutessentials.notify.silent: true
+      donutessentials.vanish: true
+      donutessentials.teleport.offlinetp: true
+      donutessentials.view.playerlist: true
+      donutessentials.punish.delete-record: true
+      donutessentials.invsee: true
+      donutessentials.maintenance.admin: true
+      donutessentials.maintenance.bypass: true
+      donutessentials.maintenance.notify: true
+      server.broadcast: true
+      plugin.iplock.admin: true
+      plugin.iplock.bypass: true
+
   fssentials.*:
     default: op
     children:
@@ -139,9 +175,33 @@ permissions:
       plugin.iplock.admin: true
       plugin.iplock.bypass: true
 
-  fssentials.teleport.offlinetp:
+  donutessentials.teleport.offlinetp:
     default: op
     description: Allows teleporting to offline players.
+
+  donutessentials.view.playerlist:
+    default: true
+    description: Allows viewing online player count and names.
+
+  donutessentials.punish.delete-record:
+    default: op
+    description: Allows deleting punishment records from storage.
+
+  donutessentials.maintenance.admin:
+    default: op
+    description: Allows managing maintenance mode.
+
+  donutessentials.maintenance.bypass:
+    default: op
+    description: Allows joining during maintenance mode.
+
+  donutessentials.maintenance.notify:
+    default: op
+    description: Receives maintenance join-attempt notifications.
+
+  fssentials.teleport.offlinetp:
+    default: op
+    description: Legacy alias for donutessentials.teleport.offlinetp.
 
   fssentials.view.playerlist:
     default: true
@@ -149,19 +209,19 @@ permissions:
 
   fssentials.punish.delete-record:
     default: op
-    description: Allows deleting punishment records from storage.
+    description: Legacy alias for donutessentials.punish.delete-record.
 
   fssentials.maintenance.admin:
     default: op
-    description: Allows managing maintenance mode.
+    description: Legacy alias for donutessentials.maintenance.admin.
 
   fssentials.maintenance.bypass:
     default: op
-    description: Allows joining during maintenance mode.
+    description: Legacy alias for donutessentials.maintenance.bypass.
 
   fssentials.maintenance.notify:
     default: op
-    description: Receives maintenance join-attempt notifications.
+    description: Legacy alias for donutessentials.maintenance.notify.
 
   server.broadcast:
     default: op

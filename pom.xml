@@ -4,24 +4,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.nightbeam</groupId>
-    <artifactId>fssentials</artifactId>
-    <version>1.1.2</version>
+    <artifactId>donutessentials</artifactId>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Fssentials</name>
-    <description>Playful but professional moderation essentials for Paper servers.</description>
+    <name>Donut Essentials</name>
+    <description>Moderation and admin essentials for Paper, Folia, and Purpur servers.</description>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper-api.version>26.2.build.121-stable</paper-api.version>
+        <paper-api.version>1.20.1-R0.1-SNAPSHOT</paper-api.version>
     </properties>
 
     <repositories>
         <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -31,6 +43,11 @@
             <artifactId>paper-api</artifactId>
             <version>${paper-api.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -47,7 +64,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <release>25</release>
+                    <release>21</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -67,6 +84,19 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <minimizeJar>false</minimizeJar>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.bstats:bstats-bukkit</include>
+                                    <include>org.bstats:bstats-base</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>dev.nightbeam.donutessentials.lib.bstats</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

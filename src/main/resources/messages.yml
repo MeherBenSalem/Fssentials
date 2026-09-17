@@ -1,4 +1,4 @@
-prefix: "&6&lCore &8» "
+prefix: "&6&lDonut &8» "
 
 errors:
   no-permission: "&cNope! You do not have permission for that command."
@@ -32,7 +32,8 @@ usage:
   punishment: "&eUsage: /punishment delete record <id>"
   invsee: "&eUsage: /invsee <player>"
   iplock: "&eUsage: /iplock <set|remove|change|check> <player> [ip]"
-  fssentials: "&eUsage: /fssentials <help|reload>"
+  donutessentials: "&eUsage: /donutessentials <help|reload>"
+  fssentials: "&eUsage: /donutessentials <help|reload>"
 
 vanish:
   enabled: "&aYou are now vanished."
@@ -63,7 +64,7 @@ target:
   warn: "&eHey %player%, you have been warned for: &f%reason%&e. Stay on your toes!"
 
 help:
-  header: "&6Fssentials Help &8- &7Friendly moderation toolkit"
+  header: "&6Donut Essentials Help &8- &7Friendly moderation toolkit"
 
 check:
   header: "&6Moderation Snapshot for &e%player%"
@@ -101,7 +102,7 @@ list:
   line: "&8- &e%id% &7| &c%type% &7| &f%player% &7| &f%reason% &7| &aBy %actor% &7| &b%created% &7| &dUntil %until% &7| %active%"
 
 admin:
-  reloaded: "&aConfigs refreshed. Fssentials is back in action!"
+  reloaded: "&aConfigs refreshed. Donut Essentials is back in action!"
 
 system:
   header: "&6System Preferences"
