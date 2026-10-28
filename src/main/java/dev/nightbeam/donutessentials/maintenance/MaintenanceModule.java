@@ -163,6 +163,13 @@ public final class MaintenanceModule implements Module {
         return true;
     }
 
+    /** Before login (no player yet): whitelisted, or the bypass/admin permission through the permissions plugin. */
+    boolean mayJoin(java.util.UUID uuid, String name) {
+        return !enabled || whitelist.contains(name.toLowerCase(Locale.ROOT))
+                || dev.nightbeam.donutessentials.hook.OfflinePermissions.has(uuid, BYPASS)
+                || dev.nightbeam.donutessentials.hook.OfflinePermissions.has(uuid, ADMIN);
+    }
+
     /** Whether the player may be on the server right now. */
     boolean mayJoin(Player player) {
         return !enabled || player.hasPermission(BYPASS) || player.hasPermission(ADMIN)

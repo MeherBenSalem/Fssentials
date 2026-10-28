@@ -18,7 +18,7 @@ import org.bukkit.plugin.ServicePriority;
 final class VaultProvider implements Economy {
 
     private final Plugin plugin;
-    private final NativeEconomy economy;
+    private volatile NativeEconomy economy;
 
     private VaultProvider(Plugin plugin, NativeEconomy economy) {
         this.plugin = plugin;
@@ -30,6 +30,25 @@ final class VaultProvider implements Economy {
         VaultProvider provider = new VaultProvider(plugin, economy);
         Bukkit.getServicesManager().register(Economy.class, provider, plugin, ServicePriority.Low);
         return provider;
+    }
+
+    /**
+     * Registers before the economy exists (while plugins load), so plugins that look Vault's economy up when they
+     * enable find it even when they enable before Donut Essentials. Until {@link #attach} it reports itself disabled.
+     */
+    static Object registerEarly(Plugin plugin) {
+        return register(plugin, null);
+    }
+
+    /** Connects an early registration to the economy once it is loaded. */
+    static void attach(Object provider, NativeEconomy economy) {
+        if (provider instanceof VaultProvider vault) {
+            vault.economy = economy;
+        }
+    }
+
+    private static EconomyResponse starting() {
+        return new EconomyResponse(0, 0, ResponseType.FAILURE, "Donut Essentials is still starting");
     }
 
     static void unregister(Object provider) {
@@ -48,7 +67,8 @@ final class VaultProvider implements Economy {
     }
 
     private EconomyResponse response(NativeEconomy.Result result, double amount, OfflinePlayer player) {
-        double balance = player == null ? 0 : economy.balance(player.getUniqueId());
+        NativeEconomy economy = this.economy;
+        double balance = player == null || economy == null ? 0 : economy.balance(player.getUniqueId());
         return switch (result) {
             case OK -> new EconomyResponse(amount, balance, ResponseType.SUCCESS, null);
             case NOT_ENOUGH -> new EconomyResponse(0, balance, ResponseType.FAILURE, "Insufficient funds");
@@ -67,7 +87,8 @@ final class VaultProvider implements Economy {
 
     @Override
     public boolean isEnabled() {
-        return plugin.isEnabled() && economy.available();
+        NativeEconomy economy = this.economy;
+        return plugin.isEnabled() && economy != null && economy.available();
     }
 
     @Override
@@ -82,22 +103,26 @@ final class VaultProvider implements Economy {
 
     @Override
     public int fractionalDigits() {
-        return economy.settings().decimals();
+        NativeEconomy economy = this.economy;
+        return economy == null ? 2 : economy.settings().decimals();
     }
 
     @Override
     public String format(double amount) {
-        return economy.format(amount);
+        NativeEconomy economy = this.economy;
+        return economy == null ? String.format(java.util.Locale.ROOT, "%.2f", amount) : economy.format(amount);
     }
 
     @Override
     public String currencyNamePlural() {
-        return economy.settings().namePlural();
+        NativeEconomy economy = this.economy;
+        return economy == null ? "" : economy.settings().namePlural();
     }
 
     @Override
     public String currencyNameSingular() {
-        return economy.settings().nameSingular();
+        NativeEconomy economy = this.economy;
+        return economy == null ? "" : economy.settings().nameSingular();
     }
 
     @Override
@@ -108,7 +133,8 @@ final class VaultProvider implements Economy {
 
     @Override
     public boolean hasAccount(OfflinePlayer player) {
-        return player != null && economy.hasAccount(player.getUniqueId());
+        NativeEconomy economy = this.economy;
+        return player != null && economy != null && economy.hasAccount(player.getUniqueId());
     }
 
     @Override
@@ -129,7 +155,8 @@ final class VaultProvider implements Economy {
 
     @Override
     public double getBalance(OfflinePlayer player) {
-        return player == null ? 0 : economy.balance(player.getUniqueId());
+        NativeEconomy economy = this.economy;
+        return player == null || economy == null ? 0 : economy.balance(player.getUniqueId());
     }
 
     @Override
@@ -150,7 +177,8 @@ final class VaultProvider implements Economy {
 
     @Override
     public boolean has(OfflinePlayer player, double amount) {
-        return player != null && economy.balance(player.getUniqueId()) >= amount;
+        NativeEconomy economy = this.economy;
+        return player != null && economy != null && economy.balance(player.getUniqueId()) >= amount;
     }
 
     @Override
@@ -176,6 +204,10 @@ final class VaultProvider implements Economy {
         }
         if (amount < 0) {
             return new EconomyResponse(0, getBalance(player), ResponseType.FAILURE, "Cannot withdraw negative funds");
+        }
+        NativeEconomy economy = this.economy;
+        if (economy == null) {
+            return starting();
         }
         return response(economy.withdraw(player.getUniqueId(), amount, "Vault"), amount, player);
     }
@@ -203,6 +235,10 @@ final class VaultProvider implements Economy {
         }
         if (amount < 0) {
             return new EconomyResponse(0, getBalance(player), ResponseType.FAILURE, "Cannot deposit negative funds");
+        }
+        NativeEconomy economy = this.economy;
+        if (economy == null) {
+            return starting();
         }
         return response(economy.deposit(player.getUniqueId(), amount, "Vault"), amount, player);
     }
@@ -285,7 +321,8 @@ final class VaultProvider implements Economy {
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer player) {
-        return player != null && economy.createAccount(player.getUniqueId());
+        NativeEconomy economy = this.economy;
+        return player != null && economy != null && economy.createAccount(player.getUniqueId());
     }
 
     @Override

@@ -29,7 +29,7 @@ public final class ConfigFiles {
     /** Sections whose entries an admin may delete on purpose: only added back when the whole section is gone. */
     static final Set<String> KEEP_AS_IS = Set.of("teleport.tiers", "homes.limits", "chat.formats", "chat.filter.replacements",
             "announcements.messages", "moderation.layouts", "moderation.time-layouts", "moderation.warn-escalation",
-            "server-links.links", "rtp.worlds", "command-rules", "economy.balance-caps", "kits.first-join", "afk.tiers",
+            "server-links.links", "rtp.worlds", "command-rules.rules", "economy.balance-caps", "kits.first-join", "afk.tiers",
             "teleport.costs", "rules.lines");
 
     /** Files the 2.x plugin (and Fssentials before it) kept in its folder. */

@@ -4,6 +4,8 @@ import dev.nightbeam.donutessentials.DonutEssentialsPlugin;
 import dev.nightbeam.donutessentials.homes.Home;
 import dev.nightbeam.donutessentials.homes.HomesModule;
 import dev.nightbeam.donutessentials.kits.KitsModule;
+import dev.nightbeam.donutessentials.moderation.ModerationModule;
+import dev.nightbeam.donutessentials.moderation.Punishment;
 import dev.nightbeam.donutessentials.player.PlayerData;
 import dev.nightbeam.donutessentials.teleport.TeleportService;
 import dev.nightbeam.donutessentials.vanish.VanishModule;
@@ -190,16 +192,27 @@ public final class DonutEssentialsApiImpl implements DonutEssentialsApi {
 
     @Override
     public boolean isMuted(UUID player) {
-        return false;
+        ModerationModule moderation = plugin.module(ModerationModule.class);
+        return moderation != null && moderation.isMuted(player);
     }
 
     @Override
     public boolean isBanned(UUID player) {
-        return false;
+        ModerationModule moderation = plugin.module(ModerationModule.class);
+        return moderation != null && moderation.isBanned(player);
     }
 
     @Override
     public List<PunishmentInfo> activePunishments(UUID player) {
-        return List.of();
+        ModerationModule moderation = plugin.module(ModerationModule.class);
+        if (moderation == null) {
+            return List.of();
+        }
+        List<PunishmentInfo> out = new ArrayList<>();
+        for (Punishment p : moderation.punishments().activeFor(player)) {
+            out.add(new PunishmentInfo(p.id(), p.type().name(), p.targetUuid(), p.targetName(), p.actor(), p.reason(), p.created(),
+                    p.expires(), p.active()));
+        }
+        return out;
     }
 }

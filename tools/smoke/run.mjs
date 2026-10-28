@@ -67,7 +67,7 @@ async function download(url, file) {
   return file;
 }
 
-function cached(...parts) {
+export function cached(...parts) {
   const file = path.join(cache, ...parts);
   return fs.existsSync(file) ? file : null;
 }

@@ -4,6 +4,7 @@ import dev.nightbeam.donutessentials.DonutEssentialsPlugin;
 import dev.nightbeam.donutessentials.economy.Baltop;
 import dev.nightbeam.donutessentials.economy.EconomyModule;
 import dev.nightbeam.donutessentials.homes.HomesModule;
+import dev.nightbeam.donutessentials.moderation.ModerationModule;
 import dev.nightbeam.donutessentials.player.PlayerData;
 import dev.nightbeam.donutessentials.player.PlayerFlag;
 import dev.nightbeam.donutessentials.util.Amounts;
@@ -144,7 +145,28 @@ final class EssentialsExpansion extends PlaceholderExpansion {
 
     /** Placeholders the moderation module answers (warnings, mutes); null when unknown. */
     private String moderation(String key, Player player) {
-        return null;
+        ModerationModule moderation = plugin.module(ModerationModule.class);
+        if (moderation == null) {
+            return switch (key) {
+                case "muted", "frozen" -> "false";
+                case "warns" -> "0";
+                default -> null;
+            };
+        }
+        return switch (key) {
+            case "muted" -> yesNo(moderation.isMuted(player.getUniqueId()));
+            case "frozen" -> yesNo(moderation.isFrozen(player.getUniqueId()));
+            case "warns" -> {
+                int count = 0;
+                for (var punishment : moderation.punishments().activeFor(player.getUniqueId())) {
+                    if (punishment.type() == dev.nightbeam.donutessentials.moderation.PunishmentType.WARN) {
+                        count++;
+                    }
+                }
+                yield String.valueOf(count);
+            }
+            default -> null;
+        };
     }
 
     private String baltop(String rest, OfflinePlayer viewer) {

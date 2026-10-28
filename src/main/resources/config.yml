@@ -69,6 +69,9 @@ teleport:
     vip:
       warmup-seconds: 1
       cooldowns: {home: 0, warp: 0, tpa: 5, rtp: 60}
+  tpa:
+    # Seconds before an unanswered teleport request expires.
+    expire-seconds: 60
 
 combat:
   # Hitting or being hit by a player puts both in combat for this many seconds.
@@ -76,12 +79,34 @@ combat:
   seconds: 15
   # Commands players in combat cannot use (teleports are always blocked).
   blocked-commands: [home, homes, warp, warps, spawn, tpa, tpahere, tpaccept, back, rtp, kit, enderchest, ec]
+  # A player who disconnects in combat: KILL (they die and drop their items) or NOTHING.
+  on-logout: KILL
+
+command-rules:
+  # Cooldowns and costs for any command, also other plugins' (aliases share the rule). cooldown: seconds, or 5m, 1h...
+  # donutessentials.bypass.command-rules skips them all.
+  enabled: true
+  rules:
+    repair: {cooldown: 5m, cost: 0}
+    near: {cooldown: 30, cost: 0}
 
 sounds:
   # "<sound> <volume> <pitch>". Empty ("") for silence.
   menu-click: "ui.button.click 0.5 1.4"
   teleport: "entity.enderman.teleport 0.7 1.1"
   teleport-tick: "block.note_block.hat 0.5 1.6"
+  kit-claim: "entity.item.pickup 0.8 1.0"
+  payment-sent: "entity.experience_orb.pickup 0.6 1.2"
+  payment-received: "entity.player.levelup 0.6 1.6"
+  tpa-request: "block.note_block.pling 0.6 1.4"
+  warp-set: "block.beacon.activate 0.4 1.6"
+  mention: "entity.experience_orb.pickup 0.6 1.6"
+  message: "entity.item.pickup 0.5 1.4"
+  warned: "entity.villager.no 0.8 0.8"
+  report: "block.note_block.pling 0.6 1.4"
+  heal: "entity.player.levelup 0.4 1.6"
+  enderchest: "block.ender_chest.open 0.5 1"
+  rules-accepted: "entity.player.levelup 0.5 1.2"
 
 discord:
   # A Discord channel webhook (Channel settings > Integrations > Webhooks) for staff logs. Empty to switch off.
@@ -105,3 +130,293 @@ homes:
   default-name: home
   # Worlds where homes can't be set (donutessentials.homes.anyworld bypasses).
   disabled-worlds: []
+
+kits:
+  # When true, each kit needs donutessentials.kit.<name>; otherwise everyone can claim every kit.
+  per-kit-permissions: false
+  # Hide kits a player can't claim from the kits menu (instead of showing them as locked).
+  hide-locked: false
+  # A kit that doesn't fit: DENY (the player is told how many slots to free) or DROP (the rest falls at their feet).
+  full-inventory: DENY
+  # Put armour and shields from a kit straight on when those slots are empty.
+  auto-equip: true
+  # Kits given to players on their very first join (they count as claimed).
+  first-join: [starter]
+  # On the first start, create a "starter" kit (stone tools and bread, once per player). Never recreated afterwards.
+  create-starter-kit: true
+
+economy:
+  # Money every new player starts with.
+  starting-balance: 100
+  # The highest balance a player can have. 0 for no limit.
+  max-balance: 0
+  # Rank tiers (donutessentials.tier.<name>) with a higher limit, e.g. vip: 50000000. 0 removes the limit.
+  balance-caps: {}
+  # The smallest amount /pay accepts.
+  min-payment: 0.01
+  currency:
+    symbol: "$"
+    decimals: 2
+    # {symbol} and {amount}, e.g. "{amount} coins".
+    format: "{symbol}{amount}"
+    name-singular: "dollar"
+    name-plural: "dollars"
+  # Write every balance change to logs/economy-YYYY-MM-DD.log.
+  log: true
+  baltop:
+    # How often the richest-players list is worked out, and how many players it holds.
+    refresh-seconds: 60
+    size: 100
+
+warps:
+  # When true, each warp needs donutessentials.warp.<name> (donutessentials.warps.all gives every warp).
+  per-warp-permissions: false
+  # The icon of a warp set with an empty hand.
+  default-icon: ENDER_PEARL
+
+spawn:
+  # New players start at the first-join spawn (/setspawn first), or the spawn (/setspawn). Nothing happens until one
+  # of them is set.
+  on-first-join: true
+  # Send everyone to spawn every time they join.
+  on-join: false
+  # Players without a bed or respawn anchor respawn at spawn (once /setspawn is used).
+  on-respawn: true
+
+rtp:
+  # Spots tried before giving up (each loads one chunk).
+  max-attempts: 12
+  # Where /rtp goes when the player's world is not enabled below.
+  default-world: world
+  # Worlds players can /rtp in. center: spawn (the world spawn), or "x, z" like "0, 0".
+  worlds:
+    world: {enabled: true, radius: 5000, min-radius: 300, center: spawn}
+    world_nether: {enabled: false, radius: 2000, min-radius: 100, center: spawn}
+    world_the_end: {enabled: false, radius: 1500, min-radius: 200, center: spawn}
+  # Biomes to skip: any biome whose name contains one of these words.
+  blocked-biomes: [ocean, river]
+  # Blocks nobody should land on or in.
+  unsafe-blocks: [LAVA, WATER, MAGMA_BLOCK, CACTUS, FIRE, SOUL_FIRE, CAMPFIRE, SOUL_CAMPFIRE, POWDER_SNOW,
+    SWEET_BERRY_BUSH, WITHER_ROSE, POINTED_DRIPSTONE, BUBBLE_COLUMN, SEAGRASS, TALL_SEAGRASS, KELP, KELP_PLANT]
+
+chat:
+  # Format chat here. false leaves the format to another chat plugin (the checks below still apply).
+  format-enabled: true
+  # MiniMessage (& codes work too). <prefix>, <suffix> and <group> come from your permissions plugin through Vault
+  # (LuckPerms works); <name>, <display_name> (the nickname, or the name), <world> and <message>.
+  # PlaceholderAPI placeholders work too.
+  format: "<prefix><display_name><suffix> <dark_gray>»</dark_gray> <gray><message>"
+  # A format per permission group (the player's primary group, lower case) replaces the one above.
+  formats:
+    admin: "<#ff6b6b>[Admin]</#ff6b6b> <white><display_name></white> <dark_gray>»</dark_gray> <white><message>"
+  # Shown in front of every nickname (e.g. "~"), so nicknames can't pass for real names.
+  nickname-prefix: ""
+  # Show nicknames in the tab list too.
+  nickname-in-tab: true
+  nickname:
+    min-length: 3
+    max-length: 16
+    # What a nickname may contain once colours are taken out (a Java regular expression).
+    allowed: "[A-Za-z0-9_]+"
+  # "[item]" in chat shows the held item with its tooltip (donutessentials.chat.item).
+  item:
+    enabled: true
+  # Names of online players in chat are highlighted and ping them. require-at: only "@name" counts.
+  mentions:
+    enabled: true
+    require-at: false
+  # For players without donutessentials.chat.bypass.
+  anti-spam:
+    enabled: true
+    # The shortest time between two messages.
+    min-delay-ms: 800
+    # The same message again within this many seconds is refused.
+    repeat-window-seconds: 20
+  filter:
+    enabled: true
+    # Whole words, any case, replaced with stars.
+    words: []
+    # Words replaced with something else, e.g. ez: "gg".
+    replacements: {}
+    # Refuse messages with links, except links to the domains below (e.g. your website).
+    block-links: true
+    allowed-links: []
+  # Join, quit and first-join messages from messages.yml (chat.join, chat.quit, chat.first-join).
+  # false leaves them to vanilla or another plugin.
+  join-quit-messages: true
+
+broadcast:
+  # The lines /broadcast sends to chat. <title> is the text before "|", <message> the text after it.
+  format:
+    - "<dark_gray><st>                                        </st>"
+    - "<#6bc6ff><bold><title></bold>"
+    - "<white><message>"
+    - "<dark_gray><st>                                        </st>"
+  # Also show the title (and the message as a subtitle) on screen.
+  title: true
+  sound:
+    enabled: true
+    name: "block.note_block.pling"
+    volume: 1.0
+    pitch: 1.0
+
+announcements:
+  # One entry every interval-seconds, in order (or at random). An entry is one line, or a list of lines.
+  # <player> is the reader's name; PlaceholderAPI placeholders work too.
+  enabled: true
+  interval-seconds: 300
+  random: false
+  messages:
+    - "<#6bc6ff>✦</#6bc6ff> <gray>Set a home with <white>/sethome</white> and go back with <white>/home</white>."
+    - - "<#6bc6ff>✦</#6bc6ff> <gray>Lost? <white>/spawn</white> takes you back to spawn."
+      - "<#6bc6ff>✦</#6bc6ff> <gray>Visit a friend with <white>/tpa <player></white>."
+    - "<#6bc6ff>✦</#6bc6ff> <gray>Read the rules with <white>/rules</white>."
+
+messaging:
+  mail:
+    # Letters a mailbox holds; more are refused until the player clears it.
+    max-per-player: 50
+    # Seconds between two letters from the same player (donutessentials.msg.bypass skips it).
+    cooldown-seconds: 10
+
+afk:
+  # Minutes without moving, looking around, chatting or using commands before a player is AFK. 0 = only /afk.
+  idle-minutes: 5
+  # Kick players AFK for this many minutes (donutessentials.afk.kickexempt never). 0 = never.
+  kick-minutes: 0
+  # Tell everyone when someone goes AFK or comes back (vanished players never).
+  announce: true
+  # Show [AFK] in the tab list (afk.tab-prefix in messages.yml).
+  tab-tag: true
+  # AFK players don't count when skipping the night by sleeping.
+  ignore-sleep: true
+
+moderation:
+  # Announce punishments to everyone. -s keeps one silent: only staff with donutessentials.notify.silent see it.
+  # Notes are always staff-only.
+  broadcast: true
+  # How dates are shown in lists and ban screens (Java DateTimeFormatter pattern).
+  date-format: "yyyy-MM-dd HH:mm"
+  # Lines per page in /history, /banlist, /warns and /notes.
+  history-page-size: 8
+  # Reasons staff can type as @name: /ban Kiri @hacking
+  layouts:
+    toxicity: "Being toxic in chat"
+    spam: "Spamming messages"
+    exploit: "Using unfair exploits"
+    hacking: "Using a hacked client"
+    griefing: "Griefing"
+  # Durations staff can type as #name: /tempmute Kiri #short
+  time-layouts:
+    default: "1d"
+    short: "30m"
+    long: "7d"
+  # Commands muted players can't use.
+  muted-blocked-commands: [msg, tell, w, m, whisper, r, reply, mail, me, say]
+  # When a player's active warnings reach a number, this console command runs (<player>, <count>).
+  # Temporary warnings stop counting when they expire. Remove the entries to switch it off.
+  warn-escalation:
+    3: "tempmute <player> 1h Reached 3 warnings"
+    5: "tempban <player> 1d Reached 5 warnings"
+  alts:
+    # Tell staff (donutessentials.alerts.alts) when a joining player shares an address with a banned account.
+    alert-banned: true
+  freeze:
+    # Ban players who log out while frozen (otherwise staff are only told).
+    ban-on-logout: false
+    ban-reason: "Logged out while frozen"
+    # Commands frozen players can still use.
+    allowed-commands: [msg, tell, w, r, reply, staffchat, sc, report]
+  reports:
+    # Seconds between two reports from the same player (staff are exempt).
+    cooldown-seconds: 60
+  commandspy:
+    # Commands never shown to spies (passwords!).
+    hidden: [login, l, register, reg, changepassword, changepw, cp, 2fa]
+  discord:
+    # Post punishments and reports to discord.webhook-url.
+    punishments: true
+    reports: true
+
+vanish:
+  # Show "<player> left the game" / "joined the game" to players when someone vanishes or reappears.
+  fake-messages: true
+  # Vanished players don't pick up items, can't be hurt or get hungry, and don't press plates or tripwires.
+  prevent-pickup: true
+  invulnerable: true
+  no-physical-interact: true
+  # Leave vanished players out of the server list's player count and sample.
+  hide-from-server-list: true
+  # Vanished players don't count for skipping the night.
+  ignore-sleep: true
+  # Seconds between action bar reminders while vanished (0 = off).
+  reminder-seconds: 3
+
+staff:
+  # How /whois shows dates (Java DateTimeFormatter pattern, server time zone).
+  date-format: "yyyy-MM-dd HH:mm"
+
+maintenance:
+  # The screen players see when they can't join. <timer> is the time left on a running timer.
+  kick-message: "<#ff6b6b><bold>Under maintenance</bold><newline><newline><gray>We're working on the server.<newline><gray>Please come back later."
+  # The server list text while maintenance is on: two lines. Use a list of lists for several that take turns.
+  motd:
+    - "<#ff6b6b><bold>Under maintenance"
+    - "<gray>We'll be back soon."
+  # Shown in place of the player count on the server list ("" to keep the count).
+  version-text: "<#ff6b6b>Maintenance"
+  # Players who may not stay are sent away when maintenance switches on.
+  kick-on-enable: true
+  # Seconds before a timer switches maintenance on or off at which everyone is told.
+  countdown: [600, 300, 120, 60, 30, 10, 5, 4, 3, 2, 1]
+
+iplock:
+  # Lock accounts (usually staff) to the IPs they may join from: an address, 1.2.3.* or a range like 10.0.0.0/24.
+  # Manage locks with /iplock. donutessentials.iplock.bypass skips the check.
+  enabled: true
+  kick-message: "<#ff6b6b>This account can't join from your IP address.<newline><gray>Ask a server admin if this is wrong."
+  # Write refused logins to the console.
+  log-blocked-attempts: true
+
+rules:
+  # /rules shows these lines (MiniMessage). They are also the text of the rules screen.
+  lines:
+    - "<#6bc6ff><bold>Server rules</bold>"
+    - "<gray>1. <white>Be kind. No harassment, hate speech or threats."
+    - "<gray>2. <white>No cheats, hacked clients, x-ray or dupes."
+    - "<gray>3. <white>No griefing or stealing from other players."
+    - "<gray>4. <white>No spam, advertising or begging in chat."
+    - "<gray>5. <white>Staff decisions are final. Questions? Ask a staff member."
+  # New players must accept the rules before they can play: on 1.21.7+ a native screen with Accept and Disconnect,
+  # older servers get the rules in chat with clickable [Accept] [Decline].
+  require-accept: false
+  # Raise this number after changing the rules to make everyone accept them again.
+  version: 1
+  # Until they accept: no chat, no commands except /rules, no building, no interacting.
+  block-until-accepted: true
+
+server-links:
+  # Links in the pause menu (Minecraft 1.21+; older servers skip them). Players see changes when they next join.
+  enabled: false
+  links:
+    discord: {label: "<#6bc6ff>Discord", url: "https://discord.gg/your-invite"}
+    website: {label: "<#7ee081>Website", url: "https://example.com"}
+    store: {label: "<#ffc24b>Store", url: "https://store.example.com"}
+
+motd:
+  # Shown by /motd, and on join when on-join is true. <player>, <display> (nickname), <online>, <max> and
+  # PlaceholderAPI placeholders work.
+  on-join: true
+  lines:
+    - ""
+    - "<gray>Welcome, <#6bc6ff><display></#6bc6ff>! <dark_gray>·</dark_gray> <white><online></white><gray>/<max> online"
+    - "<gray>Type <white>/menu</white> for homes, warps, kits and more. <dark_gray>·</dark_gray> <white>/rules</white>"
+    - ""
+
+utility:
+  # /near: the radius without an argument, and the largest one players may ask for.
+  near:
+    default-radius: 100
+    max-radius: 500
+  # Dates in /seen and /playtime (Java DateTimeFormatter pattern).
+  date-format: "yyyy-MM-dd"

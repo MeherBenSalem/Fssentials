@@ -10,3 +10,211 @@ sethome: {enabled: true, aliases: [createhome], description: "Set a home where y
 home: {enabled: true, aliases: [h], description: "Teleport to a home"}
 delhome: {enabled: true, aliases: [deletehome, rmhome], description: "Delete a home"}
 homes: {enabled: true, aliases: [listhomes], description: "Your homes"}
+
+kit: {enabled: true, aliases: [], description: "Claim a kit (no name: the kits menu)"}
+
+kits: {enabled: true, aliases: [kitlist], description: "The kits menu"}
+
+createkit: {enabled: true, aliases: [addkit], description: "Make a kit from your inventory"}
+
+editkit: {enabled: true, aliases: [], description: "Change a kit's items"}
+
+delkit: {enabled: true, aliases: [deletekit, removekit], description: "Delete a kit"}
+
+balance: {enabled: true, aliases: [bal, money], description: "Your balance, or another player's"}
+
+pay: {enabled: true, aliases: [], description: "Pay another player"}
+
+paytoggle: {enabled: true, aliases: [togglepay], description: "Accept or refuse payments"}
+
+baltop: {enabled: true, aliases: [balancetop, moneytop, richest], description: "The richest players"}
+
+eco: {enabled: true, aliases: [economy], description: "Give, take or set a player's money"}
+
+tpa: {enabled: true, aliases: [tpask, call], description: "Ask to teleport to a player"}
+
+tpahere: {enabled: true, aliases: [tpaskhere], description: "Ask a player to teleport to you"}
+
+tpaccept: {enabled: true, aliases: [tpyes], description: "Accept a teleport request"}
+
+tpdeny: {enabled: true, aliases: [tpno], description: "Deny a teleport request"}
+
+tpacancel: {enabled: true, aliases: [], description: "Take back your teleport request"}
+
+tptoggle: {enabled: true, aliases: [], description: "Turn teleport requests off or on"}
+
+tpauto: {enabled: true, aliases: [], description: "Accept every /tpa at once"}
+
+back: {enabled: true, aliases: [], description: "Go back to your last place or where you died"}
+
+tphere: {enabled: true, aliases: [s], description: "Bring a player to you (staff)"}
+
+tpo: {enabled: true, aliases: [], description: "Teleport to a player, ignoring their toggles (staff)"}
+
+warp: {enabled: true, aliases: [], description: "Teleport to a warp, or open the warps menu"}
+
+warps: {enabled: true, aliases: [listwarps], description: "The warps menu"}
+
+setwarp: {enabled: true, aliases: [createwarp], description: "Set a warp where you stand (held item is the icon)"}
+
+delwarp: {enabled: true, aliases: [deletewarp, rmwarp], description: "Delete a warp"}
+
+spawn: {enabled: true, aliases: [], description: "Teleport to spawn"}
+
+setspawn: {enabled: true, aliases: [], description: "Set the spawn, or where new players start (first)"}
+
+rtp: {enabled: true, aliases: [wild, randomtp], description: "Teleport to a random safe spot"}
+
+chat: {enabled: true, aliases: [chatcontrol], description: "Clear, lock or slow down the chat"}
+
+broadcast: {enabled: true, aliases: [bc, announce], description: "Announce something to the whole server"}
+
+nick: {enabled: true, aliases: [nickname], description: "Set or remove a nickname"}
+
+realname: {enabled: true, aliases: [], description: "Who is behind a nickname"}
+
+msg: {enabled: true, aliases: [tell, w, m, whisper, pm], description: "Send a private message"}
+
+reply: {enabled: true, aliases: [r], description: "Reply to your last private message"}
+
+msgtoggle: {enabled: true, aliases: [togglemsg], description: "Take or refuse private messages"}
+
+ignore: {enabled: true, aliases: [unignore], description: "Ignore a player, or stop ignoring them"}
+
+ignorelist: {enabled: true, aliases: [ignored], description: "The players you ignore"}
+
+socialspy: {enabled: true, aliases: [spy], description: "Read other players' private messages"}
+
+mail: {enabled: true, aliases: [email], description: "Send and read offline mail"}
+
+afk: {enabled: true, aliases: [away], description: "Go AFK, or come back"}
+
+kick: {enabled: true, aliases: [], description: "Kick a player"}
+
+ban: {enabled: true, aliases: [], description: "Ban a player for good"}
+
+tempban: {enabled: true, aliases: [], description: "Ban a player for a while"}
+
+mute: {enabled: true, aliases: [], description: "Mute a player for good"}
+
+tempmute: {enabled: true, aliases: [], description: "Mute a player for a while"}
+
+warn: {enabled: true, aliases: [], description: "Warn a player"}
+
+tempwarn: {enabled: true, aliases: [], description: "Warn a player for a while"}
+
+note: {enabled: true, aliases: [], description: "Add a staff note to a player"}
+
+banip: {enabled: true, aliases: [ban-ip, ipban], description: "Ban an address for good"}
+
+tempipban: {enabled: true, aliases: [tempbanip], description: "Ban an address for a while"}
+
+unban: {enabled: true, aliases: [pardon], description: "Lift a ban (ID, player or IP)"}
+
+unmute: {enabled: true, aliases: [], description: "Lift a mute (ID or player)"}
+
+unwarn: {enabled: true, aliases: [], description: "Lift a warning (ID or player)"}
+
+unnote: {enabled: true, aliases: [], description: "Remove a note (ID or player)"}
+
+unpunish: {enabled: true, aliases: [], description: "Lift any punishment by ID"}
+
+change-reason: {enabled: true, aliases: [changereason], description: "Change a punishment's reason"}
+
+warns: {enabled: true, aliases: [warnings], description: "A player's warnings"}
+
+notes: {enabled: true, aliases: [], description: "Staff notes on a player"}
+
+check: {enabled: true, aliases: [lookup], description: "A player's moderation summary"}
+
+banlist: {enabled: true, aliases: [bans], description: "Every active punishment"}
+
+history: {enabled: true, aliases: [hist], description: "A player's punishment history"}
+
+punishment: {enabled: true, aliases: [], description: "Look up or delete a punishment record"}
+
+alts: {enabled: true, aliases: [dupeip], description: "Accounts seen on a player's addresses"}
+
+freeze: {enabled: true, aliases: [ss], description: "Freeze or unfreeze a player"}
+
+report: {enabled: true, aliases: [], description: "Report a player to staff"}
+
+reports: {enabled: true, aliases: [], description: "Open reports"}
+
+staffchat: {enabled: true, aliases: [sc], description: "Talk to staff"}
+
+commandspy: {enabled: true, aliases: [cspy], description: "See the commands players type"}
+
+vanish: {enabled: true, aliases: [v], description: "Vanish from players, or see who is vanished"}
+
+invsee: {enabled: true, aliases: [inventorysee], description: "Look into a player's inventory"}
+
+endersee: {enabled: true, aliases: [ecsee], description: "Look into a player's ender chest"}
+
+whois: {enabled: true, aliases: [playerinfo], description: "Everything about a player"}
+
+offlinetp: {enabled: true, aliases: [otp], description: "Teleport to a player, or where they logged out"}
+
+playerlist: {enabled: true, aliases: [online], description: "Who is online"}
+
+maintenance: {enabled: true, aliases: [maint], description: "Maintenance mode, its whitelist and timers"}
+
+iplock: {enabled: true, aliases: [], description: "Lock accounts to the IPs they may join from"}
+
+rules: {enabled: true, aliases: [serverrules], description: "The server rules"}
+
+motd: {enabled: true, aliases: [], description: "The message of the day"}
+
+fly: {enabled: true, aliases: [], description: "Switch flight on or off"}
+
+god: {enabled: true, aliases: [godmode], description: "Switch god mode on or off"}
+
+heal: {enabled: true, aliases: [], description: "Heal fully"}
+
+feed: {enabled: true, aliases: [eat], description: "Fill your hunger"}
+
+speed: {enabled: true, aliases: [], description: "Walk or fly faster (1-10)"}
+
+gm: {enabled: true, aliases: [gamemode], description: "Change game mode"}
+
+gmc: {enabled: true, aliases: [], description: "Creative mode"}
+
+gms: {enabled: true, aliases: [], description: "Survival mode"}
+
+gma: {enabled: true, aliases: [], description: "Adventure mode"}
+
+gmsp: {enabled: true, aliases: [], description: "Spectator mode"}
+
+craft: {enabled: true, aliases: [workbench, wb], description: "A crafting table anywhere"}
+
+enderchest: {enabled: true, aliases: [ec], description: "Your ender chest anywhere"}
+
+trash: {enabled: true, aliases: [disposal], description: "Throw items away"}
+
+hat: {enabled: true, aliases: [head], description: "Wear the held item"}
+
+repair: {enabled: true, aliases: [fix], description: "Repair the held item (or all)"}
+
+clearinventory: {enabled: true, aliases: [ci, clearinv], description: "Clear an inventory"}
+
+top: {enabled: true, aliases: [], description: "Go to the highest block above you"}
+
+seen: {enabled: true, aliases: [lastseen], description: "When a player was last online"}
+
+playtime: {enabled: true, aliases: [pt], description: "Time played on the server"}
+
+ping: {enabled: true, aliases: [], description: "Connection latency"}
+
+near: {enabled: true, aliases: [nearby], description: "Players near you"}
+
+day: {enabled: true, aliases: [], description: "Make it day"}
+
+night: {enabled: true, aliases: [], description: "Make it night"}
+
+sun: {enabled: true, aliases: [clearweather], description: "Clear the weather"}
+
+rain: {enabled: true, aliases: [storm], description: "Make it rain"}
+
+menu: {enabled: true, aliases: [profile], description: "Homes, warps, kits and more in one menu"}
+
+settings: {enabled: true, aliases: [prefs, toggles], description: "Your personal settings"}

@@ -110,6 +110,24 @@ public final class PunishmentService {
     // ── Lookups ─────────────────────────────────────────────────────────────────────────────────────────────────
 
     /** The ban that keeps this account or address out, or null. */
+    /** A player's punishments that are in force, newest first (memory only). */
+    public List<Punishment> activeFor(UUID uuid) {
+        long now = System.currentTimeMillis();
+        List<Punishment> out = new java.util.ArrayList<>();
+        for (Punishment p : active.values()) {
+            if (uuid.equals(p.targetUuid()) && p.inForce(now)) {
+                out.add(p);
+            }
+        }
+        out.sort(java.util.Comparator.comparingLong(Punishment::created).reversed());
+        return out;
+    }
+
+    /** Reads the active punishments from the database again (after an import). */
+    public void reloadActive() throws Exception {
+        load();
+    }
+
     public Punishment activeBan(UUID uuid, String ip) {
         long now = System.currentTimeMillis();
         for (Punishment p : active.values()) {
@@ -237,6 +255,27 @@ public final class PunishmentService {
             escalate(punishment);
         }
         return punishment;
+    }
+
+    /**
+     * Stores a punishment made elsewhere (the EssentialsX import of vanilla bans) without announcing it. Skipped when
+     * the same account (or IP) already has an active punishment of that type. Returns true when stored.
+     */
+    public boolean importActive(PunishmentType type, UUID target, String targetName, String ip, String actor, String reason,
+                                long created, Long expires) {
+        for (Punishment old : active.values()) {
+            if (old.type() == type && ((target != null && target.equals(old.targetUuid())) || (target == null && ip != null && ip.equals(old.targetIp())))) {
+                return false;
+            }
+        }
+        String id = freshId();
+        Punishment punishment = new Punishment(id, type, target, targetName, ip, actor, null, reason, created, expires, true, true);
+        if (!punishment.inForce(System.currentTimeMillis())) {
+            return false;
+        }
+        active.put(id, punishment);
+        plugin.writer().write("punishment " + id, connection -> store.insert(connection, punishment));
+        return true;
     }
 
     private String freshId() {

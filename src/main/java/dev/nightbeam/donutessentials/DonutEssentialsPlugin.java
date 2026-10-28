@@ -6,6 +6,7 @@ import dev.nightbeam.donutessentials.api.DonutEssentialsApiImpl;
 import dev.nightbeam.donutessentials.chat.ChatModule;
 import dev.nightbeam.donutessentials.command.AdminCommand;
 import dev.nightbeam.donutessentials.command.CommandRegistry;
+import dev.nightbeam.donutessentials.command.CommandRules;
 import dev.nightbeam.donutessentials.config.ConfigFiles;
 import dev.nightbeam.donutessentials.config.Messages;
 import dev.nightbeam.donutessentials.economy.EconomyModule;
@@ -75,6 +76,7 @@ public final class DonutEssentialsPlugin extends JavaPlugin implements Listener 
     private MenuManager menus;
     private InputService input;
     private CommandRegistry commands;
+    private CommandRules commandRules;
     private ModuleManager modules;
     private Database database;
     private DataWriter writer;
@@ -90,6 +92,20 @@ public final class DonutEssentialsPlugin extends JavaPlugin implements Listener 
     private UpdateChecker updates;
     private DonutEssentialsApiImpl api;
     private boolean enabled;
+
+    @Override
+    public void onLoad() {
+        // The economy registers with Vault before any plugin enables (see EconomyModule.registerEarly).
+        try {
+            java.io.File config = new java.io.File(getDataFolder(), "config.yml");
+            boolean economyOn = !config.isFile() || YamlConfiguration.loadConfiguration(config).getBoolean("modules.economy", true);
+            if (economyOn && getServer().getPluginManager().getPlugin("Vault") != null) {
+                EconomyModule.registerEarly(this);
+            }
+        } catch (Throwable error) {
+            getLogger().fine("Early Vault registration skipped: " + error);
+        }
+    }
 
     @Override
     public void onEnable() {
@@ -128,6 +144,7 @@ public final class DonutEssentialsPlugin extends JavaPlugin implements Listener 
         this.discord = new DiscordWebhook(getLogger());
         this.input = new InputService(this, DialogSupport.create(this));
         this.commands = new CommandRegistry(this);
+        this.commandRules = new CommandRules(this);
         this.updates = new UpdateChecker(this);
         applySettings();
 
@@ -161,6 +178,9 @@ public final class DonutEssentialsPlugin extends JavaPlugin implements Listener 
         pm.registerEvents(input, this);
         pm.registerEvents(this, this);
         modules.enableAll();
+        EconomyModule.dropEarly();
+        commandRules.load(getConfig().getConfigurationSection("command-rules"));
+        pm.registerEvents(commandRules, this);
         commands.register(List.of(new AdminCommand(this)));
 
         this.api = new DonutEssentialsApiImpl(this);
@@ -224,6 +244,7 @@ public final class DonutEssentialsPlugin extends JavaPlugin implements Listener 
         reloadConfig();
         loadTexts();
         applySettings();
+        commandRules.load(getConfig().getConfigurationSection("command-rules"));
         modules.reloadAll();
     }
 

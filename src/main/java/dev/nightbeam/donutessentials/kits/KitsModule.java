@@ -58,6 +58,18 @@ public final class KitsModule implements Module {
     }
 
     /** Kit names, for other modules (menus, placeholders). */
+    /**
+     * Adds a kit made elsewhere (the EssentialsX import). {@code cooldownSeconds}: 0 none, -1 once ever. Returns false
+     * when a kit with that name exists already.
+     */
+    public boolean importKit(String name, List<org.bukkit.inventory.ItemStack> items, long cooldownSeconds) {
+        if (kits.kit(name) != null) {
+            return false;
+        }
+        kits.save(Kit.of(name, items, cooldownSeconds < 0 ? KitTimes.ONCE : cooldownSeconds, 0, null));
+        return true;
+    }
+
     public List<String> kitNames() {
         return kits.names();
     }

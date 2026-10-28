@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 
 /** Refuses players who may not join during maintenance, and shows the maintenance MOTD on the server list. */
@@ -21,19 +21,20 @@ final class MaintenanceListener implements Listener {
         this.module = module;
     }
 
-    /** At login, so the permissions plugin has loaded the player's permissions. */
-    @SuppressWarnings("deprecation")
+    /**
+     * Before login, on the login thread (the permissions plugin has loaded the player by then). Listening to the
+     * synchronous login event instead would switch off Paper's re-configuration APIs for every plugin.
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLogin(PlayerLoginEvent event) {
-        if (event.getResult() != PlayerLoginEvent.Result.ALLOWED || !module.enabled()) {
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED || !module.enabled()) {
             return;
         }
-        Player player = event.getPlayer();
-        if (module.mayJoin(player)) {
+        String name = event.getName();
+        if (module.mayJoin(event.getUniqueId(), name)) {
             return;
         }
-        event.disallow(PlayerLoginEvent.Result.KICK_OTHER, module.kickMessage());
-        String name = player.getName();
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, module.kickMessage());
         for (Player online : plugin.getServer().getOnlinePlayers()) {
             if (online.hasPermission(MaintenanceModule.NOTIFY)) {
                 plugin.messages().send(online, "maintenance.join-attempt", "player", name);

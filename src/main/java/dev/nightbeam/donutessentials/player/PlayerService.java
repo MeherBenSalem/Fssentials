@@ -62,6 +62,20 @@ public final class PlayerService {
         }
     }
 
+    /** Counts the known players again (after an import added some). */
+    public void recount() {
+        writer.query(connection -> {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*), MAX(join_number) FROM " + database.table("players"));
+                 ResultSet result = statement.executeQuery()) {
+                return result.next() ? Math.max(result.getInt(1), result.getInt(2)) : 0;
+            }
+        }).thenAccept(count -> {
+            synchronized (this) {
+                knownPlayers = Math.max(knownPlayers, count);
+            }
+        });
+    }
+
     public int knownPlayers() {
         return knownPlayers;
     }

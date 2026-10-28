@@ -39,6 +39,21 @@ public final class IgnoreService implements Listener {
         return set == null ? Set.of() : Collections.unmodifiableSet(set);
     }
 
+    /** Starts ignoring (no-op when already ignored); for imports. Works for offline players too. */
+    public void add(UUID who, UUID other) {
+        Set<UUID> set = ignores.get(who);
+        if (set != null) {
+            set.add(other);
+        }
+        writer.write("ignore", connection -> {
+            try (PreparedStatement statement = connection.prepareStatement(writer.database().upsert("ignores", 2, "uuid", "ignored"))) {
+                statement.setString(1, who.toString());
+                statement.setString(2, other.toString());
+                statement.executeUpdate();
+            }
+        });
+    }
+
     /** Starts or stops ignoring; returns true when {@code other} is now ignored. */
     public boolean toggle(UUID who, UUID other) {
         Set<UUID> set = ignores.computeIfAbsent(who, id -> ConcurrentHashMap.newKeySet());

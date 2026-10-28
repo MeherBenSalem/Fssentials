@@ -26,6 +26,36 @@ public final class EconomyModule implements Module, Listener {
         this.plugin = plugin;
     }
 
+    /** A Vault registration made while plugins load (see {@link #registerEarly}), attached in {@link #enable()}. */
+    private static Object earlyProvider;
+
+    /**
+     * Registers with Vault while plugins load, before any plugin enables, so plugins that look the economy up in
+     * their own start-up find it. Called from the plugin's onLoad when the economy module is on.
+     */
+    public static void registerEarly(org.bukkit.plugin.Plugin plugin) {
+        if (earlyProvider != null || !Hooks.vault()) {
+            return;
+        }
+        try {
+            earlyProvider = VaultProvider.registerEarly(plugin);
+        } catch (Throwable error) {
+            plugin.getLogger().warning("Could not register the economy with Vault early: " + error);
+        }
+    }
+
+    /** Removes an early Vault registration that was never attached (the module is off). */
+    public static void dropEarly() {
+        if (earlyProvider != null) {
+            try {
+                VaultProvider.unregister(earlyProvider);
+            } catch (Throwable ignored) {
+                // Vault is gone.
+            }
+            earlyProvider = null;
+        }
+    }
+
     @Override
     public String id() {
         return "economy";
@@ -40,7 +70,11 @@ public final class EconomyModule implements Module, Listener {
         } catch (Exception error) {
             throw new IllegalStateException("Could not load balances", error);
         }
-        if (Hooks.vault()) {
+        if (earlyProvider != null) {
+            VaultProvider.attach(earlyProvider, economy);
+            vaultProvider = earlyProvider;
+            earlyProvider = null;
+        } else if (Hooks.vault()) {
             try {
                 vaultProvider = VaultProvider.register(plugin, economy);
             } catch (Throwable error) {

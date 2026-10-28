@@ -10,6 +10,165 @@ softdepend: [Vault, VaultUnlocked, PlaceholderAPI, LuckPerms, DonutRTP]
 # Commands are registered from commands.yml at start-up (switched off ones are never registered).
 
 permissions:
+  donutessentials.*:
+    default: op
+    description: Every Donut Essentials permission except the ones that are off for everyone by default (exempt and bypass nodes).
+    children:
+      donutessentials.admin: true
+      donutessentials.afk.kickexempt: true
+      donutessentials.alerts.alts: true
+      donutessentials.back.death: true
+      donutessentials.balance.others: true
+      donutessentials.bypass.cooldown: true
+      donutessentials.bypass.cost: true
+      donutessentials.bypass.warmup: true
+      donutessentials.chat.bypass: true
+      donutessentials.chat.color: true
+      donutessentials.chat.item: true
+      donutessentials.clearinventory.others: true
+      donutessentials.command.afk: true
+      donutessentials.command.alts: true
+      donutessentials.command.back: true
+      donutessentials.command.balance: true
+      donutessentials.command.baltop: true
+      donutessentials.command.ban: true
+      donutessentials.command.banip: true
+      donutessentials.command.banlist: true
+      donutessentials.command.broadcast: true
+      donutessentials.command.change-reason: true
+      donutessentials.command.chat: true
+      donutessentials.command.check: true
+      donutessentials.command.clearinventory: true
+      donutessentials.command.commandspy: true
+      donutessentials.command.craft: true
+      donutessentials.command.createkit: true
+      donutessentials.command.day: true
+      donutessentials.command.delhome: true
+      donutessentials.command.delkit: true
+      donutessentials.command.delwarp: true
+      donutessentials.command.eco: true
+      donutessentials.command.editkit: true
+      donutessentials.command.enderchest: true
+      donutessentials.command.endersee: true
+      donutessentials.command.feed: true
+      donutessentials.command.fly: true
+      donutessentials.command.freeze: true
+      donutessentials.command.gm: true
+      donutessentials.command.gma: true
+      donutessentials.command.gmc: true
+      donutessentials.command.gms: true
+      donutessentials.command.gmsp: true
+      donutessentials.command.god: true
+      donutessentials.command.hat: true
+      donutessentials.command.heal: true
+      donutessentials.command.history: true
+      donutessentials.command.home: true
+      donutessentials.command.homes: true
+      donutessentials.command.ignore: true
+      donutessentials.command.ignorelist: true
+      donutessentials.command.invsee: true
+      donutessentials.command.iplock: true
+      donutessentials.command.kick: true
+      donutessentials.command.kit: true
+      donutessentials.command.kits: true
+      donutessentials.command.mail: true
+      donutessentials.command.maintenance: true
+      donutessentials.command.menu: true
+      donutessentials.command.motd: true
+      donutessentials.command.msg: true
+      donutessentials.command.msgtoggle: true
+      donutessentials.command.mute: true
+      donutessentials.command.near: true
+      donutessentials.command.nick: true
+      donutessentials.command.night: true
+      donutessentials.command.note: true
+      donutessentials.command.notes: true
+      donutessentials.command.offlinetp: true
+      donutessentials.command.pay: true
+      donutessentials.command.paytoggle: true
+      donutessentials.command.ping: true
+      donutessentials.command.playerlist: true
+      donutessentials.command.playtime: true
+      donutessentials.command.punishment: true
+      donutessentials.command.rain: true
+      donutessentials.command.realname: true
+      donutessentials.command.repair: true
+      donutessentials.command.reply: true
+      donutessentials.command.report: true
+      donutessentials.command.reports: true
+      donutessentials.command.rtp: true
+      donutessentials.command.rules: true
+      donutessentials.command.seen: true
+      donutessentials.command.sethome: true
+      donutessentials.command.setspawn: true
+      donutessentials.command.settings: true
+      donutessentials.command.setwarp: true
+      donutessentials.command.socialspy: true
+      donutessentials.command.spawn: true
+      donutessentials.command.speed: true
+      donutessentials.command.staffchat: true
+      donutessentials.command.sun: true
+      donutessentials.command.tempban: true
+      donutessentials.command.tempipban: true
+      donutessentials.command.tempmute: true
+      donutessentials.command.tempwarn: true
+      donutessentials.command.top: true
+      donutessentials.command.tpa: true
+      donutessentials.command.tpacancel: true
+      donutessentials.command.tpaccept: true
+      donutessentials.command.tpahere: true
+      donutessentials.command.tpauto: true
+      donutessentials.command.tpdeny: true
+      donutessentials.command.tphere: true
+      donutessentials.command.tpo: true
+      donutessentials.command.tptoggle: true
+      donutessentials.command.trash: true
+      donutessentials.command.unban: true
+      donutessentials.command.unmute: true
+      donutessentials.command.unnote: true
+      donutessentials.command.unpunish: true
+      donutessentials.command.unwarn: true
+      donutessentials.command.vanish: true
+      donutessentials.command.warn: true
+      donutessentials.command.warns: true
+      donutessentials.command.warp: true
+      donutessentials.command.warps: true
+      donutessentials.command.whois: true
+      donutessentials.endersee.edit: true
+      donutessentials.feed.others: true
+      donutessentials.fly.others: true
+      donutessentials.gamemode.adventure: true
+      donutessentials.gamemode.creative: true
+      donutessentials.gamemode.others: true
+      donutessentials.gamemode.spectator: true
+      donutessentials.gamemode.survival: true
+      donutessentials.god.others: true
+      donutessentials.heal.others: true
+      donutessentials.homes.anyworld: true
+      donutessentials.homes.others: true
+      donutessentials.ignore.exempt: true
+      donutessentials.invsee.edit: true
+      donutessentials.kit.others: true
+      donutessentials.maintenance.bypass: true
+      donutessentials.maintenance.notify: true
+      donutessentials.moderation.ip: true
+      donutessentials.msg.bypass: true
+      donutessentials.msg.color: true
+      donutessentials.nick.color: true
+      donutessentials.nick.others: true
+      donutessentials.notify.silent: true
+      donutessentials.ping.others: true
+      donutessentials.playtime.others: true
+      donutessentials.repair.all: true
+      donutessentials.reports.notify: true
+      donutessentials.rtp.others: true
+      donutessentials.spawn.others: true
+      donutessentials.speed.others: true
+      donutessentials.tpa.bypasstoggle: true
+      donutessentials.vanish.others: true
+      donutessentials.vanish.see: true
+      donutessentials.warps.all: true
+      donutessentials.whois.ip: true
   donutessentials.admin:
     default: op
     description: /donutessentials (reload, info, import) and update notices.
@@ -25,6 +184,9 @@ permissions:
   donutessentials.bypass.cost:
     default: op
     description: Teleports are free.
+  donutessentials.bypass.command-rules:
+    default: op
+    description: No cooldowns or costs from command-rules.
   donutessentials.bypass.combat:
     default: false
     description: Never tagged in combat.
@@ -38,3 +200,482 @@ permissions:
   donutessentials.homes.anyworld:
     default: op
     description: Set homes in disabled worlds.
+  donutessentials.command.kit: {default: true}
+  donutessentials.command.kits: {default: true}
+  donutessentials.command.createkit: {default: op}
+  donutessentials.command.editkit: {default: op}
+  donutessentials.command.delkit: {default: op}
+  donutessentials.kit.others:
+    default: op
+    description: Give a kit to another player (/kit <kit> <player>), with no cooldown or cost.
+  donutessentials.kit.bypass:
+    default: false
+    description: Claim any kit with no permission, cooldown, once-only limit or cost.
+  donutessentials.command.balance: {default: true}
+  donutessentials.balance.others:
+    default: true
+    description: See other players' balances.
+  donutessentials.command.pay: {default: true}
+  donutessentials.command.paytoggle: {default: true}
+  donutessentials.command.baltop: {default: true}
+  donutessentials.command.eco: {default: op}
+  donutessentials.command.tpa: {default: true}
+  donutessentials.command.tpahere: {default: true}
+  donutessentials.command.tpaccept: {default: true}
+  donutessentials.command.tpdeny: {default: true}
+  donutessentials.command.tpacancel: {default: true}
+  donutessentials.command.tptoggle: {default: true}
+  donutessentials.command.tpauto: {default: true}
+  donutessentials.command.back: {default: true}
+  donutessentials.command.tphere: {default: op}
+  donutessentials.command.tpo: {default: op}
+  donutessentials.tpa.bypasstoggle:
+    default: op
+    description: Send teleport requests to players who turned them off.
+  donutessentials.command.warp: {default: true}
+  donutessentials.command.warps: {default: true}
+  donutessentials.command.setwarp: {default: op}
+  donutessentials.command.delwarp: {default: op}
+  donutessentials.warps.all:
+    default: op
+    description: Every warp, when warps.per-warp-permissions is on (else donutessentials.warp.<name> per warp).
+  donutessentials.command.spawn: {default: true}
+  donutessentials.command.setspawn: {default: op}
+  donutessentials.spawn.others:
+    default: op
+    description: /spawn <player> sends another player to spawn.
+  donutessentials.command.rtp: {default: true}
+  donutessentials.rtp.others:
+    default: op
+    description: /rtp <player> [world] sends another player at once.
+  donutessentials.command.chat: {default: op}
+  donutessentials.command.broadcast: {default: op}
+  donutessentials.command.nick: {default: op}
+  donutessentials.command.realname: {default: true}
+  donutessentials.command.msg: {default: true}
+  donutessentials.command.reply: {default: true}
+  donutessentials.command.msgtoggle: {default: true}
+  donutessentials.command.ignore: {default: true}
+  donutessentials.command.ignorelist: {default: true}
+  donutessentials.command.socialspy: {default: op}
+  donutessentials.command.mail: {default: true}
+  donutessentials.command.afk: {default: true}
+  donutessentials.chat.color:
+    default: op
+    description: Colours and styles in chat (& codes and MiniMessage colour tags).
+  donutessentials.chat.item:
+    default: true
+    description: Show the held item with [item] in chat.
+  donutessentials.chat.bypass:
+    default: op
+    description: Talk while chat is locked or slow, and skip the anti-spam and the filter.
+  donutessentials.nick.color:
+    default: op
+    description: Colours in nicknames.
+  donutessentials.nick.others:
+    default: op
+    description: Set or remove other players' nicknames.
+  donutessentials.msg.color:
+    default: op
+    description: Colours in private messages.
+  donutessentials.msg.bypass:
+    default: op
+    description: Message players who switched private messages off; no mail cooldown.
+  donutessentials.ignore.exempt:
+    default: op
+    description: Can't be ignored.
+  donutessentials.afk.kickexempt:
+    default: op
+    description: Never kicked for being AFK.
+  server.broadcast:
+    default: op
+    description: The 2.x permission for /broadcast.
+    children:
+      donutessentials.command.broadcast: true
+  # Moderation commands.
+  donutessentials.command.kick: {default: op}
+  donutessentials.command.ban: {default: op}
+  donutessentials.command.tempban: {default: op}
+  donutessentials.command.mute: {default: op}
+  donutessentials.command.tempmute: {default: op}
+  donutessentials.command.warn: {default: op}
+  donutessentials.command.tempwarn: {default: op}
+  donutessentials.command.note: {default: op}
+  donutessentials.command.banip: {default: op}
+  donutessentials.command.tempipban: {default: op}
+  donutessentials.command.unban: {default: op}
+  donutessentials.command.unmute: {default: op}
+  donutessentials.command.unwarn: {default: op}
+  donutessentials.command.unnote: {default: op}
+  donutessentials.command.unpunish: {default: op}
+  donutessentials.command.change-reason: {default: op}
+  donutessentials.command.warns: {default: op}
+  donutessentials.command.notes: {default: op}
+  donutessentials.command.check: {default: op}
+  donutessentials.command.banlist: {default: op}
+  donutessentials.command.history: {default: op}
+  donutessentials.command.punishment: {default: op}
+  donutessentials.command.alts: {default: op}
+  donutessentials.command.freeze: {default: op}
+  donutessentials.command.report: {default: true}
+  donutessentials.command.reports: {default: op}
+  donutessentials.command.staffchat: {default: op}
+  donutessentials.command.commandspy: {default: op}
+  donutessentials.notify.silent:
+    default: op
+    description: See silent punishments, lifts, expiries and escalations.
+  donutessentials.moderation.exempt:
+    default: false
+    description: Cannot be punished or kicked by other players (the console still can).
+  donutessentials.moderation.mute-bypass:
+    default: false
+    description: Mutes do not apply.
+  donutessentials.moderation.ip:
+    default: op
+    description: See IP addresses in /check.
+  donutessentials.alerts.alts:
+    default: op
+    description: Told when a joining player shares an address with a banned account.
+  donutessentials.reports.notify:
+    default: op
+    description: Told about new reports (with [Teleport] and [Claim]); no report cooldown.
+  donutessentials.freeze.bypass:
+    default: false
+    description: Cannot be frozen by other players.
+  # 2.x permission nodes keep working: each grants the 3.0 nodes it became.
+  donutessentials.punish.kick:
+    default: op
+    children:
+      donutessentials.command.kick: true
+  donutessentials.punish.ban:
+    default: op
+    children:
+      donutessentials.command.ban: true
+  donutessentials.punish.mute:
+    default: op
+    children:
+      donutessentials.command.mute: true
+  donutessentials.punish.warn:
+    default: op
+    children:
+      donutessentials.command.warn: true
+  donutessentials.punish.note:
+    default: op
+    children:
+      donutessentials.command.note: true
+  donutessentials.punish.banip:
+    default: op
+    children:
+      donutessentials.command.banip: true
+  donutessentials.punish.tempban:
+    default: op
+    children:
+      donutessentials.command.tempban: true
+  donutessentials.punish.tempmute:
+    default: op
+    children:
+      donutessentials.command.tempmute: true
+  donutessentials.punish.tempwarn:
+    default: op
+    children:
+      donutessentials.command.tempwarn: true
+  donutessentials.punish.tempipban:
+    default: op
+    children:
+      donutessentials.command.tempipban: true
+  donutessentials.punish.unpunish:
+    default: op
+    children:
+      donutessentials.command.unpunish: true
+      donutessentials.command.unban: true
+      donutessentials.command.unmute: true
+      donutessentials.command.unwarn: true
+      donutessentials.command.unnote: true
+  donutessentials.punish.change-reason:
+    default: op
+    children:
+      donutessentials.command.change-reason: true
+  donutessentials.punish.delete-record:
+    default: op
+    children:
+      donutessentials.command.punishment: true
+  donutessentials.view.warn:
+    default: op
+    children:
+      donutessentials.command.warns: true
+  donutessentials.view.note:
+    default: op
+    children:
+      donutessentials.command.notes: true
+  donutessentials.view.check:
+    default: op
+    children:
+      donutessentials.command.check: true
+  donutessentials.view.banlist:
+    default: op
+    children:
+      donutessentials.command.banlist: true
+  donutessentials.view.history:
+    default: op
+    children:
+      donutessentials.command.history: true
+  donutessentials.view.playerlist:
+    default: true
+    children:
+      donutessentials.command.playerlist: true
+  donutessentials.admin.reload:
+    default: op
+    children:
+      donutessentials.admin: true
+  donutessentials.admin.systemprefs:
+    default: op
+    children:
+      donutessentials.admin: true
+  donutessentials.vanish:
+    default: op
+    children:
+      donutessentials.command.vanish: true
+  donutessentials.teleport.offlinetp:
+    default: op
+    children:
+      donutessentials.command.offlinetp: true
+  donutessentials.invsee:
+    default: op
+    children:
+      donutessentials.command.invsee: true
+      donutessentials.invsee.edit: true
+  donutessentials.maintenance.admin:
+    default: op
+    children:
+      donutessentials.command.maintenance: true
+  plugin.iplock.admin:
+    default: op
+    children:
+      donutessentials.command.iplock: true
+  plugin.iplock.bypass:
+    default: op
+    children:
+      donutessentials.iplock.bypass: true
+  # Fssentials 1.x nodes.
+  fssentials.punish.kick:
+    default: op
+    children:
+      donutessentials.punish.kick: true
+  fssentials.punish.ban:
+    default: op
+    children:
+      donutessentials.punish.ban: true
+  fssentials.punish.mute:
+    default: op
+    children:
+      donutessentials.punish.mute: true
+  fssentials.punish.warn:
+    default: op
+    children:
+      donutessentials.punish.warn: true
+  fssentials.punish.note:
+    default: op
+    children:
+      donutessentials.punish.note: true
+  fssentials.punish.banip:
+    default: op
+    children:
+      donutessentials.punish.banip: true
+  fssentials.punish.tempban:
+    default: op
+    children:
+      donutessentials.punish.tempban: true
+  fssentials.punish.tempmute:
+    default: op
+    children:
+      donutessentials.punish.tempmute: true
+  fssentials.punish.tempwarn:
+    default: op
+    children:
+      donutessentials.punish.tempwarn: true
+  fssentials.punish.tempipban:
+    default: op
+    children:
+      donutessentials.punish.tempipban: true
+  fssentials.punish.unpunish:
+    default: op
+    children:
+      donutessentials.punish.unpunish: true
+  fssentials.punish.change-reason:
+    default: op
+    children:
+      donutessentials.punish.change-reason: true
+  fssentials.punish.delete-record:
+    default: op
+    children:
+      donutessentials.punish.delete-record: true
+  fssentials.view.warn:
+    default: op
+    children:
+      donutessentials.view.warn: true
+  fssentials.view.note:
+    default: op
+    children:
+      donutessentials.view.note: true
+  fssentials.view.check:
+    default: op
+    children:
+      donutessentials.view.check: true
+  fssentials.view.banlist:
+    default: op
+    children:
+      donutessentials.view.banlist: true
+  fssentials.view.history:
+    default: op
+    children:
+      donutessentials.view.history: true
+  fssentials.view.playerlist:
+    default: true
+    children:
+      donutessentials.view.playerlist: true
+  fssentials.admin.reload:
+    default: op
+    children:
+      donutessentials.admin.reload: true
+  fssentials.admin.systemprefs:
+    default: op
+    children:
+      donutessentials.admin.systemprefs: true
+  fssentials.vanish:
+    default: op
+    children:
+      donutessentials.vanish: true
+  fssentials.teleport.offlinetp:
+    default: op
+    children:
+      donutessentials.teleport.offlinetp: true
+  fssentials.invsee:
+    default: op
+    children:
+      donutessentials.invsee: true
+  fssentials.maintenance.admin:
+    default: op
+    children:
+      donutessentials.maintenance.admin: true
+  fssentials.notify.silent:
+    default: op
+    children:
+      donutessentials.notify.silent: true
+  fssentials.maintenance.bypass:
+    default: op
+    children:
+      donutessentials.maintenance.bypass: true
+  fssentials.maintenance.notify:
+    default: op
+    children:
+      donutessentials.maintenance.notify: true
+  fssentials.*:
+    default: op
+    children:
+      fssentials.punish.kick: true
+      fssentials.punish.ban: true
+      fssentials.punish.mute: true
+      fssentials.punish.warn: true
+      fssentials.punish.note: true
+      fssentials.punish.banip: true
+      fssentials.punish.tempban: true
+      fssentials.punish.tempmute: true
+      fssentials.punish.tempwarn: true
+      fssentials.punish.tempipban: true
+      fssentials.punish.unpunish: true
+      fssentials.punish.change-reason: true
+      fssentials.punish.delete-record: true
+      fssentials.view.warn: true
+      fssentials.view.note: true
+      fssentials.view.check: true
+      fssentials.view.banlist: true
+      fssentials.view.history: true
+      fssentials.admin.reload: true
+      fssentials.admin.systemprefs: true
+      fssentials.vanish: true
+      fssentials.teleport.offlinetp: true
+      fssentials.invsee: true
+      fssentials.maintenance.admin: true
+      fssentials.notify.silent: true
+      fssentials.maintenance.bypass: true
+      fssentials.maintenance.notify: true
+      fssentials.view.playerlist: true
+      server.broadcast: true
+      plugin.iplock.admin: true
+      plugin.iplock.bypass: true
+  donutessentials.command.vanish: {default: op}
+  donutessentials.vanish.others:
+    default: op
+    description: Vanish or show other players.
+  donutessentials.vanish.see:
+    default: op
+    description: See vanished players (and their names in completion, /playerlist and /whois).
+  donutessentials.command.invsee: {default: op}
+  donutessentials.invsee.edit:
+    default: op
+    description: Change items in /invsee (otherwise it is read-only).
+  donutessentials.command.endersee: {default: op}
+  donutessentials.endersee.edit:
+    default: op
+    description: Change items in /endersee (otherwise it is read-only).
+  donutessentials.command.whois: {default: op}
+  donutessentials.whois.ip:
+    default: op
+    description: See IP addresses in /whois.
+  donutessentials.command.offlinetp: {default: op}
+  donutessentials.command.playerlist: {default: true}
+  donutessentials.command.maintenance: {default: op}
+  donutessentials.maintenance.bypass:
+    default: op
+    description: Join while maintenance mode is on.
+  donutessentials.maintenance.notify:
+    default: op
+    description: Told when maintenance switches and when someone is refused.
+  donutessentials.command.iplock: {default: op}
+  donutessentials.iplock.bypass:
+    default: false
+    description: Join from any IP even when the account is IP locked.
+  # 2.x permission names keep working.
+  donutessentials.command.rules: {default: true}
+  donutessentials.command.motd: {default: true}
+  donutessentials.command.menu: {default: true}
+  donutessentials.command.settings: {default: true}
+  donutessentials.command.seen: {default: true}
+  donutessentials.command.playtime: {default: true}
+  donutessentials.command.ping: {default: true}
+  donutessentials.command.trash: {default: true}
+  donutessentials.command.fly: {default: op}
+  donutessentials.command.god: {default: op}
+  donutessentials.command.heal: {default: op}
+  donutessentials.command.feed: {default: op}
+  donutessentials.command.speed: {default: op}
+  donutessentials.command.gm: {default: op}
+  donutessentials.command.gmc: {default: op}
+  donutessentials.command.gms: {default: op}
+  donutessentials.command.gma: {default: op}
+  donutessentials.command.gmsp: {default: op}
+  donutessentials.command.craft: {default: op}
+  donutessentials.command.enderchest: {default: op}
+  donutessentials.command.hat: {default: op}
+  donutessentials.command.repair: {default: op}
+  donutessentials.command.clearinventory: {default: op}
+  donutessentials.command.top: {default: op}
+  donutessentials.command.near: {default: op}
+  donutessentials.command.day: {default: op}
+  donutessentials.command.night: {default: op}
+  donutessentials.command.sun: {default: op}
+  donutessentials.command.rain: {default: op}
+  donutessentials.gamemode.survival: {default: op, description: "Switch to survival with /gm, /gms."}
+  donutessentials.gamemode.creative: {default: op, description: "Switch to creative with /gm, /gmc."}
+  donutessentials.gamemode.adventure: {default: op, description: "Switch to adventure with /gm, /gma."}
+  donutessentials.gamemode.spectator: {default: op, description: "Switch to spectator with /gm, /gmsp."}
+  donutessentials.gamemode.others: {default: op, description: "Change other players' game mode."}
+  donutessentials.fly.others: {default: op, description: "/fly <player>."}
+  donutessentials.god.others: {default: op, description: "/god <player>."}
+  donutessentials.heal.others: {default: op, description: "/heal <player>."}
+  donutessentials.feed.others: {default: op, description: "/feed <player>."}
+  donutessentials.speed.others: {default: op, description: "/speed <level> [type] <player>."}
+  donutessentials.ping.others: {default: op, description: "/ping <player>."}
+  donutessentials.playtime.others: {default: op, description: "/playtime <player>."}
+  donutessentials.clearinventory.others: {default: op, description: "/clearinventory <player>."}
+  donutessentials.repair.all: {default: op, description: "/repair all: everything you carry and wear."}
