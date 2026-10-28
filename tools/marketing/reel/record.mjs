@@ -6,6 +6,7 @@
 //
 // Needs what tools/marketing/capture.mjs needs, plus libfaketime. Run from the repository root after ./gradlew build:
 //   node tools/marketing/reel/record.mjs            # both phases (about 40 minutes)
+//   node tools/marketing/reel/record.mjs --setup    # phase A only
 //   node tools/marketing/reel/record.mjs --record   # phase B only, on the world phase A left
 // Footage goes to $REEL_DIR/raw (default $ESSLAB_HOME/reel/raw).
 import { spawn, execFileSync } from 'node:child_process';
@@ -27,6 +28,7 @@ const DISPLAY = process.env.REEL_DISPLAY || ':98';
 const W = 1080;
 const H = 1920;
 const SCALE = 3;
+const CURSOR = 96;
 const python = process.env.CAPTURE_PYTHON || path.join(lab, 'venv', 'bin', 'python3');
 const portablemc = process.env.PORTABLEMC || path.join(lab, 'venv', 'bin', 'portablemc');
 const clientDir = process.env.CAPTURE_CLIENT_DIR || path.join(lab, 'client');
@@ -250,12 +252,17 @@ async function shoot(java) {
   const tp = (who, dx, dz, yaw = 0, pitch = 0, dy = 0) => server.command(`tp ${who} ${px + dx} ${py + dy} ${pz + dz} ${yaw} ${pitch}`);
   const say = (who, line) => server.lab(`sudo ${who} ${line}`, 300_000);
 
-  const xvfb = spawn('Xvfb', [DISPLAY, '-screen', '0', `${W}x${H}x24`, '-nolisten', 'tcp'], { stdio: 'ignore' });
+  const xvfb = spawn('Xvfb', [DISPLAY, '-screen', '0', `${W}x${H}x24`, '-nolisten', 'tcp', '-noreset'], { stdio: 'ignore' });
   await sleep(1500);
+  // A big arrow instead of the bare server's little cross, so every click reads on a phone.
+  x('cursor', 'Adwaita', CURSOR);
   writeClientOptions();
   const client = spawn(portablemc, ['--main-dir', clientDir, 'start', `mojang:${VERSION}`, '-u', P, '--join-server', '127.0.0.1',
     '--join-server-port', String(PORT), '--resolution', `${W}x${H}`, '--jvm', java, '--jvm-arg=-Xmx3G'],
-  { env: { ...process.env, ...FAKE, DISPLAY, LIBGL_ALWAYS_SOFTWARE: '1', __GL_SYNC_TO_VBLANK: '0' }, stdio: ['ignore', 'pipe', 'pipe'] });
+  {
+    env: { ...process.env, ...FAKE, DISPLAY, LIBGL_ALWAYS_SOFTWARE: '1', __GL_SYNC_TO_VBLANK: '0', XCURSOR_THEME: 'Adwaita', XCURSOR_SIZE: String(CURSOR) },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
   const clientLog = fs.createWriteStream(path.join(REEL, 'client.log'));
   client.stdout.pipe(clientLog);
   client.stderr.pipe(clientLog);
@@ -284,18 +291,23 @@ async function shoot(java) {
     await g(300);
   };
   const camera = () => tp(P, 0.5, 9.5, 180, 8);
+  // Blank lines push old messages out of the chat history; unfocused lines fade after 10 game seconds.
+  const clearChat = async () => {
+    for (let i = 0; i < 24; i++) server.command(`tellraw ${P} ""`);
+    await g(11000);
+  };
   camera();
   await place();
   server.command(`execute at ${P} run kill @e[type=!player,distance=..64]`);
-  await g(3000);
+  await clearChat();
 
   // Hook: the player hub, the cursor running over every button.
   await say(P, 'menu');
   await g(800);
   x('move', ...slot(10, 4));
   await g(400);
-  let shot = record('hook', 3.6);
-  await glide(slot(10, 4), slot(16, 4), 3400);
+  let shot = record('hook', 4.2);
+  await glide(slot(10, 4), slot(16, 4), 3800);
   await shot;
   x('key', 'Escape');
   await g(600);
@@ -327,6 +339,8 @@ async function shoot(java) {
   await g(1100);
   x('key', 'Escape');
   await shot;
+  // Kiri's own countdown ends after the shot; let it land before everyone goes back to their spots.
+  await g(3000);
   await place();
   await g(1000);
 
@@ -368,11 +382,11 @@ async function shoot(java) {
 
   // Chat: ranks, a mention, and [item] with its tooltip.
   server.command(`item replace entity ${P} hotbar.0 with ${SWORD}`);
-  await g(300);
+  await clearChat();
   const chat = (who, text) => bots.get(who).chat(text);
   chat('Kiri', 'anyone up for the arena tonight?');
   await g(500);
-  shot = record('chat', 4.8);
+  shot = record('chat', 5.0);
   await g(300);
   chat('Ember', `@${P} the new spawn looks amazing`);
   await g(700);
@@ -391,7 +405,7 @@ async function shoot(java) {
   await g(600);
 
   // Moderation: a warning, a mute, a report with staff buttons, the reports menu.
-  shot = record('moderation', 4.4);
+  shot = record('moderation', 5.4);
   await g(200);
   await say(P, 'warn Rook Spamming in chat');
   await g(800);
@@ -402,6 +416,7 @@ async function shoot(java) {
   await say(P, 'reports');
   await g(400);
   await glide([540, 1300], slot(10, 6), 600);
+  await g(800);
   await shot;
   x('key', 'Escape');
   await g(600);
@@ -412,17 +427,17 @@ async function shoot(java) {
   await g(4000);
   x('key', 'F1');
   await g(500);
-  await record('wide', 3.4);
+  await record('wide', 3.8);
   tp(P, 0.5, 12.5, 180, 4, 1.5);
   await g(3000);
-  await record('title', 4.0);
+  await record('title', 5.2);
   x('key', 'F1');
   server.command(`gamemode survival ${P}`);
   camera();
   await g(3000);
 
   // Loop end: back at the plaza, the hub opens and the cursor lands where the hook starts.
-  shot = record('loopend', 2.8);
+  shot = record('loopend', 3.6);
   await g(700);
   await say(P, 'menu');
   await g(700);
@@ -455,7 +470,9 @@ async function main() {
   if (!process.argv.includes('--record')) {
     await setup(java);
   }
-  await shoot(java);
+  if (!process.argv.includes('--setup')) {
+    await shoot(java);
+  }
 }
 
 main().catch((error) => {

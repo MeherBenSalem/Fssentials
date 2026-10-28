@@ -1,7 +1,7 @@
 """Tiny XTEST driver for the screenshot client: move, click, press keys and type on an X display.
 
 Usage: python3 xinput.py move X Y | click X Y [button] | shiftclick X Y | key NAME | hold NAME SECONDS | type TEXT |
-       scroll X Y N
+       scroll X Y N | cursor THEME SIZE
 Needs python-xlib (pip install python-xlib). DISPLAY selects the Xvfb display.
 """
 import sys
@@ -94,6 +94,36 @@ def hold(name, seconds):
     d.sync()
 
 
+def cursor(theme, size):
+    """Gives the root window a themed arrow (e.g. Adwaita 64), so captures show a big, readable pointer instead of
+    the bare X server's small cross. Needs libXcursor."""
+    import ctypes
+    import ctypes.util
+    x11 = ctypes.cdll.LoadLibrary(ctypes.util.find_library("X11"))
+    xc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("Xcursor"))
+    x11.XOpenDisplay.restype = ctypes.c_void_p
+    x11.XDefaultRootWindow.restype = ctypes.c_ulong
+    x11.XDefaultRootWindow.argtypes = [ctypes.c_void_p]
+    x11.XDefineCursor.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.c_ulong]
+    x11.XFlush.argtypes = x11.XCloseDisplay.argtypes = [ctypes.c_void_p]
+    x11.XSetCloseDownMode.argtypes = [ctypes.c_void_p, ctypes.c_int]
+    xc.XcursorSetTheme.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+    xc.XcursorSetDefaultSize.argtypes = [ctypes.c_void_p, ctypes.c_int]
+    xc.XcursorLibraryLoadCursor.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+    xc.XcursorLibraryLoadCursor.restype = ctypes.c_ulong
+    dpy = x11.XOpenDisplay(None)
+    xc.XcursorSetTheme(dpy, theme.encode())
+    xc.XcursorSetDefaultSize(dpy, int(size))
+    shape = xc.XcursorLibraryLoadCursor(dpy, b"default")
+    if not shape:
+        sys.exit(f"no cursor 'default' in theme {theme}")
+    x11.XDefineCursor(dpy, x11.XDefaultRootWindow(dpy), shape)
+    # Keep the cursor after this client leaves (capture tools cannot read a cursor whose owner is gone).
+    x11.XSetCloseDownMode(dpy, 1)
+    x11.XFlush(dpy)
+    x11.XCloseDisplay(dpy)
+
+
 def type_text(text):
     for char in text:
         if char in SPECIAL:
@@ -119,5 +149,7 @@ if __name__ == "__main__":
         key(sys.argv[2])
     elif command == "hold":
         hold(sys.argv[2], sys.argv[3])
+    elif command == "cursor":
+        cursor(sys.argv[2], sys.argv[3])
     elif command == "type":
         type_text(" ".join(sys.argv[2:]))

@@ -1,0 +1,213 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: Mont; src: url('fonts/Montserrat.ttf'); font-weight: 100 900; }
+@font-face { font-family: Anton; src: url('fonts/Anton-Regular.ttf'); }
+html, body { margin: 0; width: 1080px; height: 1920px; background: transparent; overflow: hidden; }
+* { box-sizing: border-box; }
+.layer { position: absolute; inset: 0; }
+#vignette { background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 58%, rgba(0,0,0,.40) 100%); }
+#flash { background: #fff; opacity: 0; }
+#dim { background: radial-gradient(ellipse at 50% 42%, rgba(8,12,18,.62), rgba(6,8,12,.9)); opacity: 0; }
+
+/* captions */
+#cap { position: absolute; left: 100px; right: 100px; top: 1300px; display: flex; flex-wrap: wrap; justify-content: center;
+       gap: 4px 30px; font-family: Mont; font-weight: 900; text-transform: uppercase; text-align: center; line-height: 1.02;
+       transform-origin: 50% 50%; }
+#cap span { display: inline-block; color: #fff; font-size: 84px; letter-spacing: .5px;
+            -webkit-text-stroke: 12px #000; paint-order: stroke fill;
+            text-shadow: 0 8px 0 rgba(0,0,0,.55), 0 0 28px rgba(0,0,0,.45); }
+#cap span.on { color: #ffd84a; }
+
+/* machine label */
+#label { position: absolute; left: 0; right: 0; top: 230px; text-align: center; opacity: 0; }
+#lname { font-family: Anton; font-size: 124px; line-height: 1; letter-spacing: 3px; color: #fff; text-transform: uppercase;
+         -webkit-text-stroke: 12px #000; paint-order: stroke fill; display: inline-block; white-space: nowrap; }
+#lbar { width: 320px; height: 8px; margin: 14px auto 12px; border-radius: 4px; transform-origin: 50% 50%; }
+#lsub { font-family: Mont; font-weight: 900; font-size: 50px; letter-spacing: 6px; text-transform: uppercase;
+        -webkit-text-stroke: 9px #000; paint-order: stroke fill; display: inline-block; white-space: nowrap; }
+
+/* hook headline: four words, top third, on frame one */
+#hook { position: absolute; left: 0; right: 0; top: 250px; text-align: center; opacity: 0; transform-origin: 50% 50%; }
+#hook .h1, #hook .h2 { font-family: Anton; font-size: 150px; line-height: .98; letter-spacing: 4px; color: #fff;
+  -webkit-text-stroke: 14px #000; paint-order: stroke fill; text-shadow: 0 10px 0 rgba(0,0,0,.55), 0 0 40px rgba(107,198,255,.55); }
+#hook .h2 { color: #ffc24b; text-shadow: 0 10px 0 rgba(0,0,0,.55), 0 0 40px rgba(255,194,75,.6); }
+
+/* platform pills */
+#loaderBg { position: absolute; left: 0; right: 0; top: 760px; height: 780px; opacity: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.55) 30%, rgba(0,0,0,.55) 70%, rgba(0,0,0,0)); }
+#loaders { position: absolute; left: 0; right: 0; top: 860px; display: flex; flex-direction: column; align-items: center; gap: 26px; }
+.pill { font-family: Mont; font-weight: 900; font-size: 74px; color: #fff; padding: 18px 54px 16px; border-radius: 999px;
+        background: rgba(10,12,22,.82); border: 5px solid var(--c); box-shadow: 0 0 40px var(--g), 0 12px 0 rgba(0,0,0,.45);
+        letter-spacing: 3px; opacity: 0; }
+#versions { font-family: Mont; font-weight: 800; font-size: 54px; color: #fff; letter-spacing: 2px; opacity: 0;
+            -webkit-text-stroke: 9px #000; paint-order: stroke fill; margin-top: 10px; }
+
+/* title card */
+#title { opacity: 0; }
+#logo { position: absolute; left: 50%; top: 470px; width: 400px; height: 400px; margin-left: -200px; image-rendering: pixelated;
+        filter: drop-shadow(0 0 60px rgba(107,198,255,.45)); }
+#t1 { position: absolute; left: 0; right: 0; top: 930px; text-align: center; font-family: Anton; font-size: 128px;
+      letter-spacing: 6px; line-height: 1; white-space: nowrap;
+      background: linear-gradient(180deg, #ffffff 0%, #d8efff 40%, #6bc6ff 70%, #3f8fd6 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 8px 0 rgba(0,0,0,.6)) drop-shadow(0 0 30px rgba(107,198,255,.45)); }
+#rule { position: absolute; left: 50%; top: 1130px; width: 700px; height: 4px; margin-left: -350px;
+        background: linear-gradient(90deg, rgba(255,200,60,0), #ffc83c 20%, #ffc83c 80%, rgba(255,200,60,0)); }
+#t2 { position: absolute; left: 0; right: 0; top: 1160px; text-align: center; font-family: Mont; font-weight: 900;
+      font-size: 38px; letter-spacing: 2px; white-space: nowrap; color: #ffd84a; -webkit-text-stroke: 8px #000; paint-order: stroke fill; }
+#t3 { position: absolute; left: 0; right: 0; top: 1260px; text-align: center; font-family: Mont; font-weight: 800;
+      font-size: 36px; letter-spacing: 4px; white-space: nowrap; color: #dfe6ee; }
+#shine { position: absolute; top: 900px; height: 240px; width: 220px; left: -300px;
+         background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.6), rgba(255,255,255,0));
+         mix-blend-mode: overlay; filter: blur(6px); }
+
+/* CTA */
+#cta { position: absolute; left: 50%; top: 420px; font-family: Mont; font-weight: 900; color: #0d1116; background: #ffc24b;
+       padding: 18px 46px 16px; border-radius: 26px; font-size: 58px; letter-spacing: 2px; white-space: nowrap;
+       box-shadow: 0 12px 0 rgba(0,0,0,.45), 0 0 50px rgba(255,194,75,.5); opacity: 0; transform-origin: 50% 50%; }
+</style></head>
+<body>
+<div id="vignette" class="layer"></div>
+<div id="dim" class="layer"></div>
+<div id="hook"><div class="h1">ONE PLUGIN.</div><div class="h2">EVERYTHING.</div></div>
+<div id="label"><div id="lname"></div><div id="lbar"></div><div id="lsub"></div></div>
+
+
+<div id="loaderBg"></div>
+<div id="loaders">
+  <div class="pill" id="pPaper" style="--c:#e8e2d6;--g:rgba(232,226,214,.35)">PAPER</div>
+  <div class="pill" id="pFolia" style="--c:#7ee081;--g:rgba(126,224,129,.4)">FOLIA</div>
+  <div class="pill" id="pPurpur" style="--c:#c792ea;--g:rgba(199,146,234,.4)">PURPUR</div>
+  <div id="versions">MINECRAFT 1.20.1 → 26.3</div>
+</div>
+
+<div id="title" class="layer">
+  <img id="logo" src="logo.png">
+  <div id="t1">DONUT ESSENTIALS</div>
+  <div id="rule"></div>
+  <div id="t2">HOMES · KITS · ECONOMY · MODERATION</div>
+  <div id="t3">FREE ON MODRINTH &amp; CURSEFORGE</div>
+  <div id="shine"></div>
+</div>
+<div id="cta">LINK IN BIO ↗</div>
+
+<div id="cap"></div>
+<div id="flash" class="layer"></div>
+
+<script>
+const CAPS = __CAPTIONS__;
+const WORDS = __WORDS__;
+const C = __CUES__;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const eo = x => 1 - Math.pow(1 - clamp(x), 3);
+const eio = x => { x = clamp(x); return x * x * (3 - 2 * x); };
+const back = x => { x = clamp(x); const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const win = (t, a, b, fi = .15, fo = .15) => clamp((t - a) / fi) * clamp((b - t) / fo);
+const $ = id => document.getElementById(id);
+const wordAt = (txt, after) => (WORDS.find(w => w.w.toLowerCase().replace(/[^a-z0-9]/g, '').startsWith(txt) && w.start >= after) || {start: after}).start;
+
+let lastChunk = -1;
+function captions(t) {
+  const cap = $('cap');
+  const i = CAPS.findIndex(c => t >= c.start - 0.03 && t < c.end);
+  if (i < 0) { cap.style.opacity = 0; return; }
+  const c = CAPS[i];
+  if (i !== lastChunk) {
+    cap.innerHTML = c.words.map(w => `<span>${w.text}</span>`).join('');
+    const pos = C.capTop.find(p => c.start >= p.t0 && c.start < p.t1);
+    cap.style.top = (pos ? pos.top : 1300) + 'px';
+    lastChunk = i;
+  }
+  const spans = cap.querySelectorAll('span');
+  c.words.forEach((w, k) => {
+    const next = k + 1 < c.words.length ? c.words[k + 1].start : c.end;
+    const on = t >= w.start - 0.03 && t < next;
+    spans[k].classList.toggle('on', on);
+    const p = clamp((t - w.start + 0.03) / 0.12);
+    spans[k].style.transform = on ? `scale(${1 + 0.07 * Math.sin(Math.PI * clamp(p))})` : 'scale(1)';
+  });
+  const pop = back((t - c.start + 0.03) / 0.16);
+  cap.style.opacity = clamp((t - c.start + 0.03) / 0.05) * clamp((c.end - t) / 0.06);
+  cap.style.transform = `scale(${0.82 + 0.18 * pop})`;
+}
+
+let lastLabel = null;
+function label(t) {
+  const L = C.labels.find(l => t >= l.t0 && t < l.t1);
+  const el = $('label');
+  if (!L) { el.style.opacity = 0; return; }
+  if (L !== lastLabel) {
+    $('label').style.top = `${L.top || 230}px`;
+    $('lname').textContent = L.name;
+    $('lsub').textContent = L.sub;
+    $('lsub').style.color = L.color;
+    $('lname').style.textShadow = `0 8px 0 rgba(0,0,0,.55), 0 0 36px ${L.color}`;
+    $('lbar').style.background = L.color;
+    $('lbar').style.boxShadow = `0 0 24px ${L.color}`;
+    lastLabel = L;
+  }
+  const u = t - L.t0;
+  el.style.opacity = clamp(u / 0.08) * clamp((L.t1 - t) / 0.07);
+  $('lname').style.transform = `translateX(${(1 - eo(u / 0.22)) * -70}px) scale(${0.86 + 0.14 * back(u / 0.24)})`;
+  $('lbar').style.transform = `scaleX(${eo((u - 0.05) / 0.25)})`;
+  $('lsub').style.opacity = clamp((u - 0.07) / 0.12);
+  $('lsub').style.transform = `translateY(${(1 - eo((u - 0.07) / 0.25)) * 18}px)`;
+}
+
+function frame(t) {
+  let fl = 0;
+  for (const [at, peak] of C.flashes) {
+    if (t >= at && t < at + 0.3) fl = Math.max(fl, peak * Math.pow(1 - (t - at) / 0.3, 2));
+  }
+  $('flash').style.opacity = fl;
+  label(t);
+
+  // hook headline, already up on frame one; it leaves with the first cut
+  const [h0, h1] = C.hook;
+  const ho = t < h1 ? clamp((h1 - t) / 0.12) : 0;
+  $('hook').style.opacity = ho;
+  $('hook').style.transform = `scale(${1 + 0.035 * Math.sin(Math.PI * clamp((t - h0) / (h1 - h0)))})`;
+
+  // loader pills, each on its spoken word
+  const LD = C.loaders;
+  const tFab = wordAt('paper', LD.after), tForge = wordAt('folia', tFab + 0.1), tNeo = Math.max(tForge + 0.35, wordAt('one', tForge + 0.1));
+  $('loaderBg').style.opacity = win(t, LD.bg[0], LD.bg[1], 0.2, 0.12);
+  [['pPaper', tFab, -1], ['pFolia', tForge, 1], ['pPurpur', tNeo, -1]].forEach(([id, at, dir]) => {
+    const el = $(id), p = eo((t - at + 0.04) / 0.22);
+    el.style.opacity = clamp((t - at + 0.04) / 0.08) * clamp((LD.end - t) / 0.12);
+    el.style.transform = `translateX(${dir * (1 - p) * 520}px) scale(${0.9 + 0.1 * back((t - at) / .25)})`;
+  });
+  const v = $('versions');
+  v.style.opacity = clamp((t - (tNeo + 0.3)) / 0.2) * clamp((LD.end - t) / 0.12);
+  v.style.transform = `translateY(${(1 - eo((t - tNeo - .3) / .3)) * 30}px)`;
+
+  // title card
+  const [T0, T1] = C.title;
+  const to = win(t, T0, T1, 0.12, 0.18);
+  $('title').style.opacity = to;
+  $('dim').style.opacity = 0.9 * win(t, T0, T1, 0.2, 0.2);
+  if (to > 0) {
+    const lp = back((t - T0 - 0.02) / 0.4);
+    $('logo').style.transform = `scale(${0.55 + 0.45 * lp}) translateY(${Math.sin((t - T0) * 2.2) * 6}px)`;
+    $('logo').style.opacity = clamp((t - T0) / 0.15);
+    const p1 = eo((t - T0 - 0.15) / 0.45);
+    $('t1').style.opacity = clamp((t - T0 - 0.15) / 0.2);
+    $('t1').style.letterSpacing = `${8 + (1 - p1) * 36}px`;
+    $('rule').style.transform = `scaleX(${eo((t - T0 - 0.3) / 0.5)})`;
+    $('t2').style.opacity = clamp((t - T0 - 0.35) / 0.25);
+    $('t2').style.transform = `translateY(${(1 - eo((t - T0 - .35) / .35)) * 24}px)`;
+    $('t3').style.opacity = clamp((t - T0 - 0.8) / 0.3);
+    $('shine').style.left = `${-300 + 1700 * eio((t - T0 - 0.6) / 0.9)}px`;
+  }
+
+  // CTA sticker, cleared before the loop seam
+  const [c0, c1] = C.cta;
+  $('cta').style.opacity = win(t, c0, c1, 0.06, 0.2);
+  $('cta').style.transform = `translateX(-50%) scale(${0.5 + 0.5 * back((t - c0) / 0.2)}) rotate(${-4 + 4 * eo((t - c0) / .3)}deg)`;
+
+  captions(t);
+}
+window.frame = frame;
+</script>
+</body></html>

@@ -17,3 +17,8 @@ releases/*.jar
 tools/smoke/node_modules/
 marketing/source/.render-*.html
 .claude/
+# Reel renders and working files (rebuilt from marketing/reel/source, never committed)
+marketing/reel/*.mp4
+marketing/reel/*.mov
+marketing/reel/*.wav
+marketing/reel/source/__pycache__/

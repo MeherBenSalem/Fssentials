@@ -10,6 +10,7 @@ Listing copy and artwork for CurseForge, Modrinth and Hangar. Nothing here ships
 | [`curseforge/summary.txt`](curseforge/summary.txt) | Short project summary (Modrinth allows 256 characters) |
 | [`images/icon.png`](images/icon.png) | Project avatar |
 | [`../DonutEssentials-3.0.0-PatchNotes.md`](../DonutEssentials-3.0.0-PatchNotes.md) | File changelog the publish workflow uploads |
+| [`reel/`](reel/README.md) | The 39-second promo reel's cover, captions for Instagram, YouTube Shorts and TikTok, and the scripts that build it (the MP4 itself is not tracked) |
 
 Image links in the description point at `raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/...`,
 so they work once this folder is on `main`. To host on CurseForge instead, upload the images to the project gallery and
