@@ -95,9 +95,11 @@ public final class IpLockModule implements Module {
     /** The lock of an account, by UUID or (for renamed offline-mode accounts) by name. */
     Lock lock(UUID uuid, String name) {
         Lock lock = locks.get(uuid);
-        if (lock != null || name == null) {
-            return lock;
-        }
+        return lock != null || name == null ? lock : named(name);
+    }
+
+    /** The lock of the account last seen with this name. */
+    Lock named(String name) {
         String lower = name.toLowerCase(Locale.ROOT);
         for (Lock candidate : locks.values()) {
             if (candidate.name().toLowerCase(Locale.ROOT).equals(lower)) {

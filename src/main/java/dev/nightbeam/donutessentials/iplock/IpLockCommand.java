@@ -6,6 +6,8 @@ import dev.nightbeam.donutessentials.player.PlayerData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -35,7 +37,7 @@ final class IpLockCommand extends EssCommand {
             usage(sender, label);
             return;
         }
-        offline(sender, args[1], data -> {
+        offline(sender, args[1], this::unrecorded, data -> {
             switch (sub) {
                 case "set", "change", "add" -> {
                     if (args.length < 3) {
@@ -110,6 +112,26 @@ final class IpLockCommand extends EssCommand {
         for (IpLockModule.Lock lock : all) {
             messages().sendPlain(sender, "iplock.list-line", "player", lock.name(), "ips", String.join(", ", lock.ips()));
         }
+    }
+
+    /**
+     * An account Donut Essentials has no record of: one locked before the upgrade from 2.x that hasn't joined since, or
+     * one in the server's name cache.
+     */
+    private PlayerData unrecorded(String name) {
+        IpLockModule.Lock lock = module.named(name);
+        if (lock != null) {
+            return new PlayerData(lock.uuid(), lock.name());
+        }
+        try {
+            OfflinePlayer cached = Bukkit.getOfflinePlayerIfCached(name);
+            if (cached != null && cached.getName() != null) {
+                return new PlayerData(cached.getUniqueId(), cached.getName());
+            }
+        } catch (Throwable ignored) {
+            // No name cache: the player is unknown.
+        }
+        return null;
     }
 
     /** The pattern typed, or the player's present (or last) IP for {@code current}. */

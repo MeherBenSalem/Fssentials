@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -90,12 +91,21 @@ public abstract class EssCommand {
      * nobody by that name ever joined.
      */
     protected void offline(CommandSender sender, String name, Consumer<PlayerData> found) {
+        offline(sender, name, unknown -> null, found);
+    }
+
+    /**
+     * {@link #offline(CommandSender, String, Consumer)} with a {@code fallback} for players without a record (it may
+     * return null). It runs off the main thread.
+     */
+    protected void offline(CommandSender sender, String name, Function<String, PlayerData> fallback, Consumer<PlayerData> found) {
         plugin.players().find(name).whenComplete((result, error) -> {
+            PlayerData data = error == null && result.isPresent() ? result.get() : fallback.apply(name);
             Runnable reply = () -> {
-                if (error != null || result.isEmpty()) {
+                if (data == null) {
                     send(sender, "common.player-never-joined", "player", name);
                 } else {
-                    found.accept(result.get());
+                    found.accept(data);
                 }
             };
             if (sender instanceof Player player) {
