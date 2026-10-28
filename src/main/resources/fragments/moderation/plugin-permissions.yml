@@ -1,0 +1,315 @@
+  # Moderation commands.
+  donutessentials.command.kick: {default: op}
+  donutessentials.command.ban: {default: op}
+  donutessentials.command.tempban: {default: op}
+  donutessentials.command.mute: {default: op}
+  donutessentials.command.tempmute: {default: op}
+  donutessentials.command.warn: {default: op}
+  donutessentials.command.tempwarn: {default: op}
+  donutessentials.command.note: {default: op}
+  donutessentials.command.banip: {default: op}
+  donutessentials.command.tempipban: {default: op}
+  donutessentials.command.unban: {default: op}
+  donutessentials.command.unmute: {default: op}
+  donutessentials.command.unwarn: {default: op}
+  donutessentials.command.unnote: {default: op}
+  donutessentials.command.unpunish: {default: op}
+  donutessentials.command.change-reason: {default: op}
+  donutessentials.command.warns: {default: op}
+  donutessentials.command.notes: {default: op}
+  donutessentials.command.check: {default: op}
+  donutessentials.command.banlist: {default: op}
+  donutessentials.command.history: {default: op}
+  donutessentials.command.punishment: {default: op}
+  donutessentials.command.alts: {default: op}
+  donutessentials.command.freeze: {default: op}
+  donutessentials.command.report: {default: true}
+  donutessentials.command.reports: {default: op}
+  donutessentials.command.staffchat: {default: op}
+  donutessentials.command.commandspy: {default: op}
+  donutessentials.notify.silent:
+    default: op
+    description: See silent punishments, lifts, expiries and escalations.
+  donutessentials.moderation.exempt:
+    default: false
+    description: Cannot be punished or kicked by other players (the console still can).
+  donutessentials.moderation.mute-bypass:
+    default: false
+    description: Mutes do not apply.
+  donutessentials.moderation.ip:
+    default: op
+    description: See IP addresses in /check.
+  donutessentials.alerts.alts:
+    default: op
+    description: Told when a joining player shares an address with a banned account.
+  donutessentials.reports.notify:
+    default: op
+    description: Told about new reports (with [Teleport] and [Claim]); no report cooldown.
+  donutessentials.freeze.bypass:
+    default: false
+    description: Cannot be frozen by other players.
+  # 2.x permission nodes keep working: each grants the 3.0 nodes it became.
+  donutessentials.punish.kick:
+    default: op
+    children:
+      donutessentials.command.kick: true
+  donutessentials.punish.ban:
+    default: op
+    children:
+      donutessentials.command.ban: true
+  donutessentials.punish.mute:
+    default: op
+    children:
+      donutessentials.command.mute: true
+  donutessentials.punish.warn:
+    default: op
+    children:
+      donutessentials.command.warn: true
+  donutessentials.punish.note:
+    default: op
+    children:
+      donutessentials.command.note: true
+  donutessentials.punish.banip:
+    default: op
+    children:
+      donutessentials.command.banip: true
+  donutessentials.punish.tempban:
+    default: op
+    children:
+      donutessentials.command.tempban: true
+  donutessentials.punish.tempmute:
+    default: op
+    children:
+      donutessentials.command.tempmute: true
+  donutessentials.punish.tempwarn:
+    default: op
+    children:
+      donutessentials.command.tempwarn: true
+  donutessentials.punish.tempipban:
+    default: op
+    children:
+      donutessentials.command.tempipban: true
+  donutessentials.punish.unpunish:
+    default: op
+    children:
+      donutessentials.command.unpunish: true
+      donutessentials.command.unban: true
+      donutessentials.command.unmute: true
+      donutessentials.command.unwarn: true
+      donutessentials.command.unnote: true
+  donutessentials.punish.change-reason:
+    default: op
+    children:
+      donutessentials.command.change-reason: true
+  donutessentials.punish.delete-record:
+    default: op
+    children:
+      donutessentials.command.punishment: true
+  donutessentials.view.warn:
+    default: op
+    children:
+      donutessentials.command.warns: true
+  donutessentials.view.note:
+    default: op
+    children:
+      donutessentials.command.notes: true
+  donutessentials.view.check:
+    default: op
+    children:
+      donutessentials.command.check: true
+  donutessentials.view.banlist:
+    default: op
+    children:
+      donutessentials.command.banlist: true
+  donutessentials.view.history:
+    default: op
+    children:
+      donutessentials.command.history: true
+  donutessentials.view.playerlist:
+    default: true
+    children:
+      donutessentials.command.playerlist: true
+  donutessentials.admin.reload:
+    default: op
+    children:
+      donutessentials.admin: true
+  donutessentials.admin.systemprefs:
+    default: op
+    children:
+      donutessentials.admin: true
+  donutessentials.vanish:
+    default: op
+    children:
+      donutessentials.command.vanish: true
+  donutessentials.teleport.offlinetp:
+    default: op
+    children:
+      donutessentials.command.offlinetp: true
+  donutessentials.invsee:
+    default: op
+    children:
+      donutessentials.command.invsee: true
+      donutessentials.invsee.edit: true
+  donutessentials.maintenance.admin:
+    default: op
+    children:
+      donutessentials.command.maintenance: true
+  server.broadcast:
+    default: op
+    children:
+      donutessentials.command.broadcast: true
+  plugin.iplock.admin:
+    default: op
+    children:
+      donutessentials.command.iplock: true
+  plugin.iplock.bypass:
+    default: op
+    children:
+      donutessentials.iplock.bypass: true
+  # Fssentials 1.x nodes.
+  fssentials.punish.kick:
+    default: op
+    children:
+      donutessentials.punish.kick: true
+  fssentials.punish.ban:
+    default: op
+    children:
+      donutessentials.punish.ban: true
+  fssentials.punish.mute:
+    default: op
+    children:
+      donutessentials.punish.mute: true
+  fssentials.punish.warn:
+    default: op
+    children:
+      donutessentials.punish.warn: true
+  fssentials.punish.note:
+    default: op
+    children:
+      donutessentials.punish.note: true
+  fssentials.punish.banip:
+    default: op
+    children:
+      donutessentials.punish.banip: true
+  fssentials.punish.tempban:
+    default: op
+    children:
+      donutessentials.punish.tempban: true
+  fssentials.punish.tempmute:
+    default: op
+    children:
+      donutessentials.punish.tempmute: true
+  fssentials.punish.tempwarn:
+    default: op
+    children:
+      donutessentials.punish.tempwarn: true
+  fssentials.punish.tempipban:
+    default: op
+    children:
+      donutessentials.punish.tempipban: true
+  fssentials.punish.unpunish:
+    default: op
+    children:
+      donutessentials.punish.unpunish: true
+  fssentials.punish.change-reason:
+    default: op
+    children:
+      donutessentials.punish.change-reason: true
+  fssentials.punish.delete-record:
+    default: op
+    children:
+      donutessentials.punish.delete-record: true
+  fssentials.view.warn:
+    default: op
+    children:
+      donutessentials.view.warn: true
+  fssentials.view.note:
+    default: op
+    children:
+      donutessentials.view.note: true
+  fssentials.view.check:
+    default: op
+    children:
+      donutessentials.view.check: true
+  fssentials.view.banlist:
+    default: op
+    children:
+      donutessentials.view.banlist: true
+  fssentials.view.history:
+    default: op
+    children:
+      donutessentials.view.history: true
+  fssentials.view.playerlist:
+    default: true
+    children:
+      donutessentials.view.playerlist: true
+  fssentials.admin.reload:
+    default: op
+    children:
+      donutessentials.admin.reload: true
+  fssentials.admin.systemprefs:
+    default: op
+    children:
+      donutessentials.admin.systemprefs: true
+  fssentials.vanish:
+    default: op
+    children:
+      donutessentials.vanish: true
+  fssentials.teleport.offlinetp:
+    default: op
+    children:
+      donutessentials.teleport.offlinetp: true
+  fssentials.invsee:
+    default: op
+    children:
+      donutessentials.invsee: true
+  fssentials.maintenance.admin:
+    default: op
+    children:
+      donutessentials.maintenance.admin: true
+  fssentials.notify.silent:
+    default: op
+    children:
+      donutessentials.notify.silent: true
+  fssentials.maintenance.bypass:
+    default: op
+    children:
+      donutessentials.maintenance.bypass: true
+  fssentials.maintenance.notify:
+    default: op
+    children:
+      donutessentials.maintenance.notify: true
+  fssentials.*:
+    default: op
+    children:
+      fssentials.punish.kick: true
+      fssentials.punish.ban: true
+      fssentials.punish.mute: true
+      fssentials.punish.warn: true
+      fssentials.punish.note: true
+      fssentials.punish.banip: true
+      fssentials.punish.tempban: true
+      fssentials.punish.tempmute: true
+      fssentials.punish.tempwarn: true
+      fssentials.punish.tempipban: true
+      fssentials.punish.unpunish: true
+      fssentials.punish.change-reason: true
+      fssentials.punish.delete-record: true
+      fssentials.view.warn: true
+      fssentials.view.note: true
+      fssentials.view.check: true
+      fssentials.view.banlist: true
+      fssentials.view.history: true
+      fssentials.admin.reload: true
+      fssentials.admin.systemprefs: true
+      fssentials.vanish: true
+      fssentials.teleport.offlinetp: true
+      fssentials.invsee: true
+      fssentials.maintenance.admin: true
+      fssentials.notify.silent: true
+      fssentials.maintenance.bypass: true
+      fssentials.maintenance.notify: true
+      fssentials.view.playerlist: true
+      server.broadcast: true
+      plugin.iplock.admin: true
+      plugin.iplock.bypass: true
