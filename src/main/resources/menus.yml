@@ -1,0 +1,62 @@
+# Donut Essentials 3.0 menus. Every title, slot, item and line of text can be changed here.
+#
+#  slot / slots     where an item goes (0 = top left, 8 = top right, 9 = second row...). Ranges like "10-16" work.
+#  material         any item name. PLAYER_HEAD shows the viewer's head.
+#  name / lore      MiniMessage (or & codes). Placeholders such as <home>, <world>, <balance> are filled in.
+#  content          slots that list things (homes, warps, kits...). Longer lists get pages.
+#  glow: true       adds the enchantment shine.
+#  Remove an item (or set its slot to -1) to hide it.
+menus-version: 1
+
+filler:
+  material: GRAY_STAINED_GLASS_PANE
+  name: " "
+
+common:
+  previous: {material: ARROW, name: "<white>Previous page", lore: ["<gray>Page <page>/<pages>"]}
+  next: {material: ARROW, name: "<white>Next page", lore: ["<gray>Page <page>/<pages>"]}
+  back: {material: DARK_OAK_DOOR, name: "<gray>Back"}
+  close: {material: BARRIER, name: "<#ff6b6b>Close"}
+  empty: {material: GRAY_DYE, name: "<gray>Nothing here yet"}
+
+confirm:
+  title: "<dark_gray>Are you sure?"
+  rows: 3
+  items:
+    subject: {slot: 13, material: PAPER, name: "<white><subject>"}
+    confirm:
+      slots: ["10-12"]
+      material: LIME_STAINED_GLASS_PANE
+      name: "<#7ee081><bold>Confirm"
+      lore: ["<gray><action>"]
+    cancel:
+      slots: ["14-16"]
+      material: RED_STAINED_GLASS_PANE
+      name: "<#ff6b6b><bold>Cancel"
+
+homes:
+  title: "<dark_gray>Homes · <player> <dark_gray>(<count>/<limit>)"
+  rows: 4
+  content: ["10-16", "19-25"]
+  items:
+    home:
+      material: RED_BED
+      name: "<#6bc6ff><bold><home>"
+      lore:
+        - "<gray>World <white><world>"
+        - "<gray>At <white><coords>"
+        - ""
+        - "<#7ee081>Click to teleport"
+        - "<#ff6b6b>Shift + right-click to delete"
+    icon-overworld: {material: RED_BED}
+    icon-nether: {material: CRIMSON_NYLIUM}
+    icon-end: {material: END_STONE}
+    icon-missing: {material: BARRIER}
+    set:
+      slot: 31
+      material: LIME_DYE
+      name: "<#7ee081><bold>Set a home here"
+      lore: ["<gray>Name it, and it's saved", "<gray>where you stand."]
+    close: {slot: 35}
+    previous: {slot: 27}
+    next: {slot: 35}

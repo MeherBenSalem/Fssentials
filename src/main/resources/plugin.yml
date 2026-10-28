@@ -1,236 +1,40 @@
-# Folia supported v1.0+
 name: DonutEssentials
 main: dev.nightbeam.donutessentials.DonutEssentialsPlugin
-version: 2.0.0
+version: '${version}'
 api-version: '1.20'
 folia-supported: true
 author: NightBeam
-description: Moderation and admin essentials for Paper, Folia, and Purpur servers.
-
-commands:
-  kick:
-    description: Kick a player.
-    usage: /kick <-s> <player> <reason|@layout>
-  ban:
-    description: Permanently ban a player.
-    usage: /ban <-s> <player> <reason|@layout>
-  mute:
-    description: Permanently mute a player.
-    usage: /mute <-s> <player> <reason|@layout>
-  warn:
-    description: Warn a player.
-    usage: /warn <-s> <player> <reason|@layout>
-  note:
-    description: Add note to a player.
-    usage: /note <-s> <player> <reason|@layout>
-  banip:
-    description: Permanently ban an IP.
-    usage: /banip <-s> <player|ip> <reason|@layout>
-  tempban:
-    description: Temporarily ban a player.
-    usage: /tempban <-s> <player> <duration|#timelayout> <reason|@layout>
-  tempmute:
-    description: Temporarily mute a player.
-    usage: /tempmute <-s> <player> <duration|#timelayout> <reason|@layout>
-  tempwarn:
-    description: Temporarily warn a player.
-    usage: /tempwarn <-s> <player> <duration|#timelayout> <reason|@layout>
-  tempipban:
-    description: Temporarily ban an IP.
-    usage: /tempipban <-s> <player|ip> <duration|#timelayout> <reason|@layout>
-  unban:
-    description: Remove a ban by ID.
-    usage: /unban <id>
-  unmute:
-    description: Remove a mute by ID.
-    usage: /unmute <id>
-  unwarn:
-    description: Remove a warn by ID.
-    usage: /unwarn <id>
-  unnote:
-    description: Remove a note by ID.
-    usage: /unnote <id>
-  unpunish:
-    description: Remove any punishment by ID.
-    usage: /unpunish <id>
-  change-reason:
-    description: Change punishment reason.
-    usage: /change-reason <id> <new reason>
-  warns:
-    description: Show warns for a player.
-    usage: /warns <player>
-  notes:
-    description: Show notes for a player.
-    usage: /notes <player>
-  check:
-    description: Check moderation profile.
-    usage: /check <player>
-  banlist:
-    description: Show active punishments.
-    usage: /banlist <page>
-  history:
-    description: Show punishment history.
-    usage: /history <player> <page>
-  donutessentials:
-    description: Admin command hub.
-    usage: /donutessentials <help|reload>
-    aliases: [fssentials]
-  systemprefs:
-    description: Show system preferences.
-    usage: /systemprefs
-  vanish:
-    description: Toggle admin invisibility.
-    usage: /vanish
-    aliases: [v]
-  offlinetp:
-    description: Teleport to an offline player's last known location.
-    usage: /offlinetp <player|uuid>
-  playerlist:
-    description: Show online player count and optionally names.
-    usage: /playerlist [names]
-  punishment:
-    description: Manage punishment records.
-    usage: /punishment delete record <id>
-  invsee:
-    description: View a player's inventory safely.
-    usage: /invsee <player>
-  maintenance:
-    description: Manage maintenance mode.
-    usage: /maintenance <on|off|reload|add|remove|whitelist|starttimer|endtimer|schedule|aborttimer|motd|setmotd>
-  broadcast:
-    description: Send a server-wide announcement.
-    usage: /broadcast <title> [subtitle]
-  iplock:
-    description: Manage account IP lock restrictions.
-    usage: /iplock <set|remove|change|check> <player> [ip]
+website: https://modrinth.com/plugin/donutessentials
+description: Homes, warps, teleports, kits, economy, chat, moderation and staff tools in one plugin for Paper, Folia and Purpur.
+softdepend: [Vault, VaultUnlocked, PlaceholderAPI, LuckPerms, DonutRTP]
+# Commands are registered from commands.yml at start-up (switched off ones are never registered).
 
 permissions:
-  donutessentials.*:
+  donutessentials.admin:
     default: op
-    children:
-      donutessentials.punish.kick: true
-      donutessentials.punish.ban: true
-      donutessentials.punish.mute: true
-      donutessentials.punish.warn: true
-      donutessentials.punish.note: true
-      donutessentials.punish.banip: true
-      donutessentials.punish.tempban: true
-      donutessentials.punish.tempmute: true
-      donutessentials.punish.tempwarn: true
-      donutessentials.punish.tempipban: true
-      donutessentials.punish.unpunish: true
-      donutessentials.punish.change-reason: true
-      donutessentials.view.warn: true
-      donutessentials.view.note: true
-      donutessentials.view.check: true
-      donutessentials.view.banlist: true
-      donutessentials.view.history: true
-      donutessentials.admin.reload: true
-      donutessentials.admin.systemprefs: true
-      donutessentials.notify.silent: true
-      donutessentials.vanish: true
-      donutessentials.teleport.offlinetp: true
-      donutessentials.view.playerlist: true
-      donutessentials.punish.delete-record: true
-      donutessentials.invsee: true
-      donutessentials.maintenance.admin: true
-      donutessentials.maintenance.bypass: true
-      donutessentials.maintenance.notify: true
-      server.broadcast: true
-      plugin.iplock.admin: true
-      plugin.iplock.bypass: true
-
-  fssentials.*:
-    default: op
-    children:
-      fssentials.punish.kick: true
-      fssentials.punish.ban: true
-      fssentials.punish.mute: true
-      fssentials.punish.warn: true
-      fssentials.punish.note: true
-      fssentials.punish.banip: true
-      fssentials.punish.tempban: true
-      fssentials.punish.tempmute: true
-      fssentials.punish.tempwarn: true
-      fssentials.punish.tempipban: true
-      fssentials.punish.unpunish: true
-      fssentials.punish.change-reason: true
-      fssentials.view.warn: true
-      fssentials.view.note: true
-      fssentials.view.check: true
-      fssentials.view.banlist: true
-      fssentials.view.history: true
-      fssentials.admin.reload: true
-      fssentials.admin.systemprefs: true
-      fssentials.notify.silent: true
-      fssentials.vanish: true
-      fssentials.teleport.offlinetp: true
-      fssentials.view.playerlist: true
-      fssentials.punish.delete-record: true
-      fssentials.invsee: true
-      fssentials.maintenance.admin: true
-      fssentials.maintenance.bypass: true
-      fssentials.maintenance.notify: true
-      server.broadcast: true
-      plugin.iplock.admin: true
-      plugin.iplock.bypass: true
-
-  donutessentials.teleport.offlinetp:
-    default: op
-    description: Allows teleporting to offline players.
-
-  donutessentials.view.playerlist:
+    description: /donutessentials (reload, info, import) and update notices.
+  donutessentials.back.death:
     default: true
-    description: Allows viewing online player count and names.
-
-  donutessentials.punish.delete-record:
+    description: /back returns to where you died.
+  donutessentials.bypass.warmup:
     default: op
-    description: Allows deleting punishment records from storage.
-
-  donutessentials.maintenance.admin:
+    description: Teleports start at once.
+  donutessentials.bypass.cooldown:
     default: op
-    description: Allows managing maintenance mode.
-
-  donutessentials.maintenance.bypass:
+    description: No teleport cooldowns.
+  donutessentials.bypass.cost:
     default: op
-    description: Allows joining during maintenance mode.
-
-  donutessentials.maintenance.notify:
+    description: Teleports are free.
+  donutessentials.bypass.combat:
+    default: false
+    description: Never tagged in combat.
+  donutessentials.command.sethome: {default: true}
+  donutessentials.command.home: {default: true}
+  donutessentials.command.delhome: {default: true}
+  donutessentials.command.homes: {default: true}
+  donutessentials.homes.others:
     default: op
-    description: Receives maintenance join-attempt notifications.
-
-  fssentials.teleport.offlinetp:
+    description: Visit, list and delete other players' homes (player:home).
+  donutessentials.homes.anyworld:
     default: op
-    description: Legacy alias for donutessentials.teleport.offlinetp.
-
-  fssentials.view.playerlist:
-    default: true
-    description: Allows viewing online player count and names.
-
-  fssentials.punish.delete-record:
-    default: op
-    description: Legacy alias for donutessentials.punish.delete-record.
-
-  fssentials.maintenance.admin:
-    default: op
-    description: Legacy alias for donutessentials.maintenance.admin.
-
-  fssentials.maintenance.bypass:
-    default: op
-    description: Legacy alias for donutessentials.maintenance.bypass.
-
-  fssentials.maintenance.notify:
-    default: op
-    description: Legacy alias for donutessentials.maintenance.notify.
-
-  server.broadcast:
-    default: op
-    description: Allows sending server-wide announcements.
-
-  plugin.iplock.admin:
-    default: op
-    description: Allows full access to IP lock administration commands.
-
-  plugin.iplock.bypass:
-    default: op
-    description: Allows bypassing IP lock checks.
+    description: Set homes in disabled worlds.

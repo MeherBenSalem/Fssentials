@@ -11,3 +11,8 @@ target/
 Thumbs.db
 *.class
 original-*.jar
+build/
+.gradle/
+releases/*.jar
+tools/smoke/node_modules/
+marketing/source/.render-*.html

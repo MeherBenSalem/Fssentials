@@ -1,0 +1,12 @@
+# Every command Donut Essentials adds.
+#   enabled: false   the command is not registered at all (it is free for another plugin)
+#   aliases          extra names. A name vanilla Minecraft uses is only taken when it is listed under
+#                    commands.take-over-vanilla in config.yml.
+# Changes here need a restart. Every command is also reachable as /donutessentials:<name>.
+commands-version: 1
+
+donutessentials: {enabled: true, aliases: [dess, fssentials], description: "Donut Essentials admin: reload, info, import"}
+sethome: {enabled: true, aliases: [createhome], description: "Set a home where you stand"}
+home: {enabled: true, aliases: [h], description: "Teleport to a home"}
+delhome: {enabled: true, aliases: [deletehome, rmhome], description: "Delete a home"}
+homes: {enabled: true, aliases: [listhomes], description: "Your homes"}

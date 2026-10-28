@@ -1,0 +1,245 @@
+import java.security.MessageDigest
+
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '9.3.1'
+}
+
+group = 'dev.nightbeam'
+version = '3.0.0'
+description = 'Donut Essentials: the all-in-one essentials and moderation plugin for Paper, Folia and Purpur (Apache-2.0).'
+
+// The release jar is compiled against the oldest supported API (Paper 1.20.1, Java 17 bytecode) so it loads on every
+// supported server. compileMatrix compiles the same sources against each newer API to catch removed methods.
+def paperApi = 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+def paperApiMatrix = [
+        '1.20.6' : ['io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT', 21],
+        '1.21.4' : ['io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT', 21],
+        '1.21.11': ['io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT', 21],
+        '26.1.2' : ['io.papermc.paper:paper-api:26.1.2.build.74-stable', 25],
+        '26.2'   : ['io.papermc.paper:paper-api:26.2.build.135-stable', 25],
+        '26.3'   : ['io.papermc.paper:paper-api:26.3.build.227-stable', 25],
+]
+
+java {
+    toolchain {
+        // Paper 26.x API jars are Java 25 bytecode; the plugin itself still targets Java 17.
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+    disableAutoTargetJvm()
+}
+
+// Native dialogs (Minecraft 1.21.7+) are compiled against a newer API and loaded only where it exists.
+def dialogsApi = 'io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT'
+def dialogsMatrix = ['1.21.11', '26.1.2', '26.2', '26.3']
+
+sourceSets {
+    dialogs {
+        java.srcDir 'src/dialogs/java'
+        compileClasspath += sourceSets.main.output
+    }
+}
+
+repositories {
+    // PaperMC's repository also proxies Maven Central, so it goes first.
+    maven {
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    mavenCentral()
+    maven {
+        name = 'extendedclip'
+        url = 'https://repo.extendedclip.com/releases/'
+        content {
+            includeGroup 'me.clip'
+        }
+    }
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io'
+        content {
+            includeGroup 'com.github.MilkBowl'
+        }
+    }
+}
+
+dependencies {
+    compileOnly paperApi
+    compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
+        transitive = false
+    }
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+
+    implementation 'com.zaxxer:HikariCP:6.3.3'
+    // Do not relocate org.sqlite: its JNI natives bind to org.sqlite.core.NativeDB.
+    implementation('org.xerial:sqlite-jdbc:3.53.2.0') {
+        artifact {
+            classifier = 'without-natives'
+        }
+    }
+    implementation 'org.xerial:sqlite-jdbc:3.53.2.0:natives-linux'
+    implementation 'org.xerial:sqlite-jdbc:3.53.2.0:natives-windows'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.4'
+    implementation 'org.bstats:bstats-bukkit:3.1.0'
+
+    dialogsCompileOnly dialogsApi
+
+    testImplementation paperApi
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'org.yaml:snakeyaml:2.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    // Java 17 bytecode: Paper 1.20.1-1.20.4 servers still run on Java 17.
+    options.release = 17
+    options.compilerArgs.addAll(['-Xlint:removal', '-Xlint:deprecation'])
+}
+
+tasks.named('compileDialogsJava') {
+    // Dialog servers (1.21.7+) all run Java 21 or newer.
+    options.release = 21
+}
+
+def compileMatrix = tasks.register('compileMatrix') {
+    group = 'verification'
+    description = 'Compiles the plugin against every supported Paper API, from 1.20.6 to 26.3.'
+}
+paperApiMatrix.each { mc, spec ->
+    def id = mc.replace('.', '_')
+    def api = configurations.create("paperApi_${id}") {
+        canBeConsumed = false
+    }
+    dependencies.add(api.name, spec[0])
+    def task = tasks.register("compileAgainst_${id}", JavaCompile) {
+        source = sourceSets.main.java
+        classpath = api + configurations.compileClasspath.filter { !it.name.startsWith('paper-api') }
+        destinationDirectory = layout.buildDirectory.dir("matrix/${mc}")
+        javaCompiler = javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(25) }
+        options.release = spec[1]
+        options.encoding = 'UTF-8'
+        options.compilerArgs.add('-Xlint:removal')
+    }
+    compileMatrix.configure { dependsOn(task) }
+    if (dialogsMatrix.contains(mc)) {
+        def dialogsTask = tasks.register("compileDialogsAgainst_${id}", JavaCompile) {
+            source = sourceSets.dialogs.java
+            classpath = api + sourceSets.main.output + configurations.compileClasspath.filter { !it.name.startsWith('paper-api') }
+            destinationDirectory = layout.buildDirectory.dir("matrix-dialogs/${mc}")
+            javaCompiler = javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(25) }
+            options.release = spec[1]
+            options.encoding = 'UTF-8'
+            dependsOn tasks.named('compileJava')
+        }
+        compileMatrix.configure { dependsOn(dialogsTask) }
+    }
+}
+
+def pluginVersion = version
+
+processResources {
+    filteringCharset = 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand(version: pluginVersion)
+    }
+}
+
+shadowJar {
+    from(sourceSets.dialogs.output)
+    archiveBaseName.set('DonutEssentials')
+    archiveClassifier.set('')
+    mergeServiceFiles()
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE.txt'
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/versions/**/module-info.class'
+    exclude 'module-info.class'
+    exclude 'LICENSE'
+    exclude 'README'
+    exclude 'NOTICE'
+    // Linux + Windows x86_64 only.
+    exclude 'org/sqlite/native/Linux-Musl/**'
+    exclude 'org/sqlite/native/Linux/aarch64/**'
+    exclude 'org/sqlite/native/Linux/arm/**'
+    exclude 'org/sqlite/native/Linux/armv6/**'
+    exclude 'org/sqlite/native/Linux/armv7/**'
+    exclude 'org/sqlite/native/Linux/ppc64/**'
+    exclude 'org/sqlite/native/Linux/riscv64/**'
+    exclude 'org/sqlite/native/Linux/x86/**'
+    exclude 'org/sqlite/native/Windows/aarch64/**'
+    exclude 'org/sqlite/native/Windows/armv7/**'
+    exclude 'org/sqlite/native/Windows/x86/**'
+    from(rootProject.file('LICENSE')) {
+        into 'META-INF'
+    }
+    from(rootProject.file('NOTICE')) {
+        into 'META-INF'
+    }
+    relocate 'com.zaxxer.hikari', 'dev.nightbeam.donutessentials.lib.hikari'
+    relocate 'org.bstats', 'dev.nightbeam.donutessentials.lib.bstats'
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+tasks.named('build') {
+    dependsOn shadowJar
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Folia has no main thread: the Bukkit scheduler must never appear outside the scheduler package.
+def verifySourceSafety = tasks.register('verifySourceSafety') {
+    group = 'verification'
+    description = 'Fails when Folia-unsafe scheduling appears outside dev.nightbeam.donutessentials.scheduler.'
+    def sources = fileTree('src/main/java') { include '**/*.java'; exclude '**/scheduler/**' }
+    inputs.files(sources)
+    doLast {
+        def forbidden = ['Bukkit.getScheduler', 'BukkitRunnable', 'BukkitScheduler', 'getServer().getScheduler']
+        def violations = []
+        sources.files.each { file ->
+            def text = file.getText('UTF-8')
+            forbidden.each { token ->
+                if (text.contains(token)) {
+                    violations << "${projectDir.toPath().relativize(file.toPath())} uses ${token}"
+                }
+            }
+        }
+        if (!violations.isEmpty()) {
+            throw new GradleException(violations.join('\n'))
+        }
+    }
+}
+tasks.named('check') {
+    dependsOn verifySourceSafety
+}
+
+def releaseJarName = "DonutEssentials-${version}.jar"
+
+// Copies the jar to releases/ with a SHA-256 line in releases/SHA256SUMS.txt (the publish workflow checks it).
+tasks.register('release') {
+    group = 'build'
+    description = 'Builds and tests the release jar, then copies it to releases/ with SHA256SUMS.txt.'
+    dependsOn shadowJar, 'test', verifySourceSafety
+    doLast {
+        def jar = tasks.named('shadowJar').get().archiveFile.get().asFile
+        def releases = file('releases')
+        releases.mkdirs()
+        def target = new File(releases, releaseJarName)
+        target.bytes = jar.bytes
+        def hash = MessageDigest.getInstance('SHA-256').digest(target.bytes).collect { String.format('%02x', it) }.join('')
+        def sums = new File(releases, 'SHA256SUMS.txt')
+        def lines = (sums.exists() ? sums.readLines() : []).findAll { it.trim() && !it.endsWith("  ${target.name}") }
+        lines << "${hash}  ${target.name}".toString()
+        sums.setText(lines.sort().join('\n') + '\n', 'US-ASCII')
+        println "release: ${target} ${hash}"
+    }
+}

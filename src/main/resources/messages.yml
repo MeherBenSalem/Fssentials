@@ -1,112 +1,84 @@
-prefix: "&6&lDonut &8» "
+# Donut Essentials 3.0 messages. MiniMessage format (https://docs.advntr.dev/minimessage/format.html); legacy & codes
+# and &#RRGGBB work too. An empty message ("") is not sent. Placeholders look like <player>.
+messages-version: 1
 
-errors:
-  no-permission: "&cNope! You do not have permission for that command."
-  player-only: "&cThis command is for in-game players only, captain."
-  player-not-found: "&cI looked everywhere, but I could not find &e%player%&c."
-  invsee-offline: "&cPlayer %player% is not online."
-  invalid-id: "&cThat punishment ID (&e%id%&c) does not exist or is already inactive."
-  invalid-time: "&cTime format is off. Try examples like &e30m&c, &e2h&c, &e3d&c, &e1mo&c."
-  ip-not-found: "&cNo known IP found for &e%player%&c yet."
-  offlinetp-location-unavailable: "&cNo stored location is available for &e%player%&c."
+prefix: "<#6bc6ff><bold>Donut</bold></#6bc6ff> <dark_gray>»</dark_gray> "
 
-usage:
-  kick: "&eUsage: /kick <-s> <player> <reason|@layout>"
-  ban: "&eUsage: /ban <-s> <player> <reason|@layout>"
-  mute: "&eUsage: /mute <-s> <player> <reason|@layout>"
-  warn: "&eUsage: /warn <-s> <player> <reason|@layout>"
-  note: "&eUsage: /note <-s> <player> <reason|@layout>"
-  banip: "&eUsage: /banip <-s> <player|ip> <reason|@layout>"
-  tempban: "&eUsage: /tempban <-s> <player> <time|#layout> <reason|@layout>"
-  tempmute: "&eUsage: /tempmute <-s> <player> <time|#layout> <reason|@layout>"
-  tempwarn: "&eUsage: /tempwarn <-s> <player> <time|#layout> <reason|@layout>"
-  tempipban: "&eUsage: /tempipban <-s> <player|ip> <time|#layout> <reason|@layout>"
-  unpunish: "&eUsage: /unpunish <id>"
-  change-reason: "&eUsage: /change-reason <id> <new reason>"
-  warns: "&eUsage: /warns <player>"
-  notes: "&eUsage: /notes <player>"
-  check: "&eUsage: /check <player>"
-  history: "&eUsage: /history <player> <page>"
-  offlinetp: "&eUsage: /offlinetp <player|uuid>"
-  playerlist: "&eUsage: /playerlist [names]"
-  punishment: "&eUsage: /punishment delete record <id>"
-  invsee: "&eUsage: /invsee <player>"
-  iplock: "&eUsage: /iplock <set|remove|change|check> <player> [ip]"
-  donutessentials: "&eUsage: /donutessentials <help|reload>"
-  fssentials: "&eUsage: /donutessentials <help|reload>"
+common:
+  no-permission: "<#ff6b6b>You don't have permission to do that."
+  player-only: "<#ff6b6b>Only players can use this command."
+  player-not-found: "<#ff6b6b>No player named <white><player></white> is online."
+  player-never-joined: "<#ff6b6b><white><player></white> has never played here."
+  error: "<#ff6b6b>Something went wrong. The console has the details."
+  input-chat: "<gray>Type your answer in chat, or <white>cancel</white>."
+  input-cancelled: "<gray>Cancelled."
+  while-away-header: "<gray>While you were away <dark_gray>(<white><count></white>)</dark_gray>:"
+  "on": "<#7ee081>on"
+  "off": "<#ff6b6b>off"
+  "yes": "<#7ee081>yes"
+  "no": "<#ff6b6b>no"
+  none: "<dark_gray>none"
+  console: "Console"
 
-vanish:
-  enabled: "&aYou are now vanished."
-  disabled: "&cYou are now visible."
-
-invsee:
-  opened: "&aPeeking at &e%player%&a's inventory in read-only mode. Hands off the loot!"
-
-enforcement:
-  kick: "&cYou were kicked! Reason: &e%reason%"
-  ban-kick: "&cYou are banned!\n&7ID: &e%id%\n&7Reason: &e%reason%\n&7Until: &e%until%"
-  mute-chat: "&eShh... You are muted right now.\n&7ID: &e%id%\n&7Reason: &e%reason%\n&7Until: &e%until%"
-
-punishment:
-  applied: "&c%player% &7was hit with &c%type% &7by &e%staff%&7. Reason: &f%reason% &8(ID: &e%id%&8, until &e%until%&8)"
-  kick: "&e%player% &7was kicked by &e%staff%&7. Reason: &f%reason%"
-  saved: "&aAll set! Saved &e%type% &afor &e%player% &a(ID: &e%id%&a)."
-  removed: "&aPoof! Punishment &e%id% &ahas been removed."
-  record-deleted: "&aDeleted punishment record &e%id%&a from storage."
-  reason-updated: "&aUpdated reason for &e%id%&a: &f%reason%"
-  expired: "&aAuto-expired: &e%type% &afor &e%player% &7(ID: &e%id%&7)."
-  silent-wrapper: "&8[&7Silent&8] &7%message%"
+dialogs:
+  text-field: "<gray>Your answer"
+  submit: "<#7ee081>Done"
+  cancel: "<#ff6b6b>Cancel"
 
 teleport:
-  offlinetp-success: "&aTeleported to &e%player%&a's saved location."
-
-target:
-  warn: "&eHey %player%, you have been warned for: &f%reason%&e. Stay on your toes!"
-
-help:
-  header: "&6Donut Essentials Help &8- &7Friendly moderation toolkit"
-
-check:
-  header: "&6Moderation Snapshot for &e%player%"
-  uuid: "&7UUID: &f%uuid%"
-  ip: "&7IP: &f%ip%"
-  country: "&7Country: &f%country%"
-  ban: "&7Ban: %status%"
-  mute: "&7Mute: %status%"
-  warn: "&7Warn count: &e%count%"
-  note: "&7Note count: &e%count%"
-
-banlist:
-  header: "&6Active Punishments &8(Page &e%page%&8/&e%max%&8, Total: &e%count%&8)"
-
-history:
-  header: "&6History for &e%player% &8(Page &e%page%&8/&e%max%&8, Total: &e%count%&8)"
-
-playerlist:
-  header: "&6Online Players: &e%online%&7/&e%max%"
-  names: "&7Players: &f%names%"
-
-iplock:
-  set: "&aIP lock set for &e%player%&a to &e%ip%&a."
-  removed: "&aRemoved IP lock for &e%player%&a."
-  changed: "&aUpdated IP lock for &e%player%&a to &e%ip%&a."
-  check: "&e%player% &7is locked to IP: &f%ip%"
-  not-locked: "&e%player% &7does not have an IP lock."
-  invalid-ip: "&cInvalid IP address: &e%ip%&c."
-
-warns-header: "&6Warnings for &e%player% &8(Total: &e%count%&8)"
-notes-header: "&6Notes for &e%player% &8(Total: &e%count%&8)"
-
-list:
-  empty: "&7Nothing to show here right now."
-  line: "&8- &e%id% &7| &c%type% &7| &f%player% &7| &f%reason% &7| &aBy %actor% &7| &b%created% &7| &dUntil %until% &7| %active%"
+  warmup: "<gray>Teleporting in <white><seconds>s</white>. Don't move."
+  warmup-title: "<#6bc6ff>Teleporting in <white><seconds>"
+  warmup-subtitle: "<gray>Don't move"
+  cancelled-move: "<#ff6b6b>Teleport cancelled: you moved."
+  cancelled-damage: "<#ff6b6b>Teleport cancelled: you took damage."
+  cooldown: "<#ff6b6b>You can teleport again in <white><time></white>."
+  in-combat: "<#ff6b6b>You're in combat. Wait <white><seconds>s</white>."
+  cannot-afford: "<#ff6b6b>That teleport costs <#ffc24b><cost></#ffc24b>."
+  paid: "<gray>Paid <#ffc24b><cost></#ffc24b> for the teleport."
+  no-destination: "<#ff6b6b>That place can't be reached right now."
+  failed: "<#ff6b6b>The teleport failed."
 
 admin:
-  reloaded: "&aConfigs refreshed. Donut Essentials is back in action!"
+  reloaded: "<#7ee081>Reloaded config, messages and menus <dark_gray>(<ms> ms)</dark_gray>."
+  update: "<gray>Donut Essentials <white><latest></white> is out (you have <white><version></white>). <click:open_url:'<url>'><#6bc6ff><u>Download</u></#6bc6ff></click>"
+  import-usage: "<gray>Usage: <white>/<label> import essentials [confirm]</white>"
+  help:
+    - "<dark_gray><st>                                        </st>"
+    - "<#6bc6ff><bold>Donut Essentials</bold></#6bc6ff> <gray><version>"
+    - "<white>/<label> info</white> <dark_gray>·</dark_gray> <gray>version, storage, modules"
+    - "<white>/<label> reload</white> <dark_gray>·</dark_gray> <gray>config, messages and menus"
+    - "<white>/<label> import essentials</white> <dark_gray>·</dark_gray> <gray>switch from EssentialsX"
+    - "<dark_gray><st>                                        </st>"
+  info:
+    - "<dark_gray><st>                                        </st>"
+    - "<#6bc6ff><bold>Donut Essentials</bold></#6bc6ff> <white><version>"
+    - "<gray>Server <white><platform></white> <dark_gray>·</dark_gray> <gray>Java <white><java>"
+    - "<gray>Storage <white><storage></white> <dark_gray>·</dark_gray> <gray>Economy <white><economy>"
+    - "<gray>Players <white><players></white> <dark_gray>·</dark_gray> <gray>Commands <white><commands>"
+    - "<gray>Dialogs <white><dialogs></white> <dark_gray>·</dark_gray> <gray>PlaceholderAPI <white><placeholderapi></white> <dark_gray>·</dark_gray> <gray>Vault <white><vault>"
+    - "<gray>Modules (<white><module_count></white>): <white><modules>"
+    - "<dark_gray><st>                                        </st>"
 
-system:
-  header: "&6System Preferences"
-  version: "&7Plugin version: &f%version%"
-  java: "&7Java version: &f%version%"
-  players: "&7Online players: &f%online%"
-  storage: "&7Persistence: &f%state%"
+usage:
+  donutessentials: "<gray>Usage: <white>/<label> <help|info|reload|import></white>"
+  delhome: "<gray>Usage: <white>/<label> <home></white>"
+
+homes:
+  set: "<#7ee081>Home <white><home></white> set. <dark_gray>(<count>/<limit>)</dark_gray>"
+  moved: "<#7ee081>Home <white><home></white> moved here."
+  deleted: "<gray>Home <white><home></white> deleted."
+  deleted-other: "<gray>Deleted <white><player></white>'s home <white><home></white>."
+  teleported: "<gray>Welcome home <dark_gray>(<white><home></white>)</dark_gray>."
+  none: "<gray>You have no homes yet. Set one with <white>/sethome</white>."
+  not-found: "<#ff6b6b>You have no home called <white><home></white>. <gray>Your homes: <white><homes>"
+  not-found-other: "<#ff6b6b><white><player></white> has no home called <white><home></white>."
+  limit: "<#ff6b6b>You can have <white><limit></white> homes. Delete one first, or move one with <white>/sethome <name></white>."
+  invalid-name: "<#ff6b6b>Home names are 1-16 letters, digits, - or _."
+  world-disabled: "<#ff6b6b>You can't set homes in this world."
+  world-missing: "<#ff6b6b>Home <white><home></white> is in <white><world></white>, which isn't loaded."
+  prompt-title: "<#6bc6ff>New home"
+  prompt: "<gray>Name the home you're standing in."
+  confirm-delete: "Delete this home"
+
+afk:
+  tab-prefix: "<gray>[AFK] "

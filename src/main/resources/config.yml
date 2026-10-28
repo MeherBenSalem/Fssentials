@@ -1,66 +1,107 @@
-bstats: true
-update-check: true
+# ╭──────────────────────────────────────────────────────────────────────────────────────────────╮
+# │  Donut Essentials 3.0 "The All-in-One Update"                                                │
+# │  Homes, warps, teleports, kits, economy, chat, moderation and staff tools in one plugin.      │
+# │  Docs: https://github.com/MeherBenSalem/Fssentials#readme                                     │
+# ╰──────────────────────────────────────────────────────────────────────────────────────────────╯
+# New settings are added to this file on every update; your values are never changed.
+# /donutessentials reload applies everything except storage, modules and commands (those need a restart).
+config-version: 1
+
+# Switch whole features off. A module that is off adds no commands, no listeners and no tasks.
+modules:
+  economy: true
+  teleport: true
+  homes: true
+  warps: true
+  rtp: true
+  kits: true
+  chat: true
+  messaging: true
+  afk: true
+  moderation: true
+  vanish: true
+  staff: true
+  maintenance: true
+  iplock: true
+  rules: true
+  utility: true
 
 storage:
-  persistence-enabled: true
+  # SQLITE (a file in this folder) or MYSQL (MySQL and MariaDB). One server per database.
+  type: SQLITE
+  sqlite-file: data.db
+  host: localhost
+  port: 3306
+  database: donutessentials
+  username: donutessentials
+  password: ""
+  parameters: "useUnicode=true&characterEncoding=utf8"
+  pool-size: 4
+  # Prefix for table names, so several plugins or servers can share a database server.
+  table-prefix: "de_"
 
-maintenance:
-  enabled: false
+commands:
+  # Command names that vanilla Minecraft also uses are left to vanilla unless listed here. Every Donut Essentials
+  # command stays reachable as /donutessentials:<name>. Rename or switch off commands in commands.yml.
+  # Vanilla /msg ignores mutes, so it is taken over by default.
+  take-over-vanilla: [ban, ban-ip, banlist, kick, pardon, msg, tell, w]
 
-permissions:
-  silent-notify: "donutessentials.notify.silent"
-  bypass: "donutessentials.maintenance.bypass"
-  notify: "donutessentials.maintenance.notify"
-
-messages:
-  maintenance-enabled: "<green>Maintenance mode enabled."
-  maintenance-disabled: "<green>Maintenance mode disabled."
-  kick: "<red>The server is currently under maintenance.<newline><yellow>Please try again later."
-  notify-join-attempt: "<yellow>%player%</yellow> tried to join during maintenance."
-
-motd:
-  - "<red>Server Under Maintenance"
-  - "<yellow>We'll be back soon!"
-
-whitelist: []
-
-announcements:
-  format:
-    - "<gray>━━━━━━━━━━━━━━━━━━━━"
-    - "<gold><bold>📢 %title%</bold></gold>"
-    - "<white>%message%</white>"
-    - "<gray>━━━━━━━━━━━━━━━━━━━━"
-  sound:
-    enabled: true
-    type: "BLOCK_NOTE_BLOCK_PLING"
-    volume: 1.0
-    pitch: 1.0
-
-ip-lock:
+dialogs:
+  # Native dialogs on Minecraft 1.21.7+ (the rules screen, text inputs). Older servers use chat.
   enabled: true
-  kick-message: "❌ Your IP address is not authorized for this account. Contact a server administrator."
-  log-blocked-attempts: true
 
-# Reason layouts used by @layout in punishment commands.
-layouts:
-  toxicity: "Being toxic in chat"
-  spam: "Spamming messages"
-  exploit: "Using unfair exploits"
+teleport:
+  # Seconds to stand still before a teleport. Moving a block or taking damage cancels it.
+  warmup-seconds: 3
+  cancel-on-move: true
+  cancel-on-damage: true
+  # Seconds between teleports of each kind.
+  cooldowns: {home: 3, warp: 3, spawn: 3, tpa: 10, back: 10, rtp: 120}
+  # Money each teleport costs (needs an economy).
+  costs: {home: 0, warp: 0, spawn: 0, tpa: 0, back: 0, rtp: 0}
+  back:
+    # /back returns to the place you teleported from...
+    on-teleport: true
+    # ...or where you died (with donutessentials.back.death).
+    on-death: true
+  # Rank tiers: a player with donutessentials.tier.<name> gets the values the tier lists (the first match wins).
+  tiers:
+    vip:
+      warmup-seconds: 1
+      cooldowns: {home: 0, warp: 0, tpa: 5, rtp: 60}
 
-# Time layouts used by #layout in temporary punishment commands.
-time-layouts:
-  default: "1d"
-  short: "30m"
-  long: "7d"
+combat:
+  # Hitting or being hit by a player puts both in combat for this many seconds.
+  enabled: true
+  seconds: 15
+  # Commands players in combat cannot use (teleports are always blocked).
+  blocked-commands: [home, homes, warp, warps, spawn, tpa, tpahere, tpaccept, back, rtp, kit, enderchest, ec]
 
-help-lines:
-  - "&8&m----------------------------------------"
-  - "&6/donutessentials help &7- Open this guide, captain."
-  - "&6/donutessentials reload &7- Reload configs and messages."
-  - "&6/kick <-s> <player> <reason|@layout> &7- Give a quick boot."
-  - "&6/ban <-s> <player> <reason|@layout> &7- Permanent timeout."
-  - "&6/mute <-s> <player> <reason|@layout> &7- Quiet mode ON."
-  - "&6/tempban <-s> <player> <time> <reason> &7- Limited timeout."
-  - "&6/banlist <page> &7- See who is currently restricted."
-  - "&6/history <player> <page> &7- Full moderation timeline."
-  - "&8&m----------------------------------------"
+sounds:
+  # "<sound> <volume> <pitch>". Empty ("") for silence.
+  menu-click: "ui.button.click 0.5 1.4"
+  teleport: "entity.enderman.teleport 0.7 1.1"
+  teleport-tick: "block.note_block.hat 0.5 1.6"
+
+discord:
+  # A Discord channel webhook (Channel settings > Integrations > Webhooks) for staff logs. Empty to switch off.
+  webhook-url: ""
+  username: "Donut Essentials"
+
+metrics:
+  enabled: true
+
+update-check:
+  enabled: true
+
+homes:
+  # Homes everyone may have. More with donutessentials.homes.<n> (or .unlimited), or a rank tier below.
+  default-limit: 3
+  # Rank tiers (donutessentials.tier.<name>) and their home limits.
+  limits:
+    vip: 5
+    mvp: 10
+  # The name used by /sethome and /home without a name.
+  default-name: home
+  # Worlds where homes can't be set (donutessentials.homes.anyworld bypasses).
+  disabled-worlds: []
