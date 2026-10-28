@@ -1,0 +1,28 @@
+kick: {enabled: true, aliases: [], description: "Kick a player"}
+ban: {enabled: true, aliases: [], description: "Ban a player for good"}
+tempban: {enabled: true, aliases: [], description: "Ban a player for a while"}
+mute: {enabled: true, aliases: [], description: "Mute a player for good"}
+tempmute: {enabled: true, aliases: [], description: "Mute a player for a while"}
+warn: {enabled: true, aliases: [], description: "Warn a player"}
+tempwarn: {enabled: true, aliases: [], description: "Warn a player for a while"}
+note: {enabled: true, aliases: [], description: "Add a staff note to a player"}
+banip: {enabled: true, aliases: [ban-ip, ipban], description: "Ban an address for good"}
+tempipban: {enabled: true, aliases: [tempbanip], description: "Ban an address for a while"}
+unban: {enabled: true, aliases: [pardon], description: "Lift a ban (ID, player or IP)"}
+unmute: {enabled: true, aliases: [], description: "Lift a mute (ID or player)"}
+unwarn: {enabled: true, aliases: [], description: "Lift a warning (ID or player)"}
+unnote: {enabled: true, aliases: [], description: "Remove a note (ID or player)"}
+unpunish: {enabled: true, aliases: [], description: "Lift any punishment by ID"}
+change-reason: {enabled: true, aliases: [changereason], description: "Change a punishment's reason"}
+warns: {enabled: true, aliases: [warnings], description: "A player's warnings"}
+notes: {enabled: true, aliases: [], description: "Staff notes on a player"}
+check: {enabled: true, aliases: [lookup], description: "A player's moderation summary"}
+banlist: {enabled: true, aliases: [bans], description: "Every active punishment"}
+history: {enabled: true, aliases: [hist], description: "A player's punishment history"}
+punishment: {enabled: true, aliases: [], description: "Look up or delete a punishment record"}
+alts: {enabled: true, aliases: [dupeip], description: "Accounts seen on a player's addresses"}
+freeze: {enabled: true, aliases: [ss], description: "Freeze or unfreeze a player"}
+report: {enabled: true, aliases: [], description: "Report a player to staff"}
+reports: {enabled: true, aliases: [], description: "Open reports"}
+staffchat: {enabled: true, aliases: [sc], description: "Talk to staff"}
+commandspy: {enabled: true, aliases: [cspy], description: "See the commands players type"}

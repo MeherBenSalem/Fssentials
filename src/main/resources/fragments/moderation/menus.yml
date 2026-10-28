@@ -1,0 +1,29 @@
+reports:
+  title: "<dark_gray>Reports <dark_gray>(<count> open)"
+  rows: 6
+  content: ["10-16", "19-25", "28-34", "37-43"]
+  items:
+    report:
+      material: PLAYER_HEAD
+      name: "<#a77bff><bold><player></bold> <dark_gray>#<id>"
+      lore:
+        - "<gray>Reported by <white><reporter>"
+        - "<gray>Reason <white><reason>"
+        - "<gray><ago> ago"
+        - ""
+        - "<#7ee081>Click to teleport"
+        - "<#6bc6ff>Right-click to claim"
+        - "<#ff6b6b>Shift + right-click to close"
+    report-claimed:
+      material: PLAYER_HEAD
+      name: "<#a77bff><bold><player></bold> <dark_gray>#<id>"
+      lore:
+        - "<gray>Reported by <white><reporter>"
+        - "<gray>Reason <white><reason>"
+        - "<gray><ago> ago <dark_gray>·</dark_gray> <#6bc6ff>claimed by <white><handler>"
+        - ""
+        - "<#7ee081>Click to teleport"
+        - "<#ff6b6b>Shift + right-click to close"
+    close: {slot: 49}
+    previous: {slot: 45}
+    next: {slot: 53}
