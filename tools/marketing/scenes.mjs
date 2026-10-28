@@ -524,21 +524,6 @@ export const SCENES = {
     await ctx.close();
   },
 
-  // ── Random teleport ─────────────────────────────────────────────────────────────────────────────────────────
-  async rtp(ctx) {
-    await ctx.camera();
-    await sleep(1000);
-    const clip = record('rtp', 14);
-    await sleep(700);
-    await ctx.say(P, 'rtp');
-    await sleep(1500);
-    screenshot('rtp-warmup');
-    await sleep(9000);
-    screenshot('rtp-landed');
-    const raw = await clip;
-    gif([{ raw }], 'rtp');
-  },
-
   // ── The console report ──────────────────────────────────────────────────────────────────────────────────────
   async report(ctx) {
     const { server } = ctx;

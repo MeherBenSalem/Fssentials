@@ -13,15 +13,18 @@ const dry = process.env.DRY_RUN === 'true';
 
 const GALLERY = [
   { file: 'marketing/images/banner.png', title: 'Donut Essentials 3.0', description: 'The All-in-One Update', featured: true },
-  { file: 'marketing/images/screenshots/menu-hub.jpg', title: 'The player hub', description: 'Homes, warps, kits, spawn, rtp, balance and mail in /menu.' },
-  { file: 'marketing/images/screenshots/menu-homes.jpg', title: 'Homes', description: 'Click to go, shift + right-click to delete.' },
-  { file: 'marketing/images/screenshots/menu-warps.jpg', title: 'Warps', description: 'Each warp with its icon, place and visits.' },
-  { file: 'marketing/images/screenshots/menu-kits.jpg', title: 'Kits', description: 'Ready, on cooldown, claimed or locked, with a preview.' },
-  { file: 'marketing/images/screenshots/menu-baltop.jpg', title: 'Richest players', description: 'The built-in economy, registered with Vault.' },
-  { file: 'marketing/images/screenshots/tpa.jpg', title: 'Teleport requests', description: 'Clickable Accept and Deny, a title countdown.' },
-  { file: 'marketing/images/screenshots/chat.jpg', title: 'Chat', description: 'Formats, mentions and [item] with the full tooltip.' },
-  { file: 'marketing/images/screenshots/moderation.jpg', title: 'Moderation', description: 'History, alts, freeze and reports with buttons.' },
-  { file: 'marketing/images/screenshots/rules.jpg', title: 'Rules screen', description: 'New players accept the rules before they play.' },
+  { file: 'marketing/images/screenshots/menu-hub-profile.jpg', title: 'The player hub', description: 'Homes, warps, kits, spawn, rtp, money and mail in /menu.' },
+  { file: 'marketing/images/screenshots/menu-homes-nether.jpg', title: 'Homes', description: 'A home in every world; click to go, shift + right-click to delete.' },
+  { file: 'marketing/images/screenshots/menu-warps-tip.jpg', title: 'Warps', description: 'Each warp with its icon, place and visits.' },
+  { file: 'marketing/images/screenshots/menu-kits-tip.jpg', title: 'Kits', description: 'Ready, on cooldown, claimed or locked.' },
+  { file: 'marketing/images/screenshots/menu-kit-preview-tip.jpg', title: 'Kit preview', description: 'Every enchantment, name and lore kept.' },
+  { file: 'marketing/images/screenshots/menu-baltop-you.jpg', title: 'Richest players', description: 'The built-in economy, registered with Vault.' },
+  { file: 'marketing/images/screenshots/home-warmup.jpg', title: 'Teleport countdown', description: 'Moving or taking damage cancels it.' },
+  { file: 'marketing/images/screenshots/tpa-request.jpg', title: 'Teleport requests', description: 'Clickable Accept and Deny.' },
+  { file: 'marketing/images/screenshots/chat-item.jpg', title: 'Chat', description: 'LuckPerms prefixes, mentions and [item] with its tooltip.' },
+  { file: 'marketing/images/screenshots/moderation-chat.jpg', title: 'Moderation', description: 'Warnings, mutes and reports with staff buttons.' },
+  { file: 'marketing/images/screenshots/rules-dialog.jpg', title: 'Rules screen', description: 'New players accept the rules before they play.' },
+  { file: 'marketing/images/screenshots/server-links.jpg', title: 'Server links', description: 'Discord, website and store in the pause menu.' },
 ];
 
 async function call(method, path, body, type) {

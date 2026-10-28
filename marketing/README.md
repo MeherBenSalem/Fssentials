@@ -44,7 +44,6 @@ A new release name or number goes in `RELEASE` in `source/render.cjs` and in the
 | `images/header-*.png` | 1400×120, transparent | Section headings for the description |
 | `images/divider.png` | 1400×40, transparent | Section divider |
 | `images/gifs/home.gif` | 640×360 | A home teleport, from the title countdown to the farm |
-| `images/gifs/rtp.gif` | 640×360 | A random teleport |
 | `images/screenshots/*.jpg` | 1920×1080 | Gallery uploads and card art |
 
 ### How the screenshots were captured

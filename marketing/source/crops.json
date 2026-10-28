@@ -1,0 +1,200 @@
+{
+  "menu-hub": [
+    682,
+    247,
+    556,
+    316
+  ],
+  "menu-hub-profile": [
+    682,
+    247,
+    786,
+    316
+  ],
+  "menu-hub-profile-tip": [
+    982,
+    290,
+    474,
+    176
+  ],
+  "menu-hub-homes": [
+    682,
+    247,
+    556,
+    316
+  ],
+  "menu-hub-homes-tip": [
+    820,
+    344,
+    290,
+    146
+  ],
+  "menu-homes": [
+    682,
+    247,
+    556,
+    316
+  ],
+  "menu-homes-tip": [
+    682,
+    247,
+    590,
+    316
+  ],
+  "menu-homes-tip-tip": [
+    820,
+    344,
+    440,
+    206
+  ],
+  "menu-homes-nether": [
+    682,
+    247,
+    806,
+    316
+  ],
+  "menu-homes-nether-tip": [
+    1036,
+    344,
+    440,
+    206
+  ],
+  "menu-warps": [
+    682,
+    247,
+    556,
+    316
+  ],
+  "menu-warps-tip": [
+    682,
+    247,
+    914,
+    345
+  ],
+  "menu-warps-tip-tip": [
+    1144,
+    344,
+    440,
+    236
+  ],
+  "menu-kits": [
+    682,
+    247,
+    556,
+    316
+  ],
+  "menu-kits-tip": [
+    682,
+    247,
+    770,
+    375
+  ],
+  "menu-kits-tip-tip": [
+    1090,
+    344,
+    350,
+    266
+  ],
+  "menu-kits-locked": [
+    682,
+    247,
+    556,
+    375
+  ],
+  "menu-kits-locked-tip": [
+    874,
+    344,
+    350,
+    266
+  ],
+  "menu-kits-ready": [
+    682,
+    247,
+    608,
+    375
+  ],
+  "menu-kits-ready-tip": [
+    928,
+    344,
+    350,
+    266
+  ],
+  "menu-kit-preview": [
+    682,
+    193,
+    556,
+    424
+  ],
+  "menu-kit-preview-tip": [
+    682,
+    193,
+    556,
+    424
+  ],
+  "menu-kit-preview-tip-tip": [
+    766,
+    236,
+    296,
+    296
+  ],
+  "menu-baltop": [
+    682,
+    193,
+    556,
+    424
+  ],
+  "menu-baltop-you": [
+    682,
+    193,
+    714,
+    501
+  ],
+  "menu-baltop-you-tip": [
+    982,
+    506,
+    402,
+    176
+  ],
+  "menu-reports": [
+    682,
+    193,
+    556,
+    424
+  ],
+  "menu-reports-tip": [
+    682,
+    193,
+    756,
+    424
+  ],
+  "menu-reports-tip-tip": [
+    928,
+    290,
+    498,
+    266
+  ],
+  "menu-settings": [
+    682,
+    247,
+    556,
+    316
+  ],
+  "menu-settings-tip": [
+    682,
+    247,
+    620,
+    345
+  ],
+  "menu-settings-tip-tip": [
+    874,
+    344,
+    416,
+    236
+  ],
+  "invsee": [
+    682,
+    247,
+    556,
+    316
+  ]
+}

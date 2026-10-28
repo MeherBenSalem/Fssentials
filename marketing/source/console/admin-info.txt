@@ -1,0 +1,7 @@
+Killed 3 entities
+Donut Essentials 3.0.0
+Server Paper 1.21.11 · Java 21.0.13
+Storage SQLite · Economy Donut Essentials
+Players 7 · Commands 109
+Dialogs yes · PlaceholderAPI yes · Vault yes
+Modules (16): economy, teleport, homes, warps, rtp, kits, chat, messaging, afk, moderation, vanish, staff, maintenance, iplock, rules, utility

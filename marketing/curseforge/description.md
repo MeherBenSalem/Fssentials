@@ -268,15 +268,19 @@ prefixes from your permissions plugin.
 
 ![Gallery](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/header-gallery.png)
 
-![The player hub](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/menu-hub.jpg)
+![The player hub](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/menu-hub-profile.jpg)
 
-![Homes](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/menu-homes.jpg)
+![Homes in every world](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/menu-homes-nether.jpg)
 
-![Kits](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/menu-kits.jpg)
+![A kit item, every detail kept](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/menu-kit-preview-tip.jpg)
 
 ![The rules screen](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/rules-dialog.jpg)
 
-![Chat](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/chat.jpg)
+![Chat with prefixes, a mention and [item]](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/chat-item.jpg)
+
+![Moderation](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/moderation-chat.jpg)
+
+![Server links](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/screenshots/server-links.jpg)
 
 ![divider](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/divider.png)
 

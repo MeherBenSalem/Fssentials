@@ -19,31 +19,29 @@ const chat = (lines, width = 996, bottom = 962) => [0, bottom - lines * 27 - 3, 
 
 const MEASURED = path.join(__dirname, 'crops.json');
 const CROP = Object.assign({
-  'tpa-lines': chat(3),
-  'combat-lines': chat(1),
-  'pay-lines': chat(4),
-  'chat-lines': chat(5),
-  'messages-lines': chat(4),
-  'moderation-lines': chat(6),
-  'history-lines': chat(9),
+  'tpa-lines': chat(2, 620),
+  'combat-lines': chat(2, 770),
+  'pay-lines': chat(2, 870),
+  'messages-lines': chat(3, 620),
+  'moderation-lines': chat(6, 940),
+  'history-lines': chat(3, 920),
   'whois-lines': chat(12, 760),
   'broadcast-lines': chat(4),
   'afk-lines': chat(2),
-  'rules-accepted-lines': chat(7),
+  // The open chat with the [item] tooltip over it.
+  'chat-item-scene': [0, 848, 1000, 228],
   'home-warmup-scene': [0, 0, 1920, 1080],
   'home-landed-scene': [0, 0, 1920, 1080],
-  'rtp-landed-scene': [0, 0, 1920, 1080],
   'rules-dialog-scene': [240, 0, 1440, 1080],
-  'server-links-scene': [480, 120, 960, 700],
-  'afk-tab-scene': [460, 0, 1000, 330],
-  'combat-bar': [560, 820, 800, 120],
+  'server-links-scene': [470, 10, 980, 390],
+  'afk-tab-scene': [820, 10, 280, 225],
+  'combat-bar': [760, 852, 400, 48],
 }, fs.existsSync(MEASURED) ? JSON.parse(fs.readFileSync(MEASURED, 'utf8')) : {});
 const FILES = {
-  'tpa-lines': 'tpa-request', 'combat-lines': 'combat', 'pay-lines': 'pay-chat', 'chat-lines': 'chat', 'messages-lines': 'messages',
+  'tpa-lines': 'tpa-request', 'combat-lines': 'combat', 'pay-lines': 'pay-chat', 'messages-lines': 'messages',
   'moderation-lines': 'moderation-chat', 'history-lines': 'history', 'whois-lines': 'whois', 'broadcast-lines': 'broadcast',
-  'afk-lines': 'afk-chat', 'rules-accepted-lines': 'rules-accepted', 'home-warmup-scene': 'home-warmup', 'home-landed-scene': 'home-landed',
-  'rtp-landed-scene': 'rtp-landed', 'rules-dialog-scene': 'rules-dialog', 'server-links-scene': 'server-links', 'afk-tab-scene': 'afk-tab',
-  'combat-bar': 'combat',
+  'afk-lines': 'afk-chat', 'chat-item-scene': 'chat-item', 'home-warmup-scene': 'home-warmup', 'home-landed-scene': 'home-landed',
+  'rules-dialog-scene': 'rules-dialog', 'server-links-scene': 'server-links', 'afk-tab-scene': 'afk-tab', 'combat-bar': 'combat',
 };
 
 /** Width and height of a crop scaled to fit maxW x maxH. */
@@ -72,6 +70,10 @@ const inset = (name, maxW, maxH, bottom, text, kind = 'gold', right = -20) => {
   const labelTop = top - labelAbove(name, h);
   return `${shotArt(name, maxW, maxH, `position:absolute;left:${left}px;top:${top}px`)}${text ? r.label(text, `left:${left + 24}px;top:${labelTop}px`, kind) : ''}`;
 };
+
+/** Any crop at an exact place in the art area. */
+const at = (name, maxW, maxH, left, top, text, kind = '') =>
+  `${shotArt(name, maxW, maxH, `position:absolute;left:${left}px;top:${top}px`)}${text ? r.label(text, `left:${left + 24}px;top:${top - labelAbove(name, fitted(name, maxW, maxH)[1])}px`, kind) : ''}`;
 
 // Card art is built only when that card renders, so one missing capture does not stop the others.
 const card = (key, options) => () => ({ width: 1600, height: 900, file: `card-${key}.png`, html: r.card(options()) });
@@ -122,8 +124,9 @@ const assets = {
       'Buttons for switched-off commands hide themselves',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('menu-hub', 600, 560, 40, '/menu')}
-      ${inset('menu-hub-profile-tip', 400, 300, 30, 'Your profile')}
+      ${main('menu-hub', 620, 400, 40, '/menu')}
+      ${at('menu-settings-tip-tip', 360, 220, 0, 520, '/settings', 'sky')}
+      ${inset('menu-hub-profile-tip', 440, 180, 250, 'Your profile')}
     </div>`,
   })),
 
@@ -136,9 +139,9 @@ const assets = {
       '<b class="hi">Combat tags</b> stop escapes mid-fight',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('home-warmup-scene', 850, 470, 40, 'The countdown')}
-      ${inset('tpa-lines', 820, 100, 150, 'A request', 'sky')}
-      ${inset('combat-lines', 820, 40, 30, 'In combat', 'red')}
+      ${main('home-warmup-scene', 850, 480, 40, 'The countdown')}
+      ${inset('tpa-lines', 760, 70, 150, 'A request', 'sky')}
+      ${inset('combat-lines', 760, 70, 20, 'In combat', 'red')}
     </div>`,
   })),
 
@@ -151,8 +154,8 @@ const assets = {
       'Icons show the Overworld, Nether or End',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('menu-homes', 600, 520, 40, '/homes')}
-      ${inset('menu-homes-nether-tip', 400, 300, 30, 'In the Nether')}
+      ${main('menu-homes', 640, 420, 40, '/homes')}
+      ${inset('menu-homes-nether-tip', 460, 240, 60, 'In the Nether')}
     </div>`,
   })),
 
@@ -165,8 +168,8 @@ const assets = {
       '<code class="inline">/rtp</code>: a safe random spot, chunks loaded async',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('menu-warps', 600, 520, 40, '/warps')}
-      ${inset('menu-warps-tip', 400, 300, 30, 'A warp')}
+      ${main('menu-warps', 640, 420, 40, '/warps')}
+      ${inset('menu-warps-tip-tip', 460, 260, 50, 'Visits counted')}
     </div>`,
   })),
 
@@ -179,8 +182,9 @@ const assets = {
       'Right-click to <b class="hi">preview</b>; once-only kits; costs',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('menu-kits', 600, 480, 40, '/kits')}
-      ${inset('menu-kit-preview-tip-tip', 420, 360, 20, 'A kit item')}
+      ${main('menu-kits-tip', 760, 420, 40, '/kits')}
+      ${at('menu-kits-locked-tip', 330, 260, 0, 520, 'Locked', 'red')}
+      ${inset('menu-kit-preview-tip-tip', 380, 380, 20, 'Every detail kept')}
     </div>`,
   })),
 
@@ -193,8 +197,9 @@ const assets = {
       '<b class="hi">Offline payments</b> listed on join; a daily log',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('menu-baltop', 560, 560, 40, '/baltop')}
-      ${inset('pay-lines', 820, 120, 20, 'Payments', 'gold')}
+      ${main('menu-baltop', 560, 440, 40, '/baltop')}
+      ${inset('menu-baltop-you-tip', 400, 180, 190, 'You')}
+      ${inset('pay-lines', 760, 70, 20, 'Payments', 'gold')}
     </div>`,
   })),
 
@@ -207,8 +212,9 @@ const assets = {
       'Anti-spam, a word filter, AFK in the tab list',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('chat-lines', 850, 200, 150, 'Chat')}
-      ${inset('messages-lines', 850, 160, 120, 'Messages and mail', 'sky')}
+      ${main('chat-item-scene', 850, 300, 40, 'Prefixes, mentions, [item]')}
+      ${at('afk-tab-scene', 260, 220, 0, 340, 'AFK', 'gold')}
+      ${inset('messages-lines', 520, 110, 120, 'Messages and mail', 'sky')}
     </div>`,
   })),
 
@@ -221,8 +227,9 @@ const assets = {
       'Freeze, staff chat, <b class="hi">Discord logs</b>',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('history-lines', 850, 280, 60, '/history Rook')}
-      ${inset('menu-reports-tip-tip', 420, 300, 10, 'A report', 'red')}
+      ${main('moderation-lines', 850, 200, 40, 'Warn, mute, report')}
+      ${at('history-lines', 760, 90, 0, 290, '/history Rook', 'sky')}
+      ${inset('menu-reports-tip-tip', 420, 260, 0, '/reports', 'red')}
     </div>`,
   })),
 
@@ -235,8 +242,8 @@ const assets = {
       '<b class="hi">IP lock</b> for staff accounts',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('invsee', 560, 520, 40, '/invsee Kiri')}
-      ${inset('whois-lines', 520, 380, 0, '/whois Kiri', 'sky')}
+      ${main('invsee', 560, 400, 40, '/invsee Kiri')}
+      ${inset('whois-lines', 560, 400, 0, '/whois Kiri', 'sky')}
     </div>`,
   })),
 
@@ -249,8 +256,8 @@ const assets = {
       'A message of the day and first-join messages',
     ],
     art: `<div style="position:relative;height:780px">
-      ${main('rules-dialog-scene', 760, 560, 40, 'The rules screen')}
-      ${inset('server-links-scene', 430, 320, 0, 'Server links', 'sky')}
+      ${main('rules-dialog-scene', 640, 480, 40, 'The rules screen')}
+      ${inset('server-links-scene', 460, 200, 0, 'Server links', 'sky')}
     </div>`,
   })),
 
