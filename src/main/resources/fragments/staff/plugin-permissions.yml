@@ -1,0 +1,47 @@
+  donutessentials.command.vanish: {default: op}
+  donutessentials.vanish.others:
+    default: op
+    description: Vanish or show other players.
+  donutessentials.vanish.see:
+    default: op
+    description: See vanished players (and their names in completion, /playerlist and /whois).
+  donutessentials.command.invsee: {default: op}
+  donutessentials.invsee.edit:
+    default: op
+    description: Change items in /invsee (otherwise it is read-only).
+  donutessentials.command.endersee: {default: op}
+  donutessentials.endersee.edit:
+    default: op
+    description: Change items in /endersee (otherwise it is read-only).
+  donutessentials.command.whois: {default: op}
+  donutessentials.whois.ip:
+    default: op
+    description: See IP addresses in /whois.
+  donutessentials.command.offlinetp: {default: op}
+  donutessentials.command.playerlist: {default: true}
+  donutessentials.command.maintenance: {default: op}
+  donutessentials.maintenance.bypass:
+    default: op
+    description: Join while maintenance mode is on.
+  donutessentials.maintenance.notify:
+    default: op
+    description: Told when maintenance switches and when someone is refused.
+  donutessentials.command.iplock: {default: op}
+  donutessentials.iplock.bypass:
+    default: false
+    description: Join from any IP even when the account is IP locked.
+  # 2.x permission names keep working.
+  donutessentials.vanish: {default: false, children: {donutessentials.command.vanish: true}}
+  donutessentials.invsee: {default: false, children: {donutessentials.command.invsee: true, donutessentials.invsee.edit: true}}
+  donutessentials.teleport.offlinetp: {default: false, children: {donutessentials.command.offlinetp: true}}
+  donutessentials.view.playerlist: {default: false, children: {donutessentials.command.playerlist: true}}
+  donutessentials.maintenance.admin: {default: false, children: {donutessentials.command.maintenance: true}}
+  fssentials.vanish: {default: false, children: {donutessentials.command.vanish: true}}
+  fssentials.invsee: {default: false, children: {donutessentials.command.invsee: true, donutessentials.invsee.edit: true}}
+  fssentials.teleport.offlinetp: {default: false, children: {donutessentials.command.offlinetp: true}}
+  fssentials.view.playerlist: {default: false, children: {donutessentials.command.playerlist: true}}
+  fssentials.maintenance.admin: {default: false, children: {donutessentials.command.maintenance: true}}
+  fssentials.maintenance.bypass: {default: false, children: {donutessentials.maintenance.bypass: true}}
+  fssentials.maintenance.notify: {default: false, children: {donutessentials.maintenance.notify: true}}
+  plugin.iplock.admin: {default: false, children: {donutessentials.command.iplock: true}}
+  plugin.iplock.bypass: {default: false, children: {donutessentials.iplock.bypass: true}}

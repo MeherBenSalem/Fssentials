@@ -1,0 +1,8 @@
+vanish: {enabled: true, aliases: [v], description: "Vanish from players, or see who is vanished"}
+invsee: {enabled: true, aliases: [inventorysee], description: "Look into a player's inventory"}
+endersee: {enabled: true, aliases: [ecsee], description: "Look into a player's ender chest"}
+whois: {enabled: true, aliases: [playerinfo], description: "Everything about a player"}
+offlinetp: {enabled: true, aliases: [otp], description: "Teleport to a player, or where they logged out"}
+playerlist: {enabled: true, aliases: [online], description: "Who is online"}
+maintenance: {enabled: true, aliases: [maint], description: "Maintenance mode, its whitelist and timers"}
+iplock: {enabled: true, aliases: [], description: "Lock accounts to the IPs they may join from"}
