@@ -1,16 +1,18 @@
-# Publish Donut Essentials (Maven/Paper) to Modrinth + CurseForge on version tags.
+# Dual-publish NightBeam mods/plugins to Modrinth + CurseForge on version tags.
 #
 # Org/repo secrets:
 #   MODRINTH_TOKEN
 #   CURSEFORGE_TOKEN
-#   CURSEFORGE_API_KEY
 #
-# Repo variables (defaults used when unset):
-#   MODRINTH_ID   default 1YpSYvSs
-#   CURSEFORGE_ID default 1487015
+# Repo variables:
+#   MODRINTH_ID   (Donut Essentials: 1YpSYvSs; CurseForge 1487015)
+#   CURSEFORGE_ID
 #
 # Usage after a release build is ready:
-#   git tag v2.0.0 && git push --tags
+#   git tag v3.0.0 && git push --tags
+#
+# Loaders and Minecraft versions come from release/supported-minecraft.json; the changelog is
+# DonutEssentials-<version>-PatchNotes.md when it exists, else PATCHNOTES.md.
 
 name: Publish
 
@@ -53,46 +55,155 @@ jobs:
             exit 1
           fi
 
+      # A tag pushed after the version was published by hand must not upload it twice.
+      - name: Check whether this version is out already
+        id: published
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          MODRINTH_ID: ${{ vars.MODRINTH_ID || '1YpSYvSs' }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        shell: bash
+        run: |
+          if curl -fsS "https://api.modrinth.com/v2/project/${MODRINTH_ID}/version" \
+              | jq -e --arg v "$VERSION" 'any(.[]; .version_number == $v)' > /dev/null; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+            echo "$VERSION is already on Modrinth: nothing to upload."
+          fi
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: "25"
+
+      - uses: gradle/actions/setup-gradle@v4
 
       - name: Build
-        run: mvn -B package
+        run: |
+          chmod +x gradlew
+          ./gradlew build --no-daemon
 
-      - name: Find jar
-        id: jar
+      - name: Find jars
+        id: jars
         shell: bash
         run: |
-          mapfile -t JARS < <(find target -maxdepth 1 -type f -name 'donutessentials-*.jar' ! -name 'original-*' | head -n 5)
+          mapfile -t JARS < <(find . -type f -path "*/build/libs/DonutEssentials-*.jar" \
+            ! -name "*-sources.jar" ! -name "*-javadoc.jar" \
+            ! -name "*-dev.jar" ! -name "*-dev-shadow.jar" | head -n 5)
           if [ ${#JARS[@]} -eq 0 ]; then
-            echo "No donutessentials jar in target/" >&2
+            echo "No DonutEssentials jars in build/libs" >&2
             exit 1
           fi
-          JAR="${JARS[0]}"
-          echo "path=$JAR" >> "$GITHUB_OUTPUT"
-          echo "Using jar: $JAR"
+          printf '%s\n' "${JARS[@]}"
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "list<<$EOF" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "${JARS[@]}" >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
 
       - name: Upload Modrinth + CurseForge
-        if: ${{ inputs.dry_run != 'true' }}
+        if: ${{ inputs.dry_run != 'true' && steps.published.outputs.already != 'true' }}
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
           MODRINTH_ID: ${{ vars.MODRINTH_ID || '1YpSYvSs' }}
           CURSEFORGE_ID: ${{ vars.CURSEFORGE_ID || '1487015' }}
           VERSION: ${{ steps.ver.outputs.version }}
-          JAR_PATH: ${{ steps.jar.outputs.path }}
+          JAR_LIST: ${{ steps.jars.outputs.list }}
           PLATFORMS: ${{ inputs.platforms || 'both' }}
         shell: bash
         run: |
           set -euo pipefail
-          node scripts/publish-local.mjs \
-            --jar "$JAR_PATH" \
-            --version "$VERSION" \
-            --platforms "$PLATFORMS"
+          test -n "${MODRINTH_ID:-}" && test -n "${CURSEFORGE_ID:-}"
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const version = process.env.VERSION;
+          const platforms = (process.env.PLATFORMS || 'both').toLowerCase();
+          const doModrinth = platforms === 'both' || platforms === 'modrinth';
+          const doCurse = platforms === 'both' || platforms === 'curseforge';
+          const jars = process.env.JAR_LIST.split(/\n/).map(s => s.trim()).filter(Boolean);
+          const support = JSON.parse(fs.readFileSync('release/supported-minecraft.json', 'utf8'));
+          const PLUGIN_LOADERS = support.loaders;
+          const PLUGIN_GAME_VERSIONS = support.game_versions;
+          let changelog = `Release ${version}`;
+          for (const f of [`DonutEssentials-${version}-PatchNotes.md`, 'PATCHNOTES.md', 'PATCH_NOTES.md']) {
+            if (fs.existsSync(f)) { changelog = fs.readFileSync(f, 'utf8'); break; }
+          }
+
+          (async () => {
+            if (doModrinth) {
+              const tagRes = await fetch('https://api.modrinth.com/v2/tag/game_version');
+              const tags = await tagRes.json();
+              const known = new Set(tags.map(t => t.version));
+              const game_versions = PLUGIN_GAME_VERSIONS.filter(v => known.has(v));
+              for (const jar of jars) {
+                const body = {
+                  name: version,
+                  version_number: version,
+                  changelog,
+                  dependencies: [],
+                  game_versions,
+                  version_type: 'release',
+                  loaders: PLUGIN_LOADERS,
+                  featured: false,
+                  status: 'listed',
+                  project_id: process.env.MODRINTH_ID,
+                  file_parts: ['file_0'],
+                  primary_file: 'file_0',
+                };
+                const form = new FormData();
+                form.append('data', JSON.stringify(body));
+                form.append('file_0', new Blob([fs.readFileSync(jar)]), path.basename(jar));
+                const mrRes = await fetch('https://api.modrinth.com/v2/version', {
+                  method: 'POST',
+                  headers: { Authorization: process.env.MODRINTH_TOKEN },
+                  body: form,
+                });
+                const mrText = await mrRes.text();
+                if (!mrRes.ok) throw new Error('Modrinth ' + mrRes.status + ' ' + mrText.slice(0, 500));
+                console.log('Modrinth OK', body.version_number, path.basename(jar), mrText.slice(0, 160));
+              }
+            } else {
+              console.log('Skipping Modrinth');
+            }
+
+            if (!doCurse) {
+              console.log('Skipping CurseForge');
+              return;
+            }
+
+            for (const jar of jars) {
+              // CurseForge files Paper plugins under Bukkit; the platform tags follow the supported loaders.
+              const gameVersionNames = [
+                ...PLUGIN_GAME_VERSIONS,
+                'Bukkit', ...PLUGIN_LOADERS.map((l) => l.charAt(0).toUpperCase() + l.slice(1)),
+              ];
+              const meta = {
+                changelog,
+                changelogType: 'markdown',
+                displayName: version,
+                gameVersionNames,
+                releaseType: 'release',
+              };
+              const cfForm = new FormData();
+              cfForm.append('metadata', JSON.stringify(meta));
+              cfForm.append('file', new Blob([fs.readFileSync(jar)]), path.basename(jar));
+              let ok = false;
+              for (let attempt = 1; attempt <= 3; attempt++) {
+                const cfRes = await fetch(
+                  `https://minecraft.curseforge.com/api/projects/${process.env.CURSEFORGE_ID}/upload-file`,
+                  { method: 'POST', headers: { 'X-Api-Token': process.env.CURSEFORGE_TOKEN }, body: cfForm },
+                );
+                const cfText = await cfRes.text();
+                console.log('CurseForge attempt', attempt, cfRes.status, cfText.slice(0, 200));
+                if (cfRes.ok) { ok = true; console.log('CurseForge OK', path.basename(jar), cfText.slice(0, 160)); break; }
+                if (cfRes.status >= 500) await new Promise(r => setTimeout(r, 15000));
+                else break;
+              }
+              if (!ok) throw new Error('CurseForge upload failed');
+            }
+          })().catch((e) => { console.error(e); process.exit(1); });
+          NODE

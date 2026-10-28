@@ -55,24 +55,24 @@ function parseArgs(argv) {
   return out;
 }
 
-function readPomVersion() {
-  const pom = fs.readFileSync(path.join(repoRoot, 'pom.xml'), 'utf8');
-  const m = pom.match(/<version>([^<]+)<\/version>/);
+function readBuildVersion() {
+  const build = fs.readFileSync(path.join(repoRoot, 'build.gradle'), 'utf8');
+  const m = build.match(/^version = '([^']+)'/m);
   return m ? m[1].trim() : null;
 }
 
 function findJar(version) {
-  const target = path.join(repoRoot, 'target');
+  const target = path.join(repoRoot, 'build', 'libs');
   if (!fs.existsSync(target)) {
     return null;
   }
-  const exact = path.join(target, `donutessentials-${version}.jar`);
+  const exact = path.join(target, `DonutEssentials-${version}.jar`);
   if (fs.existsSync(exact)) {
     return exact;
   }
   const candidates = fs
     .readdirSync(target)
-    .filter((n) => n.startsWith('donutessentials-') && n.endsWith('.jar') && !n.startsWith('original-'))
+    .filter((n) => n.startsWith('DonutEssentials-') && n.endsWith('.jar'))
     .map((n) => path.join(target, n));
   return candidates[0] ?? null;
 }
@@ -80,7 +80,7 @@ function findJar(version) {
 function loadSupportedMatrix() {
   const file = path.join(repoRoot, 'release', 'supported-minecraft.json');
   const defaults = {
-    loaders: ['paper', 'folia', 'purpur', 'spigot', 'bukkit'],
+    loaders: ['paper', 'purpur', 'folia'],
     game_versions: [
       '1.20.1', '1.20.2', '1.20.3', '1.20.4', '1.20.5', '1.20.6',
       '1.21', '1.21.1', '1.21.2', '1.21.3', '1.21.4', '1.21.5', '1.21.6',
@@ -99,7 +99,7 @@ function loadSupportedMatrix() {
 }
 
 function readChangelog(version) {
-  for (const f of ['PATCHNOTES.md', 'PATCH_NOTES.md', 'CHANGELOG.md']) {
+  for (const f of [`DonutEssentials-${version}-PatchNotes.md`, 'PATCHNOTES.md', 'PATCH_NOTES.md', 'CHANGELOG.md']) {
     const p = path.join(repoRoot, f);
     if (fs.existsSync(p)) {
       return fs.readFileSync(p, 'utf8');
@@ -109,7 +109,7 @@ function readChangelog(version) {
 }
 
 const args = parseArgs(process.argv);
-const version = args.version || process.env.VERSION || readPomVersion();
+const version = args.version || process.env.VERSION || readBuildVersion();
 if (!version) {
   console.error('Could not resolve version (use --version or VERSION env)');
   process.exit(1);
@@ -117,7 +117,7 @@ if (!version) {
 
 const jarPath = args.jar ? path.resolve(args.jar) : findJar(version);
 if (!jarPath || !fs.existsSync(jarPath)) {
-  console.error('Jar not found. Run mvn -B package or pass --jar');
+  console.error('Jar not found. Run ./gradlew build or pass --jar');
   process.exit(1);
 }
 

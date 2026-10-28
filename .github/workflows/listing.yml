@@ -1,0 +1,33 @@
+# Updates the Modrinth project page from marketing/curseforge/ (summary, description, icon and gallery).
+# CurseForge has no API for the project description: paste marketing/curseforge/description.md there by hand.
+#
+# Uses the same secret and variable as Publish: MODRINTH_TOKEN (with the "Write projects" scope) and MODRINTH_ID.
+
+name: Sync Modrinth listing
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Only print what would change if true
+        required: false
+        default: "false"
+
+jobs:
+  modrinth:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Update the Modrinth page
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          MODRINTH_ID: ${{ vars.MODRINTH_ID || '1YpSYvSs' }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: node .github/scripts/modrinth-listing.mjs
