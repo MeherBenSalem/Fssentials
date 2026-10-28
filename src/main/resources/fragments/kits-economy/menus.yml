@@ -1,0 +1,58 @@
+kits:
+  title: "<dark_gray>Kits <dark_gray>(<count>)"
+  rows: 4
+  content: ["10-16", "19-25"]
+  items:
+    # Each kit uses its own icon (the item held when it was created). glow-when-ready shines the ones you can claim.
+    kit:
+      material: CHEST
+      glow-when-ready: true
+      name: "<#6bc6ff><bold><kit>"
+      lore:
+        - "<status>"
+        - "<price>"
+        - "<gray>Cooldown <white><cooldown>"
+        - "<gray>Items <white><items>"
+        - ""
+        - "<#7ee081>Click to claim"
+        - "<gray>Right-click to preview"
+    previous: {slot: 27}
+    close: {slot: 31}
+    next: {slot: 35}
+
+kit-preview:
+  title: "<dark_gray>Kit · <kit>"
+  rows: 6
+  content: ["0-44"]
+  items:
+    back: {slot: 45}
+    previous: {slot: 48}
+    claim:
+      slot: 49
+      material: LIME_DYE
+      name: "<#7ee081><bold>Claim <kit>"
+      lore: ["<status>", "<price>", "<gray>Cooldown <white><cooldown>"]
+    next: {slot: 50}
+    close: {slot: 53}
+
+baltop:
+  title: "<dark_gray>Richest players"
+  rows: 6
+  content: ["10-16", "19-25", "28-34"]
+  items:
+    entry:
+      material: PLAYER_HEAD
+      name: "<#ffc24b><bold>#<rank></bold> <white><player>"
+      lore: ["<gray>Balance <#ffc24b><balance>"]
+    previous: {slot: 45}
+    close: {slot: 48}
+    you:
+      slot: 49
+      material: PLAYER_HEAD
+      name: "<#6bc6ff><bold>You</bold> <dark_gray>(<white><rank></white>)"
+      lore:
+        - "<gray>Balance <#ffc24b><balance>"
+        - ""
+        - "<gray>Server total <#ffc24b><total>"
+        - "<dark_gray>Updated <updated> ago"
+    next: {slot: 53}
