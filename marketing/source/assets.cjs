@@ -349,8 +349,8 @@ const assets = {
       const tile = (t) => `<div class="panel" style="padding:12px 16px 10px;border-color:${t.ok ? 'rgba(126,224,129,.5)' : 'rgba(255,107,107,.6)'}">
         <div style="font-family:DoDisplay;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)">${t.project}${t.variant ? ' · ' + (t.variant === 'essentialsx' ? 'EssX' : t.variant) : ''}</div>
         <div style="font-family:DoDisplay;font-weight:800;font-size:28px;color:var(--hi);line-height:1.1">${t.version}</div>
-        <div style="font-size:14px;color:${t.ok ? 'var(--mint)' : 'var(--red)'};font-weight:600;margin-top:3px;white-space:nowrap">${t.ok ? '✔' : '✖'} ${t.passed}/${t.steps} · Java ${t.java}${extra(t)}</div></div>`;
-      return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:850px">${targets.map(tile).join('')}</div>
+        <div style="font-size:14px;line-height:1.35;color:${t.ok ? 'var(--mint)' : 'var(--red)'};font-weight:600;margin-top:3px">${t.ok ? '✔' : '✖'} ${t.passed}/${t.steps} · Java ${t.java}${extra(t).replace(' · ', '<br>')}</div></div>`;
+      return `<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:850px">${targets.map(tile).join('')}</div>
         <div style="margin-top:16px;font-size:18px;color:var(--dim)">Donut Essentials ${data ? data.plugin : ''} · automated run of tools/smoke on ${data ? data.date : ''}</div>`;
     })(),
   })),

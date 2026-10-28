@@ -130,10 +130,12 @@ export const fixtureJar = () => path.join(here, 'fixture', 'build', 'libs', 'Ess
 
 /** One running server: stdin for console commands, and a line log that waitFor() scans. */
 export class Server {
-  constructor(dir, java, jar) {
+  /** `env`: extra environment for the server process (the reel recorder runs it on a slowed clock). */
+  constructor(dir, java, jar, env = {}) {
     this.dir = dir;
     this.java = java;
     this.jar = jar;
+    this.env = env;
     this.lines = [];
     this.cursor = 0;
     this.waiters = [];
@@ -142,7 +144,8 @@ export class Server {
   start() {
     const log = fs.createWriteStream(path.join(this.dir, 'console.log'), { flags: 'a' });
     this.process = spawn(this.java, ['-Xms1G', '-Xmx3G', '-Dterminal.jline=false', '-Dterminal.ansi=false', '-Dfile.encoding=UTF-8',
-      '-Dstdout.encoding=UTF-8', '-Dstderr.encoding=UTF-8', '-Dpaper.disableChannelLimit=true', '-jar', this.jar, '--nogui'], { cwd: this.dir });
+      '-Dstdout.encoding=UTF-8', '-Dstderr.encoding=UTF-8', '-Dpaper.disableChannelLimit=true', '-jar', this.jar, '--nogui'],
+    { cwd: this.dir, env: { ...process.env, ...this.env } });
     let buffer = '';
     const onData = (chunk) => {
       log.write(chunk);
@@ -236,8 +239,8 @@ export function plain(component) {
  * A mineflayer bot with its chat (plain and raw JSON) and action bars recorded. Bots stand still unless
  * {@code moves} is set: through ViaBackwards, newer servers can reject an older client's movement packets.
  */
-export async function joinBot(name, version, chatFile, { moves = false } = {}, port = PORT) {
-  const bot = mineflayer.createBot({ host: '127.0.0.1', port, username: name, version, auth: 'offline', checkTimeoutInterval: 120_000 });
+export async function joinBot(name, version, chatFile, { moves = false, keepAlive = 120_000 } = {}, port = PORT) {
+  const bot = mineflayer.createBot({ host: '127.0.0.1', port, username: name, version, auth: 'offline', checkTimeoutInterval: keepAlive });
   bot.chatLog = [];
   bot.rawLog = [];
   bot.actionBars = [];
