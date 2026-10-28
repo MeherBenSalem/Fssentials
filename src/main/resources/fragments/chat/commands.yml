@@ -1,0 +1,12 @@
+chat: {enabled: true, aliases: [chatcontrol], description: "Clear, lock or slow down the chat"}
+broadcast: {enabled: true, aliases: [bc, announce], description: "Announce something to the whole server"}
+nick: {enabled: true, aliases: [nickname], description: "Set or remove a nickname"}
+realname: {enabled: true, aliases: [], description: "Who is behind a nickname"}
+msg: {enabled: true, aliases: [tell, w, m, whisper, pm], description: "Send a private message"}
+reply: {enabled: true, aliases: [r], description: "Reply to your last private message"}
+msgtoggle: {enabled: true, aliases: [togglemsg], description: "Take or refuse private messages"}
+ignore: {enabled: true, aliases: [unignore], description: "Ignore a player, or stop ignoring them"}
+ignorelist: {enabled: true, aliases: [ignored], description: "The players you ignore"}
+socialspy: {enabled: true, aliases: [spy], description: "Read other players' private messages"}
+mail: {enabled: true, aliases: [email], description: "Send and read offline mail"}
+afk: {enabled: true, aliases: [away], description: "Go AFK, or come back"}

@@ -1,0 +1,44 @@
+  donutessentials.command.chat: {default: op}
+  donutessentials.command.broadcast: {default: op}
+  donutessentials.command.nick: {default: op}
+  donutessentials.command.realname: {default: true}
+  donutessentials.command.msg: {default: true}
+  donutessentials.command.reply: {default: true}
+  donutessentials.command.msgtoggle: {default: true}
+  donutessentials.command.ignore: {default: true}
+  donutessentials.command.ignorelist: {default: true}
+  donutessentials.command.socialspy: {default: op}
+  donutessentials.command.mail: {default: true}
+  donutessentials.command.afk: {default: true}
+  donutessentials.chat.color:
+    default: op
+    description: Colours and styles in chat (& codes and MiniMessage colour tags).
+  donutessentials.chat.item:
+    default: true
+    description: Show the held item with [item] in chat.
+  donutessentials.chat.bypass:
+    default: op
+    description: Talk while chat is locked or slow, and skip the anti-spam and the filter.
+  donutessentials.nick.color:
+    default: op
+    description: Colours in nicknames.
+  donutessentials.nick.others:
+    default: op
+    description: Set or remove other players' nicknames.
+  donutessentials.msg.color:
+    default: op
+    description: Colours in private messages.
+  donutessentials.msg.bypass:
+    default: op
+    description: Message players who switched private messages off; no mail cooldown.
+  donutessentials.ignore.exempt:
+    default: op
+    description: Can't be ignored.
+  donutessentials.afk.kickexempt:
+    default: op
+    description: Never kicked for being AFK.
+  server.broadcast:
+    default: op
+    description: The 2.x permission for /broadcast.
+    children:
+      donutessentials.command.broadcast: true
