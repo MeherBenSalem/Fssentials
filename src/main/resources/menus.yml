@@ -53,10 +53,10 @@ homes:
     icon-end: {material: END_STONE}
     icon-missing: {material: BARRIER}
     set:
-      slot: 31
+      slot: 30
       material: LIME_DYE
       name: "<#7ee081><bold>Set a home here"
       lore: ["<gray>Name it, and it's saved", "<gray>where you stand."]
-    close: {slot: 35}
+    close: {slot: 32}
     previous: {slot: 27}
     next: {slot: 35}
