@@ -212,7 +212,8 @@ export async function scenario({ server: current, target, restart, joinBot, step
 
   // ── 5. Teleport requests and /back ────────────────────────────────────────────────────────────────────────────
   await check('teleport request with clickable buttons', async () => {
-    await lab(`tp Bob ${spawnPos.world} ${spawnPos.x - 30} ${spawnPos.y} ${spawnPos.z - 30}`);
+    // In the air: at spawn height this spot can be inside a hill (Bob would suffocate and the warmup cancel).
+    await lab(`tp Bob ${spawnPos.world} ${spawnPos.x - 30} 120 ${spawnPos.z - 30}`);
     await sleep(1500);
     forget(alice, bob);
     server.mark();
