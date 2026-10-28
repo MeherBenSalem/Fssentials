@@ -1,0 +1,29 @@
+rules: {enabled: true, aliases: [serverrules], description: "The server rules"}
+motd: {enabled: true, aliases: [], description: "The message of the day"}
+fly: {enabled: true, aliases: [], description: "Switch flight on or off"}
+god: {enabled: true, aliases: [godmode], description: "Switch god mode on or off"}
+heal: {enabled: true, aliases: [], description: "Heal fully"}
+feed: {enabled: true, aliases: [eat], description: "Fill your hunger"}
+speed: {enabled: true, aliases: [], description: "Walk or fly faster (1-10)"}
+gm: {enabled: true, aliases: [gamemode], description: "Change game mode"}
+gmc: {enabled: true, aliases: [], description: "Creative mode"}
+gms: {enabled: true, aliases: [], description: "Survival mode"}
+gma: {enabled: true, aliases: [], description: "Adventure mode"}
+gmsp: {enabled: true, aliases: [], description: "Spectator mode"}
+craft: {enabled: true, aliases: [workbench, wb], description: "A crafting table anywhere"}
+enderchest: {enabled: true, aliases: [ec], description: "Your ender chest anywhere"}
+trash: {enabled: true, aliases: [disposal], description: "Throw items away"}
+hat: {enabled: true, aliases: [head], description: "Wear the held item"}
+repair: {enabled: true, aliases: [fix], description: "Repair the held item (or all)"}
+clearinventory: {enabled: true, aliases: [ci, clearinv], description: "Clear an inventory"}
+top: {enabled: true, aliases: [], description: "Go to the highest block above you"}
+seen: {enabled: true, aliases: [lastseen], description: "When a player was last online"}
+playtime: {enabled: true, aliases: [pt], description: "Time played on the server"}
+ping: {enabled: true, aliases: [], description: "Connection latency"}
+near: {enabled: true, aliases: [nearby], description: "Players near you"}
+day: {enabled: true, aliases: [], description: "Make it day"}
+night: {enabled: true, aliases: [], description: "Make it night"}
+sun: {enabled: true, aliases: [clearweather], description: "Clear the weather"}
+rain: {enabled: true, aliases: [storm], description: "Make it rain"}
+menu: {enabled: true, aliases: [profile], description: "Homes, warps, kits and more in one menu"}
+settings: {enabled: true, aliases: [prefs, toggles], description: "Your personal settings"}
