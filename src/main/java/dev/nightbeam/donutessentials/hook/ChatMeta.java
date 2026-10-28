@@ -15,30 +15,35 @@ public final class ChatMeta {
     }
 
     public static String prefix(Player player) {
-        return Holder.call(chat -> chat.getPlayerPrefix(player));
+        return Hooks.vault() ? Holder.get(player, 0) : "";
     }
 
     public static String suffix(Player player) {
-        return Holder.call(chat -> chat.getPlayerSuffix(player));
+        return Hooks.vault() ? Holder.get(player, 1) : "";
     }
 
     public static String group(Player player) {
-        return Holder.call(chat -> chat.getPrimaryGroup(player));
+        return Hooks.vault() ? Holder.get(player, 2) : "";
     }
 
-    /** Keeps Vault classes out of the way until Vault is known to be there. */
+    /**
+     * The only code that names Vault's classes, loaded once Vault is known to be there. (A lambda taking a {@code Chat}
+     * in the outer class would need Vault as soon as it is linked.)
+     */
     private static final class Holder {
 
-        private static String call(java.util.function.Function<Chat, String> getter) {
-            if (!Hooks.vault()) {
-                return "";
-            }
+        private static String get(Player player, int what) {
             try {
                 RegisteredServiceProvider<Chat> registration = Bukkit.getServicesManager().getRegistration(Chat.class);
-                if (registration == null || registration.getProvider() == null) {
+                Chat chat = registration == null ? null : registration.getProvider();
+                if (chat == null) {
                     return "";
                 }
-                String value = getter.apply(registration.getProvider());
+                String value = switch (what) {
+                    case 0 -> chat.getPlayerPrefix(player);
+                    case 1 -> chat.getPlayerSuffix(player);
+                    default -> chat.getPrimaryGroup(player);
+                };
                 return value == null ? "" : value;
             } catch (Throwable ignored) {
                 return "";
