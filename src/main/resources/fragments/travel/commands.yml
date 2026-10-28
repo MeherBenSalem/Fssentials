@@ -1,0 +1,17 @@
+tpa: {enabled: true, aliases: [tpask, call], description: "Ask to teleport to a player"}
+tpahere: {enabled: true, aliases: [tpaskhere], description: "Ask a player to teleport to you"}
+tpaccept: {enabled: true, aliases: [tpyes], description: "Accept a teleport request"}
+tpdeny: {enabled: true, aliases: [tpno], description: "Deny a teleport request"}
+tpacancel: {enabled: true, aliases: [], description: "Take back your teleport request"}
+tptoggle: {enabled: true, aliases: [], description: "Turn teleport requests off or on"}
+tpauto: {enabled: true, aliases: [], description: "Accept every /tpa at once"}
+back: {enabled: true, aliases: [return], description: "Go back to your last place or where you died"}
+tphere: {enabled: true, aliases: [s], description: "Bring a player to you (staff)"}
+tpo: {enabled: true, aliases: [], description: "Teleport to a player, ignoring their toggles (staff)"}
+warp: {enabled: true, aliases: [], description: "Teleport to a warp, or open the warps menu"}
+warps: {enabled: true, aliases: [listwarps], description: "The warps menu"}
+setwarp: {enabled: true, aliases: [createwarp], description: "Set a warp where you stand (held item is the icon)"}
+delwarp: {enabled: true, aliases: [deletewarp, rmwarp], description: "Delete a warp"}
+spawn: {enabled: true, aliases: [], description: "Teleport to spawn"}
+setspawn: {enabled: true, aliases: [], description: "Set the spawn, or where new players start (first)"}
+rtp: {enabled: true, aliases: [wild, randomtp], description: "Teleport to a random safe spot"}
