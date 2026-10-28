@@ -120,8 +120,6 @@ baltop:
         - "<dark_gray>Updated <updated> ago"
     next: {slot: 53}
 
-# Fragment of menus.yml (fork "travel").
-
 warps:
   title: "<dark_gray>Warps <dark_gray>(<count>)"
   rows: 4

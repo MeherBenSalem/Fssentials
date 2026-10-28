@@ -236,10 +236,14 @@ public final class TeleportService implements Listener {
                 done.accept(false);
                 return;
             }
-            player.teleportAsync(event.getTo(), PlayerTeleportEvent.TeleportCause.PLUGIN).whenComplete((ok, failure) ->
+            Location from = player.getLocation();
+            Location to = event.getTo();
+            player.teleportAsync(to, PlayerTeleportEvent.TeleportCause.PLUGIN).whenComplete((ok, failure) ->
                     plugin.scheduler().runForEntity(player, () -> {
                         boolean arrived = Boolean.TRUE.equals(ok) && failure == null;
                         if (arrived) {
+                            // Folia does not fire PlayerTeleportEvent for teleportAsync, so /back is recorded here too.
+                            rememberBack(player, from, to);
                             lastUse.computeIfAbsent(player.getUniqueId(), id -> new EnumMap<>(Kind.class)).put(kind, System.currentTimeMillis());
                             plugin.sounds().play(player, "teleport");
                             if (cost > 0) {
@@ -300,12 +304,18 @@ public final class TeleportService implements Listener {
         if (cause != PlayerTeleportEvent.TeleportCause.COMMAND && cause != PlayerTeleportEvent.TeleportCause.PLUGIN) {
             return;
         }
-        Location from = event.getFrom();
-        Location to = event.getTo();
+        rememberBack(event.getPlayer(), event.getFrom(), event.getTo());
+    }
+
+    /** Remembers where a player teleported from, for /back (not hops of a few blocks). */
+    private void rememberBack(Player player, Location from, Location to) {
+        if (!backOnTeleport || from.getWorld() == null || to == null) {
+            return;
+        }
         if (from.getWorld() == to.getWorld() && from.distanceSquared(to) < 9) {
             return;
         }
-        PlayerData data = plugin.players().getIfOnline(event.getPlayer().getUniqueId());
+        PlayerData data = plugin.players().getIfOnline(player.getUniqueId());
         if (data != null) {
             data.backLocation(Locations.encode(from));
         }

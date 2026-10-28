@@ -120,9 +120,12 @@ public final class FoliaScheduler {
         }
     }
 
-    /** Runs on the global region thread now when already there (Paper's main thread), otherwise schedules it. */
+    /**
+     * Runs on the global region thread now when already there (Paper's main thread), otherwise schedules it. While the
+     * plugin is disabling nothing can be scheduled any more, so it runs at once (the server is stopping).
+     */
     public void global(Runnable task) {
-        if (!folia && Bukkit.isPrimaryThread()) {
+        if ((!folia && Bukkit.isPrimaryThread()) || !plugin.isEnabled()) {
             safe(task);
         } else {
             runGlobal(task);

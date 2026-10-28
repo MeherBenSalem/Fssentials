@@ -232,9 +232,6 @@ economy:
   eco-reset: "<#7ee081>Reset <white><player></white><gray>'s</gray> balance to <#ffc24b><balance></#ffc24b>."
   eco-failed: "<#ff6b6b>That change failed for <white><player></white> (not enough money, or over the balance limit)."
 
-# Fragment of messages.yml (fork "travel"). New top-level sections: tpa, back, staff-teleport, combat, warps,
-# spawn, rtp; `buttons` and `usage` entries go into those sections.
-
 tpa:
   sent: "<gray>Request sent to <white><player></white>. It expires in <white><seconds>s</white>."
   sent-here: "<gray>Asked <white><player></white> to come to you. It expires in <white><seconds>s</white>."
