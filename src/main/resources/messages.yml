@@ -49,7 +49,7 @@ import:
     - "<#6bc6ff><bold>EssentialsX</bold></#6bc6ff> <gray>data found:"
     - "<gray>Players <white><players></white> <dark_gray>·</dark_gray> <gray>balances <white><balances></white> <dark_gray>·</dark_gray> <gray>nicknames <white><nicknames></white> <dark_gray>·</dark_gray> <gray>ignores <white><ignores>"
     - "<gray>Homes <white><homes></white> <dark_gray>·</dark_gray> <gray>warps <white><warps></white> <dark_gray>·</dark_gray> <gray>spawn <white><spawn>"
-    - "<gray>Kits <white><kits></white> <dark_gray>(<kit_items> items, <kit_skipped> lines skipped)</dark_gray> <dark_gray>·</dark_gray> <gray>bans <white><bans>"
+    - "<gray>Kits <white><kits></white> <dark_gray>(<kit_items> items, <kit_skipped> skipped)</dark_gray> <dark_gray>·</dark_gray> <gray>bans <white><bans>"
     - "<gray>Unreadable entries: <white><problems>"
     - "<dark_gray><st>                                        </st>"
   done:

@@ -2,7 +2,7 @@
 """Measures card crops from the captures: the chest menu of each screenshot joined with the tooltip that is open in it.
 
 Tooltips in the vanilla client have a near-black purple background (about #120412): green almost zero, red and blue
-nearly equal and dark. The darkened world behind menus (cherry leaves included) always keeps some green.
+nearly equal and dark. The darkened world behind menus (grass and leaves included) always keeps some green.
 Writes marketing/source/crops.json.
 Usage (repository root): python3 tools/marketing/crops.py
 """
@@ -18,13 +18,15 @@ W, H, SCALE = 1920, 1080, 3
 
 # Screenshot: rows of the open chest menu.
 MENUS = {
-    "menu-no-team": 3, "menu-no-team-create": 3, "menu-main": 6, "menu-main-info": 6, "menu-members": 6,
-    "menu-members-hover": 6, "menu-member": 6, "menu-member-perm": 6, "menu-bank": 5, "menu-level": 4,
-    "menu-relations": 6, "menu-top": 6, "menu-settings": 5, "chest": 2,
+    "menu-hub": 4, "menu-hub-profile": 4, "menu-hub-homes": 4, "menu-homes": 4, "menu-homes-tip": 4, "menu-homes-nether": 4,
+    "menu-warps": 4, "menu-warps-tip": 4, "menu-kits": 4, "menu-kits-tip": 4, "menu-kits-locked": 4, "menu-kits-ready": 4, "menu-kit-preview": 6,
+    "menu-kit-preview-tip": 6, "menu-baltop": 6, "menu-baltop-you": 6, "menu-reports": 6, "menu-reports-tip": 6,
+    "menu-settings": 4, "menu-settings-tip": 4, "invsee": 4,
 }
 
 # Screenshots that also get a crop of the tooltip alone ("<name>-tip").
-TOOLTIP_ONLY = {"menu-main-info", "menu-members-hover", "menu-member-perm", "menu-bank", "menu-level", "menu-relations", "menu-top"}
+TOOLTIP_ONLY = {"menu-hub-profile", "menu-hub-homes", "menu-homes-tip", "menu-homes-nether", "menu-warps-tip", "menu-kits-tip", "menu-kits-locked",
+                "menu-kits-ready", "menu-kit-preview-tip", "menu-baltop-you", "menu-reports-tip", "menu-settings-tip"}
 
 
 def menu_box(rows):

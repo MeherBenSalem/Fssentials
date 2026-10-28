@@ -1,0 +1,13 @@
+> donutessentials import essentials
+Donut » Reading the EssentialsX data...
+EssentialsX data found:
+Players 3 · balances 3 · nicknames 1 · ignores 0
+Homes 5 · warps 2 · spawn world
+Kits 5 (13 items, 1 skipped) · bans 1
+Unreadable entries: 0
+Donut » Nothing was changed. Run /donutessentials import essentials confirm to import it. Back up first.
+> donutessentials import essentials confirm
+Imported from EssentialsX
+Players 3 · balances 3 · nicknames 1 · ignores 0
+Homes 5 · warps 2 · spawn yes · kits 5 · bans 1
+Names Donut Essentials already had were kept. You can remove EssentialsX now.

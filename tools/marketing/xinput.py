@@ -1,6 +1,7 @@
 """Tiny XTEST driver for the screenshot client: move, click, press keys and type on an X display.
 
-Usage: python3 xinput.py move X Y | click X Y [button] | shiftclick X Y | key NAME | type TEXT | scroll X Y N
+Usage: python3 xinput.py move X Y | click X Y [button] | shiftclick X Y | key NAME | hold NAME SECONDS | type TEXT |
+       scroll X Y N
 Needs python-xlib (pip install python-xlib). DISPLAY selects the Xvfb display.
 """
 import sys
@@ -77,7 +78,20 @@ def key(name, shift=False):
 
 SPECIAL = {" ": ("space", False), "/": ("slash", False), ".": ("period", False), "-": ("minus", False),
            "_": ("minus", True), ":": ("semicolon", True), "!": ("1", True), "@": ("2", True), "?": ("slash", True),
-           ",": ("comma", False), "'": ("apostrophe", False)}
+           ",": ("comma", False), "'": ("apostrophe", False), "[": ("bracketleft", False), "]": ("bracketright", False),
+           "|": ("backslash", True), "$": ("4", True), "#": ("3", True), "&": ("7", True), "(": ("9", True),
+           ")": ("0", True), "=": ("equal", False), "+": ("equal", True), '"': ("apostrophe", True),
+           ";": ("semicolon", False), "<": ("comma", True), ">": ("period", True)}
+
+
+def hold(name, seconds):
+    """Holds a key down (e.g. Tab for the player list) for a while."""
+    code = keycode(name)
+    xtest.fake_input(d, X.KeyPress, code)
+    d.sync()
+    time.sleep(float(seconds))
+    xtest.fake_input(d, X.KeyRelease, code)
+    d.sync()
 
 
 def type_text(text):
@@ -103,5 +117,7 @@ if __name__ == "__main__":
         scroll(sys.argv[2], sys.argv[3], sys.argv[4])
     elif command == "key":
         key(sys.argv[2])
+    elif command == "hold":
+        hold(sys.argv[2], sys.argv[3])
     elif command == "type":
         type_text(" ".join(sys.argv[2:]))

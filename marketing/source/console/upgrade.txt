@@ -1,0 +1,7 @@
+Created the database (SQLite).
+Imported 3 of 3 2.x punishments and 1 of 1 IP locks into the database.
+Imported the 2.x maintenance state (off) and 1 whitelisted names.
+Upgraded config.yml from 2.x (the old file is config-2.x.yml).
+messages.yml was replaced with the 3.0 version (your 2.x file is messages-2.x.yml).
+Left to vanilla (add to commands.take-over-vanilla to use ours): /gamemode. Ours stay reachable as /donutessentials:<name>.
+Donut Essentials 3.0.0 enabled on Paper: 16 modules, 109 commands, storage SQLite, economy Donut Essentials, dialogs true, PlaceholderAPI false.
