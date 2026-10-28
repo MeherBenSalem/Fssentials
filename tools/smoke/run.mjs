@@ -283,7 +283,9 @@ export function smokeConfig(target = {}) {
   let config = fs.readFileSync(path.join(repo, 'src', 'main', 'resources', 'config.yml'), 'utf8');
   config = config.replace(/(\n  warmup-seconds: )3/, '$12')
     .replace(/cooldowns: \{home: 3, warp: 3, spawn: 3, tpa: 10, back: 10, rtp: 120\}/, 'cooldowns: {home: 0, warp: 0, spawn: 0, tpa: 0, back: 0, rtp: 0}')
-    .replace(/(update-check:\n  enabled: )true/, '$1false').replace(/(metrics:\n  enabled: )true/, '$1false');
+    .replace(/(update-check:\n  enabled: )true/, '$1false').replace(/(metrics:\n  enabled: )true/, '$1false')
+    // Bots can't answer native dialogs, and a short combat tag keeps the run quick.
+    .replace(/(dialogs:\n  # .*\n  enabled: )true/, '$1false').replace(/(baltop:\n(?:    #.*\n)*    refresh-seconds: )\d+/, '$15').replace(/(combat:\n  # .*\n  enabled: true\n  seconds: )15/, '$14');
   if (target.variant === 'mysql') {
     // A local MariaDB with a donutessentials database and user (password in $ESSLAB_MYSQL_PASSWORD, default essentials).
     config = config.replace('type: SQLITE', 'type: MYSQL').replace('host: localhost', 'host: 127.0.0.1')
@@ -439,7 +441,7 @@ async function runTarget(target) {
       // The upgraded config keeps the 2.x values; speed up what the scenario waits on.
       for (const [key, value] of [['teleport.warmup-seconds', 2], ['teleport.cooldowns.home', 0], ['teleport.cooldowns.warp', 0],
         ['teleport.cooldowns.spawn', 0], ['teleport.cooldowns.tpa', 0], ['teleport.cooldowns.back', 0], ['teleport.cooldowns.rtp', 0],
-        ['update-check.enabled', false]]) {
+        ['update-check.enabled', false], ['dialogs.enabled', false], ['combat.seconds', 4]]) {
         await server.lab(`set config.yml ${key} ${value}`);
       }
       server.command('donutessentials reload');

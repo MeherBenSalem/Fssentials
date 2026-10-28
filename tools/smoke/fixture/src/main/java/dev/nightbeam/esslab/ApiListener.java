@@ -64,6 +64,16 @@ final class ApiListener implements Listener {
         plugin.report("event afk " + event.getPlayer().getName() + " " + event.isAfk() + " auto=" + event.isAutomatic());
     }
 
+    /** The chat line as the console sees it (Donut Essentials' format), and whether it carries an item tooltip. */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onChat(io.papermc.paper.event.player.AsyncChatEvent event) {
+        net.kyori.adventure.text.Component line = event.renderer().render(event.getPlayer(), event.getPlayer().displayName(), event.message(),
+                org.bukkit.Bukkit.getConsoleSender());
+        String json = net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(line);
+        plugin.report("chat " + net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(line)
+                + " item=" + json.contains("show_item"));
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVanish(VanishChangeEvent event) {
         plugin.report("event vanish " + event.getPlayer().getName() + " " + event.isVanished());
