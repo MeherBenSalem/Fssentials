@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -129,6 +130,50 @@ class EssentialsDataTest {
         EssentialsData.Ban ip = plan.bans().get(1);
         assertEquals("10.0.0.9", ip.ip());
         assertTrue(ip.expires() != null && ip.expires() > draxen.created());
+    }
+
+    @Test
+    void kitItemsUseEssentialsItemNames() throws IOException {
+        write("plugins/Essentials/items.json", """
+                #version: 2.22.0
+                # This file is for internal EssentialsX usage.
+                {
+                  "stone_sword": {
+                    "material": "STONE_SWORD"
+                  },
+                  "stonesword": "stone_sword",
+                  "diamond_pickaxe": {
+                    "material": "DIAMOND_PICKAXE"
+                  },
+                  "dpickaxe": "diamond_pickaxe",
+                  "minecraft:diamond_pickaxe": "diamond_pickaxe"
+                }
+                """);
+        write("plugins/Essentials/custom_items.yml", """
+                aliases:
+                  drill: dpickaxe
+                """);
+        write("plugins/Essentials/kits.yml", """
+                kits:
+                  tools:
+                    delay: 10
+                    items:
+                    - stonesword 1
+                    - dpickaxe 1 efficiency:1 name:&4Gigadrill
+                    - daxe:780 1
+                    - drill 2
+                    - minecraft:diamond_pickaxe 1
+                """);
+
+        EssentialsData.Plan plan = EssentialsData.read(server.resolve("plugins/Essentials").toFile(), server.toFile());
+
+        List<EssentialsData.ItemSpec> items = plan.kits().get(0).items();
+        assertEquals("STONE_SWORD", items.get(0).material());
+        assertEquals("DIAMOND_PICKAXE", items.get(1).material());
+        assertEquals(1, items.get(1).enchantments().get("efficiency"));
+        assertEquals("DAXE", items.get(2).material());
+        assertEquals("DIAMOND_PICKAXE", items.get(3).material());
+        assertEquals("DIAMOND_PICKAXE", items.get(4).material());
     }
 
     @Test

@@ -130,7 +130,7 @@ final class MaintenanceCommand extends EssCommand {
             default -> messages().raw("maintenance.status-no-timer");
         };
         messages().sendLines(sender, "maintenance.status", "label", label,
-                "state", messages().raw(module.enabled() ? "common.on" : "common.off"),
+                "state", messages().component(module.enabled() ? "common.on" : "common.off"),
                 "timer", messages().render(timer, "time", module.timer().remainingText()),
                 "whitelisted", module.whitelist().size());
     }

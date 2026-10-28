@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -90,7 +91,8 @@ public final class EssentialsData {
         List<User> users = readUsers(new File(essentialsFolder, "userdata"), problems);
         List<Warp> warps = readWarps(new File(essentialsFolder, "warps"), problems);
         Place spawn = readSpawn(new File(essentialsFolder, "spawn.yml"));
-        List<Kit> kits = readKits(new File(essentialsFolder, "kits.yml"), new File(essentialsFolder, "config.yml"));
+        Map<String, String> items = readItemAliases(new File(essentialsFolder, "items.json"), new File(essentialsFolder, "custom_items.yml"));
+        List<Kit> kits = readKits(new File(essentialsFolder, "kits.yml"), new File(essentialsFolder, "config.yml"), items);
         List<Ban> bans = new ArrayList<>();
         bans.addAll(readBans(new File(serverFolder, "banned-players.json"), false, problems));
         bans.addAll(readBans(new File(serverFolder, "banned-ips.json"), true, problems));
@@ -193,8 +195,64 @@ public final class EssentialsData {
         return place(section);
     }
 
+    /**
+     * EssentialsX's own item names ({@code stonesword}, {@code dpickaxe}, {@code lhelm}) to material names, from its
+     * items.json and the aliases in custom_items.yml. Keys are lower case. Without the files, only Minecraft's names
+     * are known.
+     */
+    static Map<String, String> readItemAliases(File itemsFile, File customFile) {
+        Map<String, String> materials = new HashMap<>();
+        Map<String, String> aliases = new HashMap<>();
+        if (itemsFile.isFile()) {
+            try {
+                StringBuilder json = new StringBuilder();
+                for (String line : Files.readAllLines(itemsFile.toPath(), StandardCharsets.UTF_8)) {
+                    if (!line.startsWith("#")) {
+                        json.append(line).append('\n');
+                    }
+                }
+                for (Map.Entry<String, JsonElement> entry : JsonParser.parseString(json.toString()).getAsJsonObject().entrySet()) {
+                    String key = entry.getKey().toLowerCase(Locale.ROOT);
+                    JsonElement value = entry.getValue();
+                    if (value.isJsonPrimitive()) {
+                        aliases.put(key, value.getAsString().toLowerCase(Locale.ROOT));
+                    } else if (value.isJsonObject() && value.getAsJsonObject().has("material")) {
+                        materials.put(key, value.getAsJsonObject().get("material").getAsString().toUpperCase(Locale.ROOT));
+                    }
+                }
+            } catch (IOException | RuntimeException unreadable) {
+                // Only Minecraft's own item names then.
+            }
+        }
+        if (customFile.isFile()) {
+            ConfigurationSection custom = YamlConfiguration.loadConfiguration(customFile).getConfigurationSection("aliases");
+            if (custom != null) {
+                for (String alias : custom.getKeys(false)) {
+                    String target = custom.getString(alias);
+                    if (target != null) {
+                        aliases.put(alias.toLowerCase(Locale.ROOT), target.toLowerCase(Locale.ROOT));
+                    }
+                }
+            }
+        }
+        Map<String, String> out = new HashMap<>(materials);
+        for (Map.Entry<String, String> alias : aliases.entrySet()) {
+            // An alias names an item, or (in custom_items.yml) another alias.
+            String target = alias.getValue();
+            String material = null;
+            for (int hop = 0; hop < 4 && material == null && target != null; hop++) {
+                material = materials.get(target);
+                target = aliases.get(target);
+            }
+            if (material != null) {
+                out.put(alias.getKey(), material);
+            }
+        }
+        return out;
+    }
+
     /** Kits live in kits.yml (EssentialsX 2.17+) or in the kits section of config.yml (older). */
-    static List<Kit> readKits(File kitsFile, File configFile) {
+    static List<Kit> readKits(File kitsFile, File configFile, Map<String, String> itemAliases) {
         ConfigurationSection kits = null;
         if (kitsFile.isFile()) {
             kits = YamlConfiguration.loadConfiguration(kitsFile).getConfigurationSection("kits");
@@ -214,7 +272,7 @@ public final class EssentialsData {
             List<ItemSpec> items = new ArrayList<>();
             List<String> skipped = new ArrayList<>();
             for (String line : kit.getStringList("items")) {
-                ItemSpec spec = itemSpec(line);
+                ItemSpec spec = itemSpec(line, itemAliases);
                 if (spec == null) {
                     skipped.add(line);
                 } else {
@@ -229,8 +287,9 @@ public final class EssentialsData {
     /**
      * One EssentialsX item line: {@code diamond_sword 1 sharpness:5 name:&bBlade lore:First|Second}. Lines with
      * commands ({@code /...}), money ({@code $...}) or serialized items ({@code @...}) are not items and return null.
+     * EssentialsX item names are looked up in {@code itemAliases} ({@link #readItemAliases}).
      */
-    static ItemSpec itemSpec(String line) {
+    static ItemSpec itemSpec(String line, Map<String, String> itemAliases) {
         if (line == null) {
             return null;
         }
@@ -239,10 +298,11 @@ public final class EssentialsData {
             return null;
         }
         String[] parts = trimmed.split("\\s+");
-        String material = parts[0].toUpperCase(Locale.ROOT).replace("MINECRAFT:", "");
-        if (material.contains(":")) {
-            material = material.substring(0, material.indexOf(':'));
+        String typed = parts[0].toLowerCase(Locale.ROOT).replace("minecraft:", "");
+        if (typed.contains(":")) {
+            typed = typed.substring(0, typed.indexOf(':'));
         }
+        String material = itemAliases.getOrDefault(typed, typed.toUpperCase(Locale.ROOT));
         int amount = 1;
         int index = 1;
         if (parts.length > 1) {

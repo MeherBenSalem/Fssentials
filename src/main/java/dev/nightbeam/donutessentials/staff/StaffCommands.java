@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -97,7 +98,7 @@ final class StaffCommands {
                         : target.getAddress().getAddress().getHostAddress();
                 messages().sendLines(sender, "staff.whois-online",
                         "player", target.getName(),
-                        "nickname", data.nickname() == null ? plugin.messages().raw("common.none") : plugin.names().plain(target),
+                        "nickname", data.nickname() == null ? plugin.messages().component("common.none") : plugin.names().plain(target),
                         "uuid", target.getUniqueId().toString(),
                         "ip", sender.hasPermission(WHOIS_IP) ? ip : "hidden",
                         "gamemode", target.getGameMode().name().toLowerCase(Locale.ROOT),
@@ -123,7 +124,8 @@ final class StaffCommands {
             String world = Locations.world(data.logoutLocation());
             messages().sendLines(sender, "staff.whois-offline",
                     "player", data.name(),
-                    "nickname", data.nickname() == null ? plugin.messages().raw("common.none") : data.nickname(),
+                    "nickname", data.nickname() == null ? plugin.messages().component("common.none")
+                            : plugin.messages().plain(plugin.messages().render(data.nickname())),
                     "uuid", data.uuid().toString(),
                     "ip", sender.hasPermission(WHOIS_IP) && data.lastIp() != null ? data.lastIp() : "hidden",
                     "last_seen", Durations.ago(data.lastSeen(), System.currentTimeMillis()),
@@ -135,8 +137,8 @@ final class StaffCommands {
                     "join_number", data.joinNumber());
         }
 
-        private String yesNo(boolean value) {
-            return plugin.messages().raw(value ? "common.yes" : "common.no");
+        private Component yesNo(boolean value) {
+            return plugin.messages().component(value ? "common.yes" : "common.no");
         }
 
         /**

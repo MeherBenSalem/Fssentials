@@ -367,7 +367,9 @@ async function essentialsPhase(target, dir, java, jar, result) {
     bots.push(willow);
     const rook = await joinBot('Rook', target.bot, path.join(dir, 'chat-ess-Rook.log'));
     bots.push(rook);
+    // EssentialsX needs a permission for /sethome, and the fixture has no permissions plugin.
     server.command('op Willow');
+    server.command('op Rook');
     await sleep(800);
     for (const line of ['/sethome base', '/sethome farm', '/setwarp market', '/setspawn', '/nick Willo']) {
       willow.chat(line);

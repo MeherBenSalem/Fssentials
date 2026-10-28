@@ -100,7 +100,7 @@ public final class EssentialsImporter {
         }
         plugin.messages().sendLines(sender, "import.summary", "players", plan.users().size(), "balances", plan.balances(),
                 "homes", plan.homes(), "nicknames", plan.nicknames(), "ignores", ignores, "warps", plan.warps().size(),
-                "spawn", plan.spawn() == null ? plugin.messages().raw("common.none") : plan.spawn().world(),
+                "spawn", plan.spawn() == null ? plugin.messages().component("common.none") : plan.spawn().world(),
                 "kits", plan.kits().size(), "kit_items", kitItems, "kit_skipped", kitSkipped, "bans", plan.bans().size(),
                 "problems", plan.problems().size());
         for (String problem : plan.problems().subList(0, Math.min(5, plan.problems().size()))) {
@@ -210,7 +210,7 @@ public final class EssentialsImporter {
                 + nicknames + " nicknames, " + ignores + " ignores, " + warps + " warps, " + (spawn ? "the spawn, " : "") + kits + " kits, "
                 + bans + " bans.");
         plugin.messages().sendLines(sender, "import.done", "players", players, "balances", balances, "homes", homes, "nicknames", nicknames,
-                "ignores", ignores, "warps", warps, "spawn", plugin.messages().raw(spawn ? "common.yes" : "common.no"), "kits", kits, "bans", bans);
+                "ignores", ignores, "warps", warps, "spawn", plugin.messages().component(spawn ? "common.yes" : "common.no"), "kits", kits, "bans", bans);
     }
 
     /** Creates the player's record when Donut Essentials has none, and sets their nickname when they have none. */

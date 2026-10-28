@@ -122,7 +122,8 @@ export async function scenario({ server: current, target, restart, joinBot, step
   if (target.variant === 'essentialsx') {
     await check('/dess import essentials (dry run, then confirm)', async () => {
       await consoleSays('donutessentials import essentials', /Players 2 .*balances 2/);
-      await consoleSays('donutessentials import essentials confirm', /Imported from EssentialsX: 2 players, 2 balances, 3 homes, 1 nicknames/);
+      await consoleSays('donutessentials import essentials confirm',
+        /Imported from EssentialsX: 2 players, 2 balances, 3 homes, 1 nicknames, 0 ignores, 1 warps, the spawn, 5 kits, 1 bans/);
       const homes = await api('homes Willow');
       if (!/ 2 base@world,farm@world/.test(homes)) throw new Error(homes);
       if (!/ 1 tower@world/.test(await api('homes Rook'))) throw new Error('Rook homes');
@@ -133,7 +134,10 @@ export async function scenario({ server: current, target, restart, joinBot, step
       if (!/ 75\.00 /.test(await api('balance Rook'))) throw new Error('Rook balance');
       if (!/banned=true/.test(await api('punish Draxen'))) throw new Error('Draxen not banned');
       if (!/nick=Willo /.test(await api('player Willow'))) throw new Error(await api('player Willow'));
-      return 'homes, warp, spawn, balances, nickname and ban';
+      // EssentialsX's default kits use its own item names (stonesword, dpickaxe, lhelm).
+      const kits = await api('kits');
+      if (!/\btools\b/.test(kits) || !/\bdtools\b/.test(kits)) throw new Error(kits);
+      return 'homes, warp, spawn, balances, nickname, ban and the 5 default kits';
     });
   }
 
