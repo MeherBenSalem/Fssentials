@@ -101,8 +101,8 @@ final class VanishListener implements Listener {
                     players.remove();
                 }
             }
-        } catch (UnsupportedOperationException ignored) {
-            // This server's ping event can't hide players; the count stays as it is.
+        } catch (UnsupportedOperationException | NoSuchMethodError ignored) {
+            // This server's ping event can't hide players (iterator() is marked for removal); the count stays as it is.
         }
     }
 }

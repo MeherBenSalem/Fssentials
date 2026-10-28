@@ -207,8 +207,10 @@ final class ModerationListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onTeleport(PlayerTeleportEvent event) {
-        if (module.freeze().isFrozen(event.getPlayer().getUniqueId()) && (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL
-                || event.getCause() == PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT)) {
+        // By name: CHORUS_FRUIT is marked for removal (CONSUMABLE_EFFECT on 1.21.2+).
+        String cause = event.getCause().name();
+        if (module.freeze().isFrozen(event.getPlayer().getUniqueId())
+                && (cause.equals("ENDER_PEARL") || cause.equals("CHORUS_FRUIT") || cause.equals("CONSUMABLE_EFFECT"))) {
             event.setCancelled(true);
         }
     }
