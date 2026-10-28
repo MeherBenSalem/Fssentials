@@ -1,0 +1,10 @@
+kit: {enabled: true, aliases: [], description: "Claim a kit (no name: the kits menu)"}
+kits: {enabled: true, aliases: [kitlist], description: "The kits menu"}
+createkit: {enabled: true, aliases: [addkit], description: "Make a kit from your inventory"}
+editkit: {enabled: true, aliases: [], description: "Change a kit's items"}
+delkit: {enabled: true, aliases: [deletekit, removekit], description: "Delete a kit"}
+balance: {enabled: true, aliases: [bal, money], description: "Your balance, or another player's"}
+pay: {enabled: true, aliases: [], description: "Pay another player"}
+paytoggle: {enabled: true, aliases: [togglepay], description: "Accept or refuse payments"}
+baltop: {enabled: true, aliases: [balancetop, moneytop, richest], description: "The richest players"}
+eco: {enabled: true, aliases: [economy], description: "Give, take or set a player's money"}
