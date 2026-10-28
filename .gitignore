@@ -16,3 +16,4 @@ build/
 releases/*.jar
 tools/smoke/node_modules/
 marketing/source/.render-*.html
+.claude/

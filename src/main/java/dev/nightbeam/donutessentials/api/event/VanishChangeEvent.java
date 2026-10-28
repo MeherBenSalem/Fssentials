@@ -26,7 +26,7 @@ public final class VanishChangeEvent extends Event implements Cancellable {
         return player;
     }
 
-    public boolean getVanished() {
+    public boolean isVanished() {
         return vanished;
     }
 

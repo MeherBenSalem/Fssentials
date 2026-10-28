@@ -32,7 +32,7 @@ public final class KitClaimEvent extends Event implements Cancellable {
         return kit;
     }
 
-    public boolean getBypass() {
+    public boolean isBypass() {
         return bypass;
     }
 

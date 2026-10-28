@@ -1,0 +1,14 @@
+name: EssLabFixture
+version: 1.0.0
+main: dev.nightbeam.esslab.EssLabPlugin
+api-version: '1.20'
+folia-supported: true
+description: Test-only fixture for the Donut Essentials smoke matrix. Never install on a real server.
+softdepend: [PlaceholderAPI, DonutEssentials]
+commands:
+  esslab:
+    description: Smoke-test helpers.
+    permission: esslab.admin
+permissions:
+  esslab.admin:
+    default: op

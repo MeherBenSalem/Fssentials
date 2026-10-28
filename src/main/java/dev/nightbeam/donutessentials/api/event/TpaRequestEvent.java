@@ -32,7 +32,7 @@ public final class TpaRequestEvent extends Event implements Cancellable {
         return target;
     }
 
-    public boolean getHere() {
+    public boolean isHere() {
         return here;
     }
 

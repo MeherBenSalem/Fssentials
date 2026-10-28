@@ -26,11 +26,11 @@ public final class AfkChangeEvent extends Event {
         return player;
     }
 
-    public boolean getAfk() {
+    public boolean isAfk() {
         return afk;
     }
 
-    public boolean getAutomatic() {
+    public boolean isAutomatic() {
         return automatic;
     }
 
