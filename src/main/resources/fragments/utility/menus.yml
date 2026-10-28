@@ -1,0 +1,115 @@
+hub:
+  # /menu. Each button runs its `command` and is hidden when that command is switched off (or the player may not use
+  # it). Placeholders: <player>, <display>, <balance>, <homes>, <playtime>, <first_join>, <number>.
+  title: "<dark_gray>Menu · <player>"
+  rows: 4
+  items:
+    profile:
+      slot: 4
+      material: PLAYER_HEAD
+      name: "<#6bc6ff><bold><display>"
+      lore:
+        - "<gray>Balance <#ffc24b><balance>"
+        - "<gray>Homes <white><homes>"
+        - "<gray>Play time <white><playtime>"
+        - "<gray>Player <white>#<number></white> <dark_gray>· since <first_join>"
+    homes:
+      slot: 10
+      material: RED_BED
+      command: homes
+      name: "<#6bc6ff><bold>Homes"
+      lore: ["<gray>Your homes <dark_gray>(<white><homes></white>)", "", "<#7ee081>Click to open"]
+    warps:
+      slot: 11
+      material: COMPASS
+      command: warps
+      name: "<#6bc6ff><bold>Warps"
+      lore: ["<gray>The server's warp points.", "", "<#7ee081>Click to open"]
+    kits:
+      slot: 12
+      material: CHEST
+      command: kit
+      name: "<#6bc6ff><bold>Kits"
+      lore: ["<gray>Claim your kits.", "", "<#7ee081>Click to open"]
+    spawn:
+      slot: 13
+      material: BEACON
+      command: spawn
+      name: "<#6bc6ff><bold>Spawn"
+      lore: ["<gray>Back to the server spawn.", "", "<#7ee081>Click to teleport"]
+    rtp:
+      slot: 14
+      material: GRASS_BLOCK
+      command: rtp
+      name: "<#6bc6ff><bold>Random teleport"
+      lore: ["<gray>Somewhere new in the wild.", "", "<#7ee081>Click to teleport"]
+    balance:
+      slot: 15
+      material: GOLD_INGOT
+      command: baltop
+      name: "<#ffc24b><bold>Money"
+      lore: ["<gray>You have <#ffc24b><balance></#ffc24b>.", "", "<#7ee081>Click for the richest players"]
+    mail:
+      slot: 16
+      material: WRITABLE_BOOK
+      command: mail read
+      name: "<#6bc6ff><bold>Mail"
+      lore: ["<gray>Messages left for you.", "", "<#7ee081>Click to read"]
+    settings:
+      slot: 22
+      material: COMPARATOR
+      command: settings
+      name: "<#6bc6ff><bold>Settings"
+      lore: ["<gray>Requests, messages, pings", "<gray>and more, your way.", "", "<#7ee081>Click to open"]
+    close: {slot: 31}
+
+settings:
+  # /settings. Each switch flips one personal setting. `requires`: hidden unless that command exists;
+  # `requires-module`: hidden unless that module is on. `material-off`: the icon while the setting is off.
+  title: "<dark_gray>Settings"
+  rows: 4
+  items:
+    tpa:
+      slot: 11
+      material: ENDER_PEARL
+      material-off: GRAY_DYE
+      requires: tpa
+      name: "<#6bc6ff><bold>Teleport requests"
+      lore: ["<gray>Let others send you /tpa", "<gray>and /tpahere requests.", "", "<gray>Now: <state>", "", "<#7ee081>Click to switch"]
+    tpa-auto:
+      slot: 13
+      material: CHORUS_FRUIT
+      material-off: GRAY_DYE
+      requires: tpa
+      name: "<#6bc6ff><bold>Accept requests at once"
+      lore: ["<gray>Teleport requests are accepted", "<gray>without asking you.", "", "<gray>Now: <state>", "", "<#7ee081>Click to switch"]
+    messages:
+      slot: 15
+      material: PAPER
+      material-off: GRAY_DYE
+      requires: msg
+      name: "<#6bc6ff><bold>Private messages"
+      lore: ["<gray>Let others /msg you.", "", "<gray>Now: <state>", "", "<#7ee081>Click to switch"]
+    mentions:
+      slot: 20
+      material: BELL
+      material-off: GRAY_DYE
+      requires-module: chat
+      name: "<#6bc6ff><bold>Mention pings"
+      lore: ["<gray>A sound when someone writes", "<gray>@<player> in chat.", "", "<gray>Now: <state>", "", "<#7ee081>Click to switch"]
+    payments:
+      slot: 22
+      material: GOLD_NUGGET
+      material-off: GRAY_DYE
+      requires: pay
+      name: "<#6bc6ff><bold>Payments"
+      lore: ["<gray>Let others /pay you.", "", "<gray>Now: <state>", "", "<#7ee081>Click to switch"]
+    join-messages:
+      slot: 24
+      material: OAK_DOOR
+      material-off: GRAY_DYE
+      requires-module: chat
+      name: "<#6bc6ff><bold>Join and leave messages"
+      lore: ["<gray>See when players join", "<gray>and leave.", "", "<gray>Now: <state>", "", "<#7ee081>Click to switch"]
+    back: {slot: 31}
+    close: {slot: 31}
