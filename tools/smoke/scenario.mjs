@@ -596,6 +596,8 @@ export async function scenario({ server: current, target, restart, joinBot, step
   // ── 18. Restart: everything comes back ────────────────────────────────────────────────────────────────────────
   if (target.restart) {
     await check('after a restart: homes, warps, balances, kit cooldowns, punishments', async () => {
+      await say(bob, '/homes');
+      await sleep(1500);
       server = await restart();
       const homes = await api('homes Bob');
       if (!/ 1 base@/.test(homes)) throw new Error(homes);

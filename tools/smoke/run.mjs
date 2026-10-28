@@ -274,6 +274,8 @@ export async function joinBot(name, version, chatFile, { moves = false } = {}, p
     bot.once('kicked', (reason) => { clearTimeout(timer); reject(new Error(`${name} kicked: ${JSON.stringify(reason)}`)); });
     bot.once('error', (error) => { clearTimeout(timer); reject(error); });
   });
+  // A server stopping under the bot (a restart) closes the connection; the scenario notices on its own.
+  bot.on('error', () => {});
   await sleep(1500);
   return bot;
 }
@@ -314,8 +316,9 @@ export function pluginErrors(lines) {
   const problems = [];
   lines.forEach((line, index) => {
     const ours = /\[DonutEssentials\]/.test(line) && /(ERROR|SEVERE|WARN)/.test(line);
-    const frame = /at dev\.nightbeam\.donutessentials\./.test(line);
-    const load = /Could not load '.*DonutEssentials|Error occurred while enabling DonutEssentials|NoSuchMethodError|NoClassDefFoundError|NoSuchFieldError|AbstractMethodError|IncompatibleClassChangeError/.test(line);
+    // Paper prints plugin frames as "at DonutEssentials-3.0.0.jar//dev.nightbeam...".
+    const frame = /at (?:\S+\/\/)?dev\.nightbeam\.donutessentials\./.test(line);
+    const load = /Could not load '.*DonutEssentials|Error occurred while (?:enabling|disabling) DonutEssentials|NoSuchMethodError|NoClassDefFoundError|NoSuchFieldError|AbstractMethodError|IncompatibleClassChangeError/.test(line);
     if (ours || load || (frame && !problems.includes(lines[index - 1]))) problems.push(line);
   });
   return problems;
@@ -423,10 +426,11 @@ async function runTarget(target) {
   server.start();
   const bots = [];
   const restart = async () => {
+    // Stopped with the players still online (one with a menu open): the plugin must disable cleanly.
+    await server.stop();
     for (const bot of bots.splice(0)) {
       try { bot.quit(); } catch { /* gone */ }
     }
-    await server.stop();
     const before = server.lines;
     server = new Server(dir, java, jar);
     server.lines = [...before, '--- restart ---'];
