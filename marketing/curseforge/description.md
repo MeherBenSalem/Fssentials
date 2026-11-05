@@ -1,5 +1,9 @@
 ![Donut Essentials 3.0: The All-in-One Update](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/banner.png)
 
+**[Discord](https://discord.gg/TJc3CxR4jK) · [Premium plugins](https://nightbeam.dev/store) · [Support NightBeam](https://nightbeam.dev/support) · [NightBeam Pro](https://nightbeam.dev/memberships) · [All projects](https://nightbeam.dev/projects)**
+
+> **Running a server?** NightBeam's premium plugins are on [BuiltByBit](https://nightbeam.dev/store): NightWatch Pro anti-cheat, the AstralSMP setup, Astral Core and more.
+
 ## Every essential your server needs, in one free plugin
 
 **Donut Essentials** is a free, open-source essentials plugin for Paper, Folia and Purpur, from Minecraft **1.20.1 to
@@ -13,7 +17,7 @@ all of it runs on **Folia**, and none of it takes over vanilla commands unless y
 **3.0 "The All-in-One Update"** turns the moderation toolkit into a complete essentials plugin:
 - teleports: TPA with buttons, `/back`, a title countdown that moving or damage cancels, rank tiers and **combat tags**;
 - homes, warps and spawn with menus, and a safe random teleport;
-- kits made from your inventory, with a kits menu, previews, cooldowns, once-only kits and costs;
+- kits made from your inventory, with a kits menu, previews, cooldowns, one-time kits and costs;
 - an economy with `/pay`, `/baltop` (a menu) and **payments shown to offline players**;
 - chat formats with LuckPerms prefixes, mentions, `[item]`, `/msg`, `/mail`, `/ignore` and AFK;
 - moderation history, warning escalation, alt alerts, freeze, reports, staff chat and **Discord logs**;
@@ -66,7 +70,7 @@ player's balance, homes and play time on their head. Buttons for switched-off co
 
 - `/setwarp shop` uses **the item in your hand as the icon**. `/warps` lists each warp with its place and visit count;
   optional per-warp permissions.
-- `/spawn` and `/setspawn`, plus `/setspawn first` for where new players start. Spawn on first join, on every join
+- `/spawn` and `/setspawn`, plus `/setspawn first` for where new players start. Spawn for new players, on every join
   (optional) and on respawn without a bed.
 - `/rtp`: a **safe random spot** (no water, lava or cactus; blocked biomes) within a ring around spawn, per world.
   Chunks load in the background. With Donut RTP installed, it steps aside.
@@ -80,7 +84,7 @@ player's balance, homes and play time on their head. Buttons for switched-off co
 - **Every detail of every item is kept**: enchantments, attributes, names, lore, custom model data, books and potions,
   stored in Paper's versioned item format so kits survive Minecraft updates.
 - A **kits menu** shows each kit as ready, on cooldown, claimed or locked; right-click to **preview** the items.
-- Cooldowns, **once-only kits**, costs, per-kit permissions, a first-join kit, and `/kit warrior Kiri` for staff.
+- Cooldowns, **one-time kits**, costs, per-kit permissions, a new-player kit, and `/kit warrior Kiri` for staff.
 
 ![Economy](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/header-economy.png)
 
@@ -142,7 +146,7 @@ player's balance, homes and play time on their head. Buttons for switched-off co
   commands: a **native dialog** on 1.21.7+, clickable buttons before that. Change the rules and bump the version, and
   everyone accepts again.
 - **Server links** in the pause menu (Minecraft 1.21+): Discord, website, store...
-- A message of the day on join (`/motd`) and **first-join messages** with the player's number.
+- A message of the day on join (`/motd`) and **welcome messages for new players** with the player's number.
 
 ![Make It Yours](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/header-yours.png)
 
@@ -170,7 +174,7 @@ player's balance, homes and play time on their head. Buttons for switched-off co
 
 ![Upgrade in place](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/card-upgrade.png)
 
-Replace the jar and restart. Donut Essentials (or Fssentials) 2.x upgrades on the first start:
+Replace the jar and restart. Donut Essentials (or Fssentials) 2.x upgrades when the new version starts:
 - **Punishments, IP locks and the maintenance whitelist** move into the database (the old files are renamed
   `.imported`).
 - `config.yml` keeps your values (the old file is saved as `config-2.x.yml`); `messages.yml` is replaced with the 3.0
@@ -213,7 +217,7 @@ Spigot and Bukkit are not supported (they lack Paper's API): the plugin says so 
 
 Each release is played by bots on Paper 1.20.1, 1.20.4, 1.20.6, 1.21.1, 1.21.4, 1.21.8, 1.21.11, 26.1.2, 26.2 and
 26.3 and Folia 1.20.4, 1.21.4, 1.21.11 and 26.3, with SQLite and MySQL, with Vault, VaultUnlocked or no Vault at all:
-about 40 checks each, from the first join to a restart, including an upgrade from 2.0.0 and a switch from EssentialsX.
+about 40 checks each, from a new player's join to a restart, including an upgrade from 2.0.0 and a switch from EssentialsX.
 The console must stay free of errors.
 
 ![Commands & Permissions](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/header-commands.png)
@@ -255,16 +259,16 @@ portals, holograms and sign shops are left to plugins that do them better.
 **Will it break `/gamemode` or `/tp`?** No. Vanilla commands stay vanilla unless you add them to
 `commands.take-over-vanilla`.
 
-**I only want the moderation tools.** Switch the other modules off under `modules:` in `config.yml`. Nothing of a
+**I just want the moderation tools.** Switch the other modules off under `modules:` in `config.yml`. Nothing of a
 switched-off module stays loaded.
 
-**Does it need Vault?** No. It needs Vault (or VaultUnlocked) only for other plugins to see its economy, and for chat
+**Does it need Vault?** No. It needs Vault (or VaultUnlocked) just for other plugins to see its economy, and for chat
 prefixes from your permissions plugin.
 
 **Several servers?** Use one database per server for now; punishments shared across a network are on the roadmap.
 
-**Will my 2.x punishments survive?** Yes. They move into the database on the first start; back up
-`plugins/DonutEssentials/` first anyway.
+**Will my 2.x punishments survive?** Yes. They move into the database when the new version starts; back up
+`plugins/DonutEssentials/` beforehand anyway.
 
 ![Gallery](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/header-gallery.png)
 
@@ -284,6 +288,14 @@ prefixes from your permissions plugin.
 
 ![divider](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/divider.png)
 
-**Discord**: [discord.gg/TJc3CxR4jK](https://discord.gg/TJc3CxR4jK) · **Source**:
-[GitHub](https://github.com/MeherBenSalem/Fssentials) (Apache 2.0) · **Support the project**:
-[nightbeam.dev/support](https://nightbeam.dev/support)
+---
+
+### More from NightBeam Studio
+
+- **[Remnants: Ashen Legacy](https://www.curseforge.com/minecraft/modpacks/remnants-ashen-legacy)**: the story-driven soulslike RPG modpack built on NightBeam's mods
+- **[Premium server plugins](https://nightbeam.dev/store)**: anti-cheat, ranked PvP, SMP setups and more on BuiltByBit
+- **[NightBeam Pro](https://nightbeam.dev/memberships)**: the model library and NightBeam Forge credits, from $5 a month
+- **[Discord](https://discord.gg/TJc3CxR4jK)**: support, bug reports, suggestions and early looks
+- **[Support NightBeam](https://nightbeam.dev/support)**: help keep every mod free
+
+**Follow:** [YouTube](https://www.youtube.com/@nightbeamstudio) · [Instagram](https://www.instagram.com/nightbeamstudio/) · [X](https://x.com/NightBeamLLC) · [Facebook](https://www.facebook.com/profile.php?id=61574823331471) · [Source and issues](https://github.com/MeherBenSalem/Fssentials)
