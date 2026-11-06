@@ -1,6 +1,6 @@
 ![Donut Essentials 3.0: The All-in-One Update](https://raw.githubusercontent.com/MeherBenSalem/Fssentials/main/marketing/images/banner.png)
 
-**[Discord](https://discord.gg/TJc3CxR4jK) · [Source and issues](https://github.com/MeherBenSalem/Fssentials)**
+**[Docs](https://nightbeam.dev/docs/donut-essentials) · [Discord](https://discord.gg/TJc3CxR4jK) · [Source and issues](https://github.com/MeherBenSalem/Fssentials)**
 
 ## Every essential your server needs, in one free plugin
 
