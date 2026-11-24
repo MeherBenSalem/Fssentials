@@ -220,11 +220,9 @@ including an upgrade from Donut Essentials 2.0.0, a switch from EssentialsX and 
 ## Publishing
 
 Tagged releases (`v*.*.*`) run [.github/workflows/publish.yml](.github/workflows/publish.yml): a Gradle build, then a
-Modrinth version and a CurseForge file using [release/supported-minecraft.json](release/supported-minecraft.json) and
-the patch notes. Repository variables `MODRINTH_ID` (`1YpSYvSs`) and `CURSEFORGE_ID` (`1487015`); secrets
-`MODRINTH_TOKEN`, `CURSEFORGE_TOKEN` and `CURSEFORGE_API_KEY` (read-only, for the same-day guard, which stops a
-second release on the same day). The *Sync Modrinth listing* workflow updates the Modrinth page from
-[`marketing/`](marketing).
+CurseForge file (releases go to CurseForge only) using [release/supported-minecraft.json](release/supported-minecraft.json)
+and the patch notes. Repository variable `CURSEFORGE_ID` (`1487015`); secrets `CURSEFORGE_TOKEN` and
+`CURSEFORGE_API_KEY` (read-only, for the same-day guard, which stops a second release on the same day).
 
 ## Contributing
 

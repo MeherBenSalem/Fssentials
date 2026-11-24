@@ -1,14 +1,14 @@
-# Dual-publish NightBeam mods/plugins to Modrinth + CurseForge on version tags.
+# Publish Donut Essentials to CurseForge on version tags (NightBeam convention: CurseForge only since 24 Nov 2026).
 #
-# Org/repo secrets:
-#   MODRINTH_TOKEN
-#   CURSEFORGE_TOKEN
+# Secrets:
+#   CURSEFORGE_TOKEN    (upload)
+#   CURSEFORGE_API_KEY  (Core API, for the same-day guard and the "already out" check)
 #
-# Repo variables:
-#   MODRINTH_ID   (Donut Essentials: 1YpSYvSs; CurseForge 1487015)
-#   CURSEFORGE_ID
+# Repo variable:
+#   CURSEFORGE_ID (Donut Essentials: 1487015)
 #
-# Read-only secret for the same-day guard: CURSEFORGE_API_KEY.
+# The existing Modrinth project stays up as it is but gets no new versions.
+#
 # Same-day guard (NightBeam convention): scripts/same_day_guard.mjs stops a real run if this plugin already had a
 # release today (Africa/Tunis day), on CurseForge or in an earlier Publish run whose upload step ran. It runs first
 # and again right before the upload; a dry run only reports it.
@@ -17,7 +17,7 @@
 # Usage after a release build is ready:
 #   git tag v3.0.0 && git push --tags
 #
-# Loaders and Minecraft versions come from release/supported-minecraft.json; the changelog is
+# Platforms and Minecraft versions come from release/supported-minecraft.json; the changelog is
 # DonutEssentials-<version>-PatchNotes.md when it exists, else PATCHNOTES.md.
 
 name: Publish
@@ -35,10 +35,6 @@ on:
         description: Skip uploads if true
         required: false
         default: "false"
-      platforms:
-        description: "modrinth, curseforge, or both"
-        required: false
-        default: "both"
 
 # One Publish at a time per repo, so two runs can't both pass the same-day guard.
 concurrency:
@@ -65,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PUBLISH_WORKFLOW: publish.yml
-          UPLOAD_STEP: Upload Modrinth + CurseForge
+          UPLOAD_STEP: Upload CurseForge|Upload Modrinth + CurseForge
           DRY_RUN: ${{ inputs.dry_run }}
         run: node scripts/same_day_guard.mjs
 
@@ -87,14 +83,16 @@ jobs:
         id: published
         if: startsWith(github.ref, 'refs/tags/v')
         env:
-          MODRINTH_ID: ${{ vars.MODRINTH_ID || '1YpSYvSs' }}
+          CURSEFORGE_ID: ${{ vars.CURSEFORGE_ID || '1487015' }}
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
           VERSION: ${{ steps.ver.outputs.version }}
         shell: bash
         run: |
-          if curl -fsS "https://api.modrinth.com/v2/project/${MODRINTH_ID}/version" \
-              | jq -e --arg v "$VERSION" 'any(.[]; .version_number == $v)' > /dev/null; then
+          if [ -n "${CURSEFORGE_ID:-}" ] && curl -fsS -H "x-api-key: ${CURSEFORGE_API_KEY}" \
+              "https://api.curseforge.com/v1/mods/${CURSEFORGE_ID}/files?pageSize=50" \
+              | jq -e --arg v "$VERSION" 'any(.data[]; .displayName == $v)' > /dev/null; then
             echo "already=true" >> "$GITHUB_OUTPUT"
-            echo "$VERSION is already on Modrinth: nothing to upload."
+            echo "$VERSION is already on CurseForge: nothing to upload."
           fi
 
       - uses: actions/setup-java@v4
@@ -133,31 +131,25 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PUBLISH_WORKFLOW: publish.yml
-          UPLOAD_STEP: Upload Modrinth + CurseForge
+          UPLOAD_STEP: Upload CurseForge|Upload Modrinth + CurseForge
           DRY_RUN: ${{ inputs.dry_run }}
         run: node scripts/same_day_guard.mjs
 
-      - name: Upload Modrinth + CurseForge
+      - name: Upload CurseForge
         if: ${{ inputs.dry_run != 'true' && steps.published.outputs.already != 'true' }}
         env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-          MODRINTH_ID: ${{ vars.MODRINTH_ID || '1YpSYvSs' }}
           CURSEFORGE_ID: ${{ vars.CURSEFORGE_ID || '1487015' }}
           VERSION: ${{ steps.ver.outputs.version }}
           JAR_LIST: ${{ steps.jars.outputs.list }}
-          PLATFORMS: ${{ inputs.platforms || 'both' }}
         shell: bash
         run: |
           set -euo pipefail
-          test -n "${MODRINTH_ID:-}" && test -n "${CURSEFORGE_ID:-}"
+          test -n "${CURSEFORGE_ID:-}" || { echo "Set the repo variable CURSEFORGE_ID" >&2; exit 1; }
           node <<'NODE'
           const fs = require('fs');
           const path = require('path');
           const version = process.env.VERSION;
-          const platforms = (process.env.PLATFORMS || 'both').toLowerCase();
-          const doModrinth = platforms === 'both' || platforms === 'modrinth';
-          const doCurse = platforms === 'both' || platforms === 'curseforge';
           const jars = process.env.JAR_LIST.split(/\n/).map(s => s.trim()).filter(Boolean);
           const support = JSON.parse(fs.readFileSync('release/supported-minecraft.json', 'utf8'));
           const PLUGIN_LOADERS = support.loaders;
@@ -168,47 +160,6 @@ jobs:
           }
 
           (async () => {
-            if (doModrinth) {
-              const tagRes = await fetch('https://api.modrinth.com/v2/tag/game_version');
-              const tags = await tagRes.json();
-              const known = new Set(tags.map(t => t.version));
-              const game_versions = PLUGIN_GAME_VERSIONS.filter(v => known.has(v));
-              for (const jar of jars) {
-                const body = {
-                  name: version,
-                  version_number: version,
-                  changelog,
-                  dependencies: [],
-                  game_versions,
-                  version_type: 'release',
-                  loaders: PLUGIN_LOADERS,
-                  featured: false,
-                  status: 'listed',
-                  project_id: process.env.MODRINTH_ID,
-                  file_parts: ['file_0'],
-                  primary_file: 'file_0',
-                };
-                const form = new FormData();
-                form.append('data', JSON.stringify(body));
-                form.append('file_0', new Blob([fs.readFileSync(jar)]), path.basename(jar));
-                const mrRes = await fetch('https://api.modrinth.com/v2/version', {
-                  method: 'POST',
-                  headers: { Authorization: process.env.MODRINTH_TOKEN },
-                  body: form,
-                });
-                const mrText = await mrRes.text();
-                if (!mrRes.ok) throw new Error('Modrinth ' + mrRes.status + ' ' + mrText.slice(0, 500));
-                console.log('Modrinth OK', body.version_number, path.basename(jar), mrText.slice(0, 160));
-              }
-            } else {
-              console.log('Skipping Modrinth');
-            }
-
-            if (!doCurse) {
-              console.log('Skipping CurseForge');
-              return;
-            }
-
             for (const jar of jars) {
               // CurseForge files Paper plugins under Bukkit; the platform tags follow the supported loaders.
               const gameVersionNames = [

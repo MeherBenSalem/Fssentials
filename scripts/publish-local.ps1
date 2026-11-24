@@ -1,4 +1,4 @@
-# Publish Donut Essentials locally (Modrinth + CurseForge).
+# Publish Donut Essentials locally to CurseForge (CurseForge only since 24 Nov 2026).
 $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $LocalEnv = 'C:\Users\mahou\NightBeam-Knowledge-Base\secrets\local.env'

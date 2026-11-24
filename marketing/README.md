@@ -1,13 +1,13 @@
 # Marketing assets: 3.0 "The All-in-One Update"
 
-Listing copy and artwork for CurseForge, Modrinth and Hangar. Nothing here ships in the plugin jar.
+Listing copy and artwork for CurseForge (releases are published there only) and Hangar. Nothing here ships in the plugin jar.
 
 ## Listing
 
 | File | Use |
 | --- | --- |
-| [`curseforge/description.md`](curseforge/description.md) | Full project description (Markdown; also works on Modrinth and Hangar) |
-| [`curseforge/summary.txt`](curseforge/summary.txt) | Short project summary (Modrinth allows 256 characters) |
+| [`curseforge/description.md`](curseforge/description.md) | Full project description (Markdown; also works on Hangar) |
+| [`curseforge/summary.txt`](curseforge/summary.txt) | Short project summary |
 | [`images/icon.png`](images/icon.png) | Project avatar |
 | [`../DonutEssentials-3.0.0-PatchNotes.md`](../DonutEssentials-3.0.0-PatchNotes.md) | File changelog the publish workflow uploads |
 | [`reel/`](reel/README.md) | The 39-second promo reel's cover, captions for Instagram, YouTube Shorts and TikTok, and the scripts that build it (the MP4 itself is not tracked) |
@@ -16,9 +16,8 @@ Image links in the description point at `raw.githubusercontent.com/MeherBenSalem
 so they work once this folder is on `main`. To host on CurseForge instead, upload the images to the project gallery and
 replace each URL.
 
-**Modrinth**: the *Sync Modrinth listing* workflow (`.github/workflows/listing.yml`, run by hand) sets the summary,
-description, icon and gallery from these files. **CurseForge** has no API for the description: paste `description.md`
-into the project's description editor (Markdown) and `summary.txt` into its summary.
+**CurseForge** has no API for the description: paste `description.md` into the project's description editor (Markdown)
+and `summary.txt` into its summary.
 
 The artwork shares the pixel donut, fonts and dark backdrop of the other Donut plugins (Donut Teams, DonutShards,
 DonutAuctionHouse, Donut Bosses). Donut Essentials' donut has blueberry icing and a gold "ESS" tag.

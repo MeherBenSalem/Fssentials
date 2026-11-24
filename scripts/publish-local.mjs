@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Local / CI publish for Donut Essentials (Modrinth + CurseForge).
- * Defaults: MODRINTH_ID=1YpSYvSs, CURSEFORGE_ID=1487015
+ * Local publish for Donut Essentials to CurseForge (NightBeam convention: CurseForge only since 24 Nov 2026;
+ * the existing Modrinth project gets no new versions).
+ * Default: CURSEFORGE_ID=1487015
  */
 import fs from 'fs';
 import path from 'path';
@@ -39,15 +40,13 @@ loadEnvFile(path.join(repoRoot, '.env'));
 loadEnvFile('C:\\Users\\mahou\\NightBeam-Knowledge-Base\\secrets\\local.env');
 
 function parseArgs(argv) {
-  const out = { platforms: process.env.PLATFORMS || 'both' };
+  const out = {};
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--jar' && argv[i + 1]) {
       out.jar = argv[++i];
     } else if (a === '--version' && argv[i + 1]) {
       out.version = argv[++i];
-    } else if (a === '--platforms' && argv[i + 1]) {
-      out.platforms = argv[++i];
     } else if (a === '--dry-run') {
       out.dryRun = true;
     }
@@ -121,72 +120,22 @@ if (!jarPath || !fs.existsSync(jarPath)) {
   process.exit(1);
 }
 
-const modrinthId = process.env.MODRINTH_ID || '1YpSYvSs';
 const curseforgeId = process.env.CURSEFORGE_ID || '1487015';
-const platforms = (args.platforms || 'both').toLowerCase();
-const doModrinth = platforms === 'both' || platforms === 'modrinth';
-const doCurse = platforms === 'both' || platforms === 'curseforge';
 
 const { loaders, game_versions: gameVersions } = loadSupportedMatrix();
 const changelog = readChangelog(version);
 
 if (args.dryRun) {
-  console.log('Dry run:', { version, jarPath, modrinthId, curseforgeId, loaders, gameVersions: gameVersions.length });
+  console.log('Dry run:', { version, jarPath, curseforgeId, loaders, gameVersions: gameVersions.length });
   process.exit(0);
 }
 
-if (doModrinth && !process.env.MODRINTH_TOKEN) {
-  console.error('MODRINTH_TOKEN is required for Modrinth upload');
-  process.exit(1);
-}
-if (doCurse && (!process.env.CURSEFORGE_TOKEN || !process.env.CURSEFORGE_API_KEY)) {
+if (!process.env.CURSEFORGE_TOKEN || !process.env.CURSEFORGE_API_KEY) {
   console.error('CURSEFORGE_TOKEN and CURSEFORGE_API_KEY are required for CurseForge upload');
   process.exit(1);
 }
 
 (async () => {
-  if (doModrinth) {
-    const tagRes = await fetch('https://api.modrinth.com/v2/tag/game_version');
-    const tags = await tagRes.json();
-    const known = new Set(tags.map((t) => t.version));
-    const filteredGameVersions = gameVersions.filter((v) => known.has(v));
-
-    const body = {
-      name: version,
-      version_number: version,
-      changelog,
-      dependencies: [],
-      game_versions: filteredGameVersions,
-      version_type: 'release',
-      loaders,
-      featured: false,
-      status: 'listed',
-      project_id: modrinthId,
-      file_parts: ['file_0'],
-      primary_file: 'file_0',
-    };
-    const form = new FormData();
-    form.append('data', JSON.stringify(body));
-    form.append('file_0', new Blob([fs.readFileSync(jarPath)]), path.basename(jarPath));
-    const mrRes = await fetch('https://api.modrinth.com/v2/version', {
-      method: 'POST',
-      headers: { Authorization: process.env.MODRINTH_TOKEN },
-      body: form,
-    });
-    const mrText = await mrRes.text();
-    if (!mrRes.ok) {
-      throw new Error(`Modrinth ${mrRes.status} ${mrText.slice(0, 500)}`);
-    }
-    console.log('Modrinth OK', version, mrText.slice(0, 160));
-  } else {
-    console.log('Skipping Modrinth');
-  }
-
-  if (!doCurse) {
-    console.log('Skipping CurseForge');
-    return;
-  }
-
   const gameVersionNames = [
     ...gameVersions,
     'Bukkit',
