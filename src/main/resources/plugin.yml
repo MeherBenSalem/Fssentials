@@ -3,6 +3,8 @@ main: dev.nightbeam.donutessentials.DonutEssentialsPlugin
 version: '${version}'
 api-version: '1.20'
 folia-supported: true
+# bStats plugin ID (Bukkit ignores this key; CI checks it matches BSTATS_ID in DonutEssentialsPlugin)
+bstats-id: 34102
 author: NightBeam
 website: https://modrinth.com/plugin/donutessentials
 description: Homes, warps, teleports, kits, economy, chat, moderation and staff tools in one plugin for Paper, Folia and Purpur.

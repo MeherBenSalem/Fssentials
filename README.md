@@ -10,6 +10,10 @@ everyday utilities, and a full **moderation suite** (punishments with history, w
 freeze, reports, staff chat, vanish, invsee, maintenance mode, IP lock) in one jar. Menus for everything, **native
 dialogs** on 1.21.7+, one SQLite or MySQL database, Folia-safe throughout, and a one-command switch from EssentialsX.
 
+Supported versions: Paper and Folia 1.20 to 26.3, Java 17+ (one jar).
+
+Metrics: bStats plugin ID 34102.
+
 Why it exists and what it does differently: [docs/MARKET-ANALYSIS.md](docs/MARKET-ANALYSIS.md). How it is built:
 [docs/DESIGN-3.0.md](docs/DESIGN-3.0.md).
 
@@ -201,7 +205,13 @@ Events: `EssentialsTeleportEvent`, `TpaRequestEvent`, `HomeSetEvent`, `KitClaimE
 ```bash
 ./gradlew build            # the jar in build/libs, unit tests, and Folia-safety checks
 ./gradlew compileMatrix    # compile against every Paper API from 1.20.6 to 26.3
+./gradlew test             # unit tests only
 ```
+
+CI (`.github/workflows/ci.yml`) runs on every push to `main`: the build with unit tests and Folia-safety checks,
+`compileMatrix`, `python3 scripts/check_plugin_yml.py` on the jar (`api-version: '1.20'`, `folia-supported: true`, the
+bStats ID, Java 17 bytecode), the same-day guard tests, and a smoke boot on Paper 1.20.1, Paper 26.3 and the newest
+Folia (`python3 scripts/smoke_boot.py`).
 
 [`tools/smoke`](tools/smoke) boots real Paper and Folia servers from 1.20.1 to 26.3 and plays every module with bots,
 including an upgrade from Donut Essentials 2.0.0, a switch from EssentialsX and MySQL storage.
@@ -212,7 +222,8 @@ including an upgrade from Donut Essentials 2.0.0, a switch from EssentialsX and 
 Tagged releases (`v*.*.*`) run [.github/workflows/publish.yml](.github/workflows/publish.yml): a Gradle build, then a
 Modrinth version and a CurseForge file using [release/supported-minecraft.json](release/supported-minecraft.json) and
 the patch notes. Repository variables `MODRINTH_ID` (`1YpSYvSs`) and `CURSEFORGE_ID` (`1487015`); secrets
-`MODRINTH_TOKEN` and `CURSEFORGE_TOKEN`. The *Sync Modrinth listing* workflow updates the Modrinth page from
+`MODRINTH_TOKEN`, `CURSEFORGE_TOKEN` and `CURSEFORGE_API_KEY` (read-only, for the same-day guard, which stops a
+second release on the same day). The *Sync Modrinth listing* workflow updates the Modrinth page from
 [`marketing/`](marketing).
 
 ## Contributing
